@@ -5,8 +5,8 @@ import type { Element } from '../src'
 describe('node guards', () => {
   const doc = parse('<div>hi<!-- c --></div>')
   const div = doc.children[0] as Element
-  const text = div.children[0]
-  const comment = div.children[1]
+  const text = div.children[0]!
+  const comment = div.children[1]!
 
   it('isDocument identifies the root', () => {
     expect(isDocument(doc)).toBe(true)
