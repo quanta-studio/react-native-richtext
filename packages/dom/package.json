@@ -1,0 +1,44 @@
+{
+  "name": "@yk-yong/rn-rich-text-dom",
+  "version": "0.0.0",
+  "description": "Forgiving HTML → DOM parsing, traversal, and node guards for rn-rich-text. React-free.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc -p tsconfig.test.json",
+    "clean": "rimraf dist"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "html",
+    "parser",
+    "dom",
+    "react-native",
+    "rich-text"
+  ],
+  "dependencies": {
+    "domelementtype": "^3.0.0",
+    "domhandler": "^6.0.1",
+    "domutils": "^4.0.2",
+    "htmlparser2": "^12.0.0"
+  }
+}
