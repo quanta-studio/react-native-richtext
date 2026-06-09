@@ -4,7 +4,10 @@ on:
   push:
     branches: [main]
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+# Queue (never cancel) overlapping runs so an in-flight publish is not interrupted.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   release:
@@ -14,6 +17,9 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Changesets needs full history to diff against the base branch.
+          fetch-depth: 0
 
       - uses: pnpm/action-setup@v4
         with:
@@ -23,6 +29,8 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
+          # Writes a CI-only ~/.npmrc wired to NODE_AUTH_TOKEN (keeps auth out of the repo).
+          registry-url: 'https://registry.npmjs.org'
 
       - run: pnpm install --frozen-lockfile
 
@@ -32,4 +40,4 @@ jobs:
           publish: pnpm release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
