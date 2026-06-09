@@ -21,9 +21,13 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "clean": "pnpm -r run clean && rimraf '**/*.tsbuildinfo'",
-    "prepare": "husky"
+    "prepare": "husky",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "pnpm build && changeset publish"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.31.0",
     "@commitlint/cli": "^21.0.2",
     "@commitlint/config-conventional": "^21.0.2",
     "@eslint/js": "^10.0.1",
