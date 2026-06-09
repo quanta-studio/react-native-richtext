@@ -12,15 +12,15 @@
 
 ## Decisions locked during planning
 
-| Question | Decision |
-| --- | --- |
-| Package manager / workspaces | **pnpm workspaces** |
-| Test runner (React-free pkgs) | **Vitest** |
-| Build tool | **tsup** for JS (ESM+CJS); `tsc -b` for `.d.ts` + project-reference type graph |
-| npm scope / naming | Scope **`@yk-yong`**, packages prefixed **`rn-rich-text-`**. Phase 0 ships `@yk-yong/rn-rich-text-dom`. Future: `…-css`, `…-core`, and the umbrella RN package `@yk-yong/rn-rich-text`. Rename later with a repo-wide find/replace. |
-| `selectAll(sel)` in `dom` | **Deferred to Phase 1 (`@scope/css`).** Selector matching needs `css-select`, which the spec assigns to the CSS engine. Phase 0 exposes `domutils` traversal only. |
-| RN/React peer floors | **Not applicable to Phase 0** — no React/RN package yet. Resolve in Phase 2. |
-| `img` in v1 (Phase 2 vs 3) | **Out of scope for Phase 0.** Resolve when Phase 2/3 specs are written. |
+| Question                      | Decision                                                                                                                                                                                                                            |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Package manager / workspaces  | **pnpm workspaces**                                                                                                                                                                                                                 |
+| Test runner (React-free pkgs) | **Vitest**                                                                                                                                                                                                                          |
+| Build tool                    | **tsup** for JS (ESM+CJS); `tsc -b` for `.d.ts` + project-reference type graph                                                                                                                                                      |
+| npm scope / naming            | Scope **`@yk-yong`**, packages prefixed **`rn-rich-text-`**. Phase 0 ships `@yk-yong/rn-rich-text-dom`. Future: `…-css`, `…-core`, and the umbrella RN package `@yk-yong/rn-rich-text`. Rename later with a repo-wide find/replace. |
+| `selectAll(sel)` in `dom`     | **Deferred to Phase 1 (`@scope/css`).** Selector matching needs `css-select`, which the spec assigns to the CSS engine. Phase 0 exposes `domutils` traversal only.                                                                  |
+| RN/React peer floors          | **Not applicable to Phase 0** — no React/RN package yet. Resolve in Phase 2.                                                                                                                                                        |
+| `img` in v1 (Phase 2 vs 3)    | **Out of scope for Phase 0.** Resolve when Phase 2/3 specs are written.                                                                                                                                                             |
 
 ## File structure (created by this plan)
 
@@ -75,6 +75,7 @@ rn-rich-text/
 ## Task 1: Root workspace + Git ignore + Node/pnpm pinning
 
 **Files:**
+
 - Create: `package.json`, `pnpm-workspace.yaml`, `.npmrc`, `.nvmrc`, `.gitignore`
 
 - [ ] **Step 1: Enable corepack/pnpm**
@@ -156,6 +157,7 @@ git commit -m "chore: scaffold pnpm workspace root"
 ## Task 2: TypeScript base config + root solution
 
 **Files:**
+
 - Create: `tsconfig.base.json`, `tsconfig.json`
 
 - [ ] **Step 1: Add TypeScript**
@@ -221,6 +223,7 @@ git commit -m "chore: add shared TypeScript config and root solution"
 ## Task 3: Prettier
 
 **Files:**
+
 - Create: `.prettierrc.json`, `.prettierignore`
 - Modify: `package.json` (add scripts)
 
@@ -276,6 +279,7 @@ git commit -m "chore: add Prettier config and format scripts"
 ## Task 4: ESLint (flat config)
 
 **Files:**
+
 - Create: `eslint.config.mjs`
 - Modify: `package.json` (add scripts)
 
@@ -336,6 +340,7 @@ git commit -m "chore: add ESLint flat config"
 ## Task 5: Vitest + tsup + build/test/clean scripts
 
 **Files:**
+
 - Create: `vitest.config.ts`
 - Modify: `package.json` (add scripts)
 
@@ -395,6 +400,7 @@ git commit -m "chore: add Vitest, tsup, and workspace build/test scripts"
 ## Task 6: `@yk-yong/rn-rich-text-dom` package skeleton (types-only barrel)
 
 **Files:**
+
 - Create: `packages/dom/package.json`, `packages/dom/tsconfig.json`, `packages/dom/tsconfig.test.json`, `packages/dom/tsup.config.ts`, `packages/dom/README.md`, `packages/dom/src/types.ts`, `packages/dom/src/index.ts`
 - Modify: `tsconfig.json` (root — add the project reference)
 
@@ -555,6 +561,7 @@ git commit -m "feat(dom): scaffold @yk-yong/rn-rich-text-dom package"
 ## Task 7: `parse(html)` → `Document` (TDD)
 
 **Files:**
+
 - Create: `packages/dom/test/parse.test.ts`, `packages/dom/src/parse.ts`
 - Modify: `packages/dom/src/index.ts`
 
@@ -698,6 +705,7 @@ git commit -m "feat(dom): add parse(html) → Document"
 ## Task 8: Node guards (TDD)
 
 **Files:**
+
 - Create: `packages/dom/test/guards.test.ts`, `packages/dom/src/guards.ts`
 - Modify: `packages/dom/src/index.ts`
 
@@ -752,15 +760,7 @@ Expected: FAIL — `isTag`/`isText`/`isComment`/`isDocument`/`hasChildren` are n
 - [ ] **Step 3: Implement `packages/dom/src/guards.ts`**
 
 ```ts
-export {
-  isTag,
-  isText,
-  isComment,
-  isCDATA,
-  isDirective,
-  isDocument,
-  hasChildren,
-} from 'domhandler'
+export { isTag, isText, isComment, isCDATA, isDirective, isDocument, hasChildren } from 'domhandler'
 export { ElementType } from 'domelementtype'
 ```
 
@@ -792,6 +792,7 @@ git commit -m "feat(dom): re-export typed node guards"
 ## Task 9: Query / traversal helpers (TDD)
 
 **Files:**
+
 - Create: `packages/dom/test/query.test.ts`, `packages/dom/src/query.ts`
 - Modify: `packages/dom/src/index.ts`
 
@@ -940,17 +941,21 @@ Expected: includes `index.js` (ESM), `index.cjs` (CJS), and `index.d.ts`.
 - [ ] **Step 3: Smoke-test the ESM build**
 
 Run:
+
 ```bash
 node --input-type=module -e "import { parse } from './packages/dom/dist/index.js'; console.log(parse('<p>x</p>').children[0].name)"
 ```
+
 Expected: prints `p`.
 
 - [ ] **Step 4: Smoke-test the CJS build**
 
 Run:
+
 ```bash
 node -e "const { parse } = require('./packages/dom/dist/index.cjs'); console.log(parse('<p>x</p>').children[0].name)"
 ```
+
 Expected: prints `p`.
 
 - [ ] **Step 5: Verify a clean rebuild**
@@ -965,6 +970,7 @@ Expected: `dist/` is removed then regenerated with the same three artifacts; no 
 ## Task 11: Governance files (LICENSE, README, CONTRIBUTING, templates, example stub)
 
 **Files:**
+
 - Create: `LICENSE`, `README.md`, `CONTRIBUTING.md`, `.github/PULL_REQUEST_TEMPLATE.md`, `.github/ISSUE_TEMPLATE/bug_report.md`, `.github/ISSUE_TEMPLATE/feature_request.md`, `example/README.md`
 
 - [ ] **Step 1: Create `LICENSE` (MIT)**
@@ -1005,19 +1011,19 @@ New-Architecture-first alternative to `react-native-render-html`.
 
 ## Packages
 
-| Package | Status | Description |
-| --- | --- | --- |
-| `@yk-yong/rn-rich-text-dom` | Phase 0 ✅ | Forgiving HTML → DOM, traversal, node guards. React-free. |
-| `@yk-yong/rn-rich-text-css` | Phase 1 | CSS engine: parse, selectors, specificity, cascade → RN styles. |
-| `@yk-yong/rn-rich-text-core` | Phase 2 | Styled render-tree builder. |
-| `@yk-yong/rn-rich-text` | Phase 2 | The public `<RichText>` component + renderer registry. |
+| Package                      | Status     | Description                                                     |
+| ---------------------------- | ---------- | --------------------------------------------------------------- |
+| `@yk-yong/rn-rich-text-dom`  | Phase 0 ✅ | Forgiving HTML → DOM, traversal, node guards. React-free.       |
+| `@yk-yong/rn-rich-text-css`  | Phase 1    | CSS engine: parse, selectors, specificity, cascade → RN styles. |
+| `@yk-yong/rn-rich-text-core` | Phase 2    | Styled render-tree builder.                                     |
+| `@yk-yong/rn-rich-text`      | Phase 2    | The public `<RichText>` component + renderer registry.          |
 
 ## Development
 
 \`\`\`bash
 corepack enable
 pnpm install
-pnpm build      # tsup (JS) + tsc -b (types)
+pnpm build # tsup (JS) + tsc -b (types)
 pnpm typecheck
 pnpm test
 pnpm lint
@@ -1036,7 +1042,7 @@ Thanks for helping build `rn-rich-text`!
 ## Setup
 
 \`\`\`bash
-corepack enable          # provides pnpm
+corepack enable # provides pnpm
 pnpm install
 \`\`\`
 
@@ -1096,12 +1102,15 @@ labels: bug
 **HTML / CSS input**
 
 \`\`\`html
+
 <!-- minimal reproduction -->
+
 \`\`\`
 
 **Expected vs actual**
 
 **Environment**
+
 - package + version:
 - React Native version:
 - platform (iOS/Android), New Architecture: yes
@@ -1148,6 +1157,7 @@ git commit -m "docs: add LICENSE, README, CONTRIBUTING, and GitHub templates"
 ## Task 12: Conventional Commits (Husky + commitlint)
 
 **Files:**
+
 - Create: `commitlint.config.mjs`, `.husky/commit-msg`
 - Modify: `package.json` (Husky adds the `prepare` script)
 
@@ -1181,10 +1191,12 @@ pnpm exec commitlint --edit "$1"
 - [ ] **Step 6: Verify commitlint accepts/rejects correctly**
 
 Run:
+
 ```bash
 echo "feat(dom): valid message" | pnpm exec commitlint
 echo "broken message" | pnpm exec commitlint; echo "exit: $?"
 ```
+
 Expected: the first command exits 0 (no output); the second prints errors and `exit: 1`.
 
 - [ ] **Step 7: Commit (exercises the hook)**
@@ -1193,6 +1205,7 @@ Expected: the first command exits 0 (no output); the second prints errors and `e
 git add -A
 git commit -m "chore: enforce Conventional Commits via Husky + commitlint"
 ```
+
 Expected: the `commit-msg` hook passes and the commit succeeds.
 
 ---
@@ -1200,6 +1213,7 @@ Expected: the `commit-msg` hook passes and the commit succeeds.
 ## Task 13: Changesets (versioning)
 
 **Files:**
+
 - Create: `.changeset/config.json`, `.changeset/README.md`
 - Modify: `package.json` (add scripts)
 
@@ -1260,6 +1274,7 @@ git commit -m "chore: configure Changesets for versioning"
 ## Task 14: GitHub Actions CI
 
 **Files:**
+
 - Create: `.github/workflows/ci.yml`
 
 - [ ] **Step 1: Create `.github/workflows/ci.yml`**
@@ -1314,6 +1329,7 @@ git commit -m "ci: lint, typecheck, test, and build on every PR"
 ## Task 15: Changesets release workflow (optional; inert until secrets set)
 
 **Files:**
+
 - Create: `.github/workflows/release.yml`
 
 - [ ] **Step 1: Create `.github/workflows/release.yml`**
@@ -1372,6 +1388,7 @@ git commit -m "ci: add Changesets release workflow"
 - [ ] **Step 1: Run the complete gate from a clean install**
 
 Run:
+
 ```bash
 pnpm clean
 pnpm install --frozen-lockfile
@@ -1381,11 +1398,13 @@ pnpm test
 pnpm test:coverage
 pnpm build
 ```
+
 Expected: every command exits 0. Coverage prints a table for `packages/dom/src` (`parse.ts`, `guards.ts`, `query.ts`).
 
 - [ ] **Step 2: Confirm the deliverable**
 
 Verify all are true:
+
 - `packages/dom` builds `index.js` + `index.cjs` + `index.d.ts` and is importable from both ESM and CJS (Task 10).
 - `parse`, the node guards, and the traversal helpers are unit-tested and green.
 - `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` all pass — the CI gate is green.
@@ -1399,26 +1418,26 @@ Expected: clean (all work committed; `dist/`, `coverage/`, `node_modules/` ignor
 
 ## Self-review — spec coverage
 
-| Phase 0 spec requirement | Task(s) |
-| --- | --- |
-| pnpm workspaces, `only-allow` guard | 1 |
-| TypeScript + **project references** | 2, 6 |
-| ESLint + Prettier | 3, 4 |
-| Vitest (unit tests) | 5, 7–9 |
-| tsup build (ESM+CJS+d.ts) | 5, 6, 10 |
-| `packages/dom` only in Phase 0 | 6 |
-| `parse(html) → Document` (forgiving) | 7 |
-| Curated traversal helpers (`getElementsByTagName`, …) | 9 |
-| Typed node guards (`isTag`, `isText`, `isComment`, …) | 8 |
-| Entities left **raw** in the DOM | 7 (test + `decodeEntities: false`) |
-| Exhaustive unit tests (nesting, void els, attrs, malformed, entities, comments) | 7–9 |
-| MIT `LICENSE`, `README`, `CONTRIBUTING` | 11 |
-| Issue/PR templates | 11 |
-| `example/` app stub | 11 |
-| Conventional Commits | 12 |
-| Changesets versioning + automated releases | 13, 15 |
-| GitHub Actions CI (lint + typecheck + test on PR) | 14 |
-| New-Architecture-only / RN peer floors | N/A in Phase 0 (no RN pkg yet) — Phase 2 |
+| Phase 0 spec requirement                                                        | Task(s)                                  |
+| ------------------------------------------------------------------------------- | ---------------------------------------- |
+| pnpm workspaces, `only-allow` guard                                             | 1                                        |
+| TypeScript + **project references**                                             | 2, 6                                     |
+| ESLint + Prettier                                                               | 3, 4                                     |
+| Vitest (unit tests)                                                             | 5, 7–9                                   |
+| tsup build (ESM+CJS+d.ts)                                                       | 5, 6, 10                                 |
+| `packages/dom` only in Phase 0                                                  | 6                                        |
+| `parse(html) → Document` (forgiving)                                            | 7                                        |
+| Curated traversal helpers (`getElementsByTagName`, …)                           | 9                                        |
+| Typed node guards (`isTag`, `isText`, `isComment`, …)                           | 8                                        |
+| Entities left **raw** in the DOM                                                | 7 (test + `decodeEntities: false`)       |
+| Exhaustive unit tests (nesting, void els, attrs, malformed, entities, comments) | 7–9                                      |
+| MIT `LICENSE`, `README`, `CONTRIBUTING`                                         | 11                                       |
+| Issue/PR templates                                                              | 11                                       |
+| `example/` app stub                                                             | 11                                       |
+| Conventional Commits                                                            | 12                                       |
+| Changesets versioning + automated releases                                      | 13, 15                                   |
+| GitHub Actions CI (lint + typecheck + test on PR)                               | 14                                       |
+| New-Architecture-only / RN peer floors                                          | N/A in Phase 0 (no RN pkg yet) — Phase 2 |
 
 **Deliverable:** a tested, React-free HTML→DOM package and a green CI pipeline. ✅
 
@@ -1428,4 +1447,3 @@ Expected: clean (all work committed; `dist/`, `coverage/`, `node_modules/` ignor
 - **No DOM lib on purpose:** if you reach for a browser global (`document`, `window`, global `Element`), stop — these packages are React-free and browser-free. The node types come from `domhandler` via `./types`.
 - **`selectAll`/CSS selectors are Phase 1.** Don't pull in `css-select` here.
 - **If a `domutils`/`domhandler` export name differs** in the installed version, the failing test or `tsc` will pinpoint it — adjust the re-export list in `query.ts`/`guards.ts` to match; don't re-implement.
-

@@ -18,12 +18,12 @@ but its rendering concepts carry straight over (see "Relationship to the seed").
 
 ## Decisions (the four pillars)
 
-| Decision | Choice | Consequence |
-| --- | --- | --- |
-| Positioning | Full `react-native-render-html` replacement, shipped incrementally | Architecture must scale to the full surface (tables, images, custom renderers) |
-| Platform | **New Architecture (Fabric) only**; bare RN + Expo; no web in v1 | Simpler internals (no Paper interop); richer CSS→RN prop mapping; "Fabric-native + maintained" is the headline pitch |
-| CSS engine | **Full**: inline + tag/class maps + `<style>` blocks + selectors + specificity/cascade/inheritance | Real CSS subsystem from v1; de-risked because the selector engine already exists |
-| Home | New standalone multi-package monorepo; consuming apps link locally | Clean OSS governance/CI/semver from day one |
+| Decision    | Choice                                                                                             | Consequence                                                                                                          |
+| ----------- | -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Positioning | Full `react-native-render-html` replacement, shipped incrementally                                 | Architecture must scale to the full surface (tables, images, custom renderers)                                       |
+| Platform    | **New Architecture (Fabric) only**; bare RN + Expo; no web in v1                                   | Simpler internals (no Paper interop); richer CSS→RN prop mapping; "Fabric-native + maintained" is the headline pitch |
+| CSS engine  | **Full**: inline + tag/class maps + `<style>` blocks + selectors + specificity/cascade/inheritance | Real CSS subsystem from v1; de-risked because the selector engine already exists                                     |
+| Home        | New standalone multi-package monorepo; consuming apps link locally                                 | Clean OSS governance/CI/semver from day one                                                                          |
 
 ## Substrate — stand on proven libs, own the orchestration
 
@@ -31,15 +31,15 @@ The hard, edge-case-heavy substrate is already proven and largely present in the
 ecosystem (verified in the seed app's `node_modules`, pulled in transitively via
 `react-native-svg`):
 
-| Layer | Library | Role | Status |
-| --- | --- | --- | --- |
-| HTML → DOM | `htmlparser2` → `domhandler` | Forgiving parse to a queryable DOM | **add** htmlparser2; domhandler proven |
-| Selector matching | `css-select` + `domutils` | Match `.cls #id div p ul>li` against the DOM | proven (no adapter needed) |
-| CSS / `<style>` parse | `css-tree` | Parse stylesheets + inline declarations + selector ASTs | proven |
-| Specificity | `@csstools/selector-specificity` (or hand-rolled from the selector AST) | Order matched rules | small/known |
-| Declaration → RN style | `css-to-react-native` | Expand shorthands, parse units/colors → RN style object | **add** |
-| Entity decoding | `entities` | Complete HTML entity decode | proven |
-| Layout | **Yoga** (native, in Fabric) | Flexbox box model | free with RN |
+| Layer                  | Library                                                                 | Role                                                    | Status                                 |
+| ---------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------- | -------------------------------------- |
+| HTML → DOM             | `htmlparser2` → `domhandler`                                            | Forgiving parse to a queryable DOM                      | **add** htmlparser2; domhandler proven |
+| Selector matching      | `css-select` + `domutils`                                               | Match `.cls #id div p ul>li` against the DOM            | proven (no adapter needed)             |
+| CSS / `<style>` parse  | `css-tree`                                                              | Parse stylesheets + inline declarations + selector ASTs | proven                                 |
+| Specificity            | `@csstools/selector-specificity` (or hand-rolled from the selector AST) | Order matched rules                                     | small/known                            |
+| Declaration → RN style | `css-to-react-native`                                                   | Expand shorthands, parse units/colors → RN style object | **add**                                |
+| Entity decoding        | `entities`                                                              | Complete HTML entity decode                             | proven                                 |
+| Layout                 | **Yoga** (native, in Fabric)                                            | Flexbox box model                                       | free with RN                           |
 
 We own: the cascade/inheritance orchestration, the RN-specific property whitelist (tuned
 to Fabric's expanded prop set — `boxShadow`, `filter`, `gap`, `aspectRatio`, … where
@@ -47,7 +47,7 @@ supported), the user-agent stylesheet, the block/inline render model, and the pu
 New direct deps are only `htmlparser2` and `css-to-react-native`; the rest are promotions
 of already-proven ecosystem packages.
 
-> Note: Yoga gives layout for free, but there is **no native CSS *interpretation* engine** —
+> Note: Yoga gives layout for free, but there is **no native CSS _interpretation_ engine** —
 > parsing, cascade, selectors, color/unit handling all run in JS. "Going Fabric" helps only
 > by widening the set of CSS properties that map faithfully to RN.
 
@@ -66,14 +66,15 @@ HTML ─▶ [1] Parse        htmlparser2 → domhandler DOM (forgiving, malforme
 ```
 
 **Stage 4 carries the seed's logic, generalized:**
+
 - **Inline context** (`b/strong i/em u s span code a` …) → nested `<Text>`.
 - **Block context** (`p div ul ol li blockquote h1–h6 pre hr table` …) → `<View>`/`<Text>`,
   honoring the "no `<View>` inside `<Text>`" constraint via the block/inline split (the
   seed's core insight, now driven by computed `display`).
 - Whitespace collapse, entity decode (via `entities`), and **per-weight/style font
-  resolution** (the Montserrat insight — emphasis selects a font *file*, configurable).
+  resolution** (the Montserrat insight — emphasis selects a font _file_, configurable).
 
-*Rejected alternatives:* no-DOM/regex (cannot do selectors), WebView (defeats native perf/UX).
+_Rejected alternatives:_ no-DOM/regex (cannot do selectors), WebView (defeats native perf/UX).
 
 ## Monorepo packages
 
@@ -111,7 +112,7 @@ popular — here it is the clean, typed core.
   Deliverable: a tested, React-free HTML→DOM package and a green CI pipeline.
 - **Phase 1 — `@scope/css` engine**: parse, selector match, specificity, cascade,
   inheritance, declaration→RN mapping, UA stylesheet. Deliverable: `HTML + CSS → resolved
-  RN styles per node`, no rendering.
+RN styles per node`, no rendering.
 - **Phase 2 — `@scope/core` + `@scope/react-native` (v1 render)**: styled-tree builder,
   inline/block renderers for the core tag set, renderer registry, `<RichText>` API, font
   resolution, `onLinkPress`. **Dogfood**: replace the app seed in `OutletAboutScreen` via
@@ -135,6 +136,7 @@ CSS animations/transitions, `@media`/`@supports`. (Tables and images are Phases 
 ## Phase 0 — detailed design (the first implementable sub-project)
 
 **Monorepo scaffold:**
+
 - Package manager: npm or pnpm workspaces (decide in plan); TypeScript with project
   references; ESLint + Prettier; Vitest/Jest for unit tests; tsup/bob for builds.
 - `packages/dom` only in Phase 0; other package dirs created as their phases begin.
@@ -145,11 +147,13 @@ CSS animations/transitions, `@media`/`@supports`. (Tables and images are Phases 
   versions decided in plan, ≥ the New-Arch-stable line); Expo supported.
 
 **`@scope/dom` API:**
+
 ```ts
 parse(html: string): Document            // htmlparser2 → domhandler tree
 // re-export/curate domutils query helpers: getElementsByTagName, selectAll(sel), etc.
 // typed node guards: isTag, isText, isComment
 ```
+
 Forgiving parsing (malformed HTML tolerated). No CSS, no React. Exhaustive unit tests:
 nesting, void elements, attributes, malformed input, entities left raw (decoded later in
 the css/render layer or via `entities` at text-render time).
