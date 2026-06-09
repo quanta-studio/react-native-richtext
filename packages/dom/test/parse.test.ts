@@ -63,12 +63,16 @@ describe('parse', () => {
     expect((span.children[0] as Text).data).toBe('oops')
   })
 
-  it('handles stray closing tags without throwing', () => {
-    // htmlparser2 v12 treats a stray </p> as an opening <p> in forgiving HTML mode.
-    // The important invariant is: no throw, and the outer div is still the root child.
+  it('applies the HTML quirk where a stray </p> generates an empty <p>', () => {
+    // Per the HTML spec (and browsers), an end tag </p> with no open <p> in scope
+    // produces an empty <p> element. htmlparser2 v12 implements this in HTML mode.
     expect(() => parse('<div></p></div>')).not.toThrow()
     const doc = parse('<div></p></div>')
     const div = doc.children[0] as Element
     expect(div.name).toBe('div')
+    const elements = div.children.filter((n): n is Element => n.type === 'tag')
+    expect(elements).toHaveLength(1)
+    expect(elements[0]!.name).toBe('p')
+    expect(elements[0]!.children).toHaveLength(0)
   })
 })
