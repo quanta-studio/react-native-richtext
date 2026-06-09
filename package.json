@@ -6,8 +6,13 @@
   "description": "Fabric-native HTML renderer for React Native (monorepo root).",
   "license": "MIT",
   "packageManager": "pnpm@11.5.2",
-  "engines": { "node": ">=20.18.0" },
+  "engines": {
+    "node": ">=20.18.0"
+  },
   "scripts": {
     "preinstall": "npx only-allow pnpm"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
   }
 }
