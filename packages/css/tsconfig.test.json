@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": false,
+    "noEmit": true,
+    "types": ["node"],
+    // Resolve the dom workspace dep to its SOURCE so typecheck does not require a
+    // prior build of dom's dist/*.d.ts. The real build (tsc -b via tsconfig.json)
+    // still resolves it through project references to dist.
+    "paths": {
+      "@yk-yong/rn-rich-text-dom": ["../dom/src/index.ts"]
+    }
+  },
+  "include": ["src", "test"]
+}

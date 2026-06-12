@@ -1,0 +1,48 @@
+{
+  "name": "@yk-yong/rn-rich-text-css",
+  "version": "0.0.0",
+  "description": "CSS engine for rn-rich-text: cascade, specificity, inheritance, and declaration->RN style resolution. React-free.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc -p tsconfig.test.json",
+    "clean": "rimraf dist"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "css",
+    "cascade",
+    "react-native",
+    "rich-text",
+    "stylesheet"
+  ],
+  "dependencies": {
+    "@yk-yong/rn-rich-text-dom": "workspace:*",
+    "css-select": "^7.0.0",
+    "css-to-react-native": "^3.2.0",
+    "css-tree": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/css-tree": "^2.3.11",
+    "@types/node": "^25.9.2"
+  }
+}
