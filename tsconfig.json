@@ -1,4 +1,4 @@
 {
   "files": [],
-  "references": [{ "path": "packages/dom" }]
+  "references": [{ "path": "packages/dom" }, { "path": "packages/css" }]
 }
