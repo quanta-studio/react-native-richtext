@@ -21,17 +21,19 @@ jobs:
           # Changesets needs full history to diff against the base branch.
           fetch-depth: 0
 
-      # setup-node MUST precede pnpm/action-setup: pnpm 11.5.2's installer requires
-      # Node >=22.13, so Node 22 has to be active before pnpm self-installs.
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           # Writes a CI-only ~/.npmrc wired to NODE_AUTH_TOKEN (keeps auth out of the repo).
           registry-url: 'https://registry.npmjs.org'
 
+      # standalone: true installs pnpm as a self-contained binary (bundled Node), so
+      # pnpm 11.5.2 (whose npm manifest requires Node >=22.13) installs regardless of
+      # the Actions runner's Node 20 runtime. Node 22 above runs the scripts.
       - uses: pnpm/action-setup@v4
         with:
           version: 11.5.2
+          standalone: true
 
       - run: pnpm install --frozen-lockfile
 
