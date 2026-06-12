@@ -11,7 +11,7 @@ maintained, and not New-Architecture-first).
 
 It originated from an in-app seed (`@packages/rich-text` in the fonerewards mobile app) that
 validated the rendering model. This is a **clean-room build on the htmlparser2/css ecosystem** —
-the seed's parser/entity-decoder are superseded; its rendering *concepts* carry over.
+the seed's parser/entity-decoder are superseded; its rendering _concepts_ carry over.
 
 ## Status
 
@@ -21,12 +21,12 @@ exists yet; **Phase 0** (monorepo scaffold + `@scope/dom`) is the next implement
 
 ## Key Decisions — do NOT re-litigate
 
-| Decision | Choice |
-| --- | --- |
-| Positioning | Full `react-native-render-html` replacement, shipped **incrementally** |
-| Platform | **New Architecture (Fabric) only** · bare RN + Expo · **no web** in v1 |
-| CSS engine | **Full** from v1: inline + tag/class maps + `<style>` blocks + selectors + specificity/cascade/inheritance |
-| Home | Standalone multi-package monorepo; consuming apps **link locally** during dev |
+| Decision    | Choice                                                                                                     |
+| ----------- | ---------------------------------------------------------------------------------------------------------- |
+| Positioning | Full `react-native-render-html` replacement, shipped **incrementally**                                     |
+| Platform    | **New Architecture (Fabric) only** · bare RN + Expo · **no web** in v1                                     |
+| CSS engine  | **Full** from v1: inline + tag/class maps + `<style>` blocks + selectors + specificity/cascade/inheritance |
+| Home        | Standalone multi-package monorepo; consuming apps **link locally** during dev                              |
 
 ## Architecture
 
@@ -46,9 +46,9 @@ Stage 4 carries the seed's logic, generalized: inline context (`b/i/a/span/code�
 `<Text>`; block context (`p/div/ul/li/h*/blockquote…`) → `<View>`/`<Text>` via the "no `<View>`
 inside `<Text>`" split (driven by computed `display`); whitespace collapse; entity decode (via
 `entities`); **per-weight/style font resolution** (the Montserrat insight — emphasis selects a
-font *file*, configurable via a `fonts` prop).
+font _file_, configurable via a `fonts` prop).
 
-*Rejected:* no-DOM/regex (no selectors), WebView (defeats native perf).
+_Rejected:_ no-DOM/regex (no selectors), WebView (defeats native perf).
 
 ## Packages (monorepo)
 
@@ -79,17 +79,17 @@ Public API target:
 Stand on proven libs; own the orchestration. New direct deps are only **`htmlparser2`** and
 **`css-to-react-native`**; the rest are proven ecosystem packages.
 
-| Layer | Library | Status |
-| --- | --- | --- |
-| HTML → DOM | `htmlparser2` → `domhandler` | add htmlparser2 |
-| Selector matching | `css-select` + `domutils` | proven (no adapter) |
-| CSS / `<style>` parse | `css-tree` | proven |
-| Specificity | `@csstools/selector-specificity` or hand-rolled | small/known |
-| Declaration → RN style | `css-to-react-native` | add |
-| Entity decoding | `entities` | proven |
-| Layout | Yoga (native, Fabric) | free with RN |
+| Layer                  | Library                                         | Status              |
+| ---------------------- | ----------------------------------------------- | ------------------- |
+| HTML → DOM             | `htmlparser2` → `domhandler`                    | add htmlparser2     |
+| Selector matching      | `css-select` + `domutils`                       | proven (no adapter) |
+| CSS / `<style>` parse  | `css-tree`                                      | proven              |
+| Specificity            | `@csstools/selector-specificity` or hand-rolled | small/known         |
+| Declaration → RN style | `css-to-react-native`                           | add                 |
+| Entity decoding        | `entities`                                      | proven              |
+| Layout                 | Yoga (native, Fabric)                           | free with RN        |
 
-There is **no native CSS *interpretation* engine** — parse/cascade/selectors/colors/units all
+There is **no native CSS _interpretation_ engine** — parse/cascade/selectors/colors/units all
 run in JS. Fabric only helps by widening which CSS props map faithfully to RN (`boxShadow`,
 `filter`, `gap`, `aspectRatio`, … where supported).
 
@@ -115,7 +115,7 @@ react-native-web, pseudo-elements, animations, `@media`/`@supports`.
   unit tests; `react-native` gets react-test-renderer structure/style assertions; no snapshots.
 - **New Architecture only** — do not add Paper/old-arch interop.
 - **Lower packages stay React-free** — `dom`/`css`/`core` must not import React or RN components
-  (they may import RN *types* / produce RN style objects). Keeps them testable and reusable.
+  (they may import RN _types_ / produce RN style objects). Keeps them testable and reusable.
 - **Strict TypeScript**, no `any`.
 - **Conventional Commits** + Changesets for versioning. MIT license.
 - Maintain a fixtures corpus of real-world HTML (CMS/Wikipedia-style) for integration tests.
