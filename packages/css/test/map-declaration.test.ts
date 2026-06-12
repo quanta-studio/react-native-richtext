@@ -73,4 +73,18 @@ describe('mapDeclaration', () => {
     const out = mapDeclaration({ property: 'width', value: '50%', important: false })
     expect(out.decls).toEqual([{ prop: 'width', value: '50%', important: false }])
   })
+
+  it('converts a pt font-size to px through mapDeclaration', () => {
+    const out = mapDeclaration({ property: 'font-size', value: '12pt', important: false })
+    expect(out.decls).toEqual([{ prop: 'fontSize', value: 16, important: false }])
+    expect(out.diagnostics).toEqual([])
+  })
+
+  it('drops a viewport-unit value and emits unsupported-unit', () => {
+    const out = mapDeclaration({ property: 'width', value: '50vw', important: false })
+    expect(out.decls).toEqual([])
+    expect(out.diagnostics).toEqual([
+      { property: 'width', value: '50vw', reason: 'unsupported-unit' },
+    ])
+  })
 })

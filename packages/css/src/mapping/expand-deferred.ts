@@ -16,7 +16,7 @@ const RESOLVE_PERCENT_PROPS = new Set<RNStyleProp>(['fontSize', 'lineHeight'])
 /** Parse a single length token for a given RN longhand prop into a final value or a DeferredLength. */
 function parseToken(prop: RNStyleProp, token: string): DeclValue {
   const t = token.trim()
-  const m = /^(-?\d*\.?\d+)(em|rem|%|px)?$/i.exec(t)
+  const m = /^(-?\d*\.?\d+)(em|rem|%|px|pt)?$/i.exec(t)
   if (!m) return t // leave non-numeric tokens (e.g. keywords) as-is
   const n = Number(m[1])
   const unit = (m[2] ?? '').toLowerCase()
@@ -29,6 +29,7 @@ function parseToken(prop: RNStyleProp, token: string): DeclValue {
     }
     return t // layout %: pass through as RN string
   }
+  if (unit === 'pt') return (n * 96) / 72
   if (unit === 'px') return n
   // unitless number: line-height multiplies font-size; everything else is a raw number
   if (prop === 'lineHeight') {

@@ -49,4 +49,8 @@ describe('expandDeferred', () => {
       { prop: 'marginLeft', value: 0 },
     ])
   })
+
+  it('converts pt to px (context-free)', () => {
+    expect(expandDeferred('fontSize', '12pt')).toEqual([{ prop: 'fontSize', value: 16 }]) // 12 * 96/72
+  })
 })

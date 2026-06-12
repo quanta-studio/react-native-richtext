@@ -12,7 +12,10 @@ export interface MapResult {
   diagnostics: MapDiagnostic[]
 }
 
-const RELATIVE_UNIT = /(?:^|\s)-?\d*\.?\d+(?:em|rem|%)(?![a-z])/i
+const RELATIVE_UNIT = /(?:^|\s)-?\d*\.?\d+(?:em|rem|%|pt)(?![a-z])/i
+
+/** Bare number + a unit RN cannot use; % and px are excluded (valid for layout / already numeric). */
+const UNSUPPORTED_UNIT = /^-?\d*\.?\d+(?:vw|vh|vmin|vmax|cm|mm|in|pc|ex|ch|q|pt)$/i
 
 /** Values that RN cannot interpret: CSS functions not supported by css-to-react-native. */
 const UNSUPPORTED_VALUE = /\bcalc\s*\(/i
@@ -64,14 +67,30 @@ export function mapDeclaration(decl: RawDecl): MapResult {
   try {
     const rn = getStylesForProperty(camel, decl.value)
     const decls: RNDecl[] = []
+    let droppedUnit = false
     for (const [prop, value] of Object.entries(rn)) {
+      if (typeof value === 'string' && UNSUPPORTED_UNIT.test(value.trim())) {
+        droppedUnit = true
+        continue
+      }
       decls.push({
         prop: prop as TargetProp,
         value: value as RNDecl['value'],
         important: decl.important,
       })
     }
-    return { decls, diagnostics: NO_DIAGNOSTICS }
+    if (droppedUnit && decls.length === 0) {
+      return {
+        decls: [],
+        diagnostics: [{ property: decl.property, value: decl.value, reason: 'unsupported-unit' }],
+      }
+    }
+    return {
+      decls,
+      diagnostics: droppedUnit
+        ? [{ property: decl.property, value: decl.value, reason: 'unsupported-unit' }]
+        : NO_DIAGNOSTICS,
+    }
   } catch {
     return failDecl(decl, 'unsupported-value')
   }
