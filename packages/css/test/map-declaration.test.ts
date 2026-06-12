@@ -41,9 +41,24 @@ describe('mapDeclaration', () => {
     expect(out.diagnostics).toEqual([{ property: 'float', value: 'left', reason: 'unknown-property' }])
   })
 
-  it('emits unsupported-value diagnostic when css-to-react-native throws on a known prop', () => {
+  it('emits unsupported-value diagnostic for unmappable values like calc()', () => {
     const out = mapDeclaration({ property: 'width', value: 'calc(100% - 10px)', important: false })
     expect(out.decls).toEqual([])
     expect(out.diagnostics[0]!.reason).toBe('unsupported-value')
+  })
+
+  it('defers a % font-size through mapDeclaration', () => {
+    const out = mapDeclaration({ property: 'font-size', value: '120%', important: false })
+    expect(out.decls[0]!.value).toEqual({ kind: 'deferred-length', unit: '%', number: 120, prop: 'fontSize' })
+  })
+
+  it('defers a % line-height through mapDeclaration', () => {
+    const out = mapDeclaration({ property: 'line-height', value: '150%', important: false })
+    expect(out.decls[0]!.value).toEqual({ kind: 'deferred-length', unit: '%', number: 150, prop: 'lineHeight' })
+  })
+
+  it('passes a layout % through as a string', () => {
+    const out = mapDeclaration({ property: 'width', value: '50%', important: false })
+    expect(out.decls).toEqual([{ prop: 'width', value: '50%', important: false }])
   })
 })
