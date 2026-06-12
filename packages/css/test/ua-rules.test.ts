@@ -13,8 +13,12 @@ describe('buildUaRules', () => {
   it('sets block display for p and inline for span', () => {
     const find = (sel: string) =>
       rules.filter((r) => r.match.kind === 'selector' && r.match.selector === sel)
-    const pDisplay = find('p').flatMap((r) => r.declarations).find((d) => d.prop === 'display')
-    const spanDisplay = find('span').flatMap((r) => r.declarations).find((d) => d.prop === 'display')
+    const pDisplay = find('p')
+      .flatMap((r) => r.declarations)
+      .find((d) => d.prop === 'display')
+    const spanDisplay = find('span')
+      .flatMap((r) => r.declarations)
+      .find((d) => d.prop === 'display')
     expect(pDisplay?.value).toBe('block')
     expect(spanDisplay?.value).toBe('inline')
   })

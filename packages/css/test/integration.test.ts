@@ -4,7 +4,10 @@ import { fileURLToPath } from 'node:url'
 import { parse, getElementsByTagName, findOne, isTag } from '@yk-yong/rn-rich-text-dom'
 import { resolveStyles } from '../src'
 
-const html = readFileSync(fileURLToPath(new URL('./fixtures/article.html', import.meta.url)), 'utf8')
+const html = readFileSync(
+  fileURLToPath(new URL('./fixtures/article.html', import.meta.url)),
+  'utf8',
+)
 
 describe('integration: article.html', () => {
   const doc = parse(html)

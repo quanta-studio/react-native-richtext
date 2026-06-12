@@ -3,7 +3,14 @@ import { cascade } from '../src/cascade/cascade'
 import { Tier } from '../src/types'
 import type { Rule } from '../src/types'
 
-const rule = (origin: number, spec: [number, number, number], order: number, prop: string, value: unknown, important = false): Rule => ({
+const rule = (
+  origin: number,
+  spec: [number, number, number],
+  order: number,
+  prop: string,
+  value: unknown,
+  important = false,
+): Rule => ({
   origin: origin as Rule['origin'],
   match: { kind: 'tag', tag: 'p' },
   specificity: spec,

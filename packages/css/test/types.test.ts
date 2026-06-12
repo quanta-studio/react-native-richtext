@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
 import type {
-  RNStyle,
   RNDecl,
   Rule,
   Tier,
@@ -18,7 +17,12 @@ describe('types', () => {
   })
 
   it('constructs an RNDecl with a deferred length', () => {
-    const def: DeferredLength = { kind: 'deferred-length', unit: 'em', number: 1.5, prop: 'fontSize' }
+    const def: DeferredLength = {
+      kind: 'deferred-length',
+      unit: 'em',
+      number: 1.5,
+      prop: 'fontSize',
+    }
     const d: RNDecl = { prop: 'fontSize', value: def, important: false }
     expect((d.value as DeferredLength).unit).toBe('em')
   })
@@ -40,7 +44,12 @@ describe('types', () => {
     expect(computed.control.display).toBe('block')
 
     const target: TargetProp = 'display'
-    const diag: Diagnostic = { property: 'float', value: 'left', reason: 'unknown-property', tier: 4 as Tier }
+    const diag: Diagnostic = {
+      property: 'float',
+      value: 'left',
+      reason: 'unknown-property',
+      tier: 4 as Tier,
+    }
     const opts: ResolveOptions = { rootFontSize: 16, collectDiagnostics: true }
     expect([target, diag.reason, opts.rootFontSize]).toEqual(['display', 'unknown-property', 16])
   })

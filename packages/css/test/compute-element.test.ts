@@ -3,7 +3,10 @@ import { computeElement, ROOT_PARENT } from '../src/resolve/compute-element'
 import type { ComputedStyle, DeferredLength } from '../src/types'
 import type { SpecifiedStyle } from '../src/cascade/cascade'
 
-const root = (fontSize: number): ComputedStyle => ({ ...ROOT_PARENT, style: { ...ROOT_PARENT.style, fontSize } })
+const root = (fontSize: number): ComputedStyle => ({
+  ...ROOT_PARENT,
+  style: { ...ROOT_PARENT.style, fontSize },
+})
 const spec = (entries: [string, unknown][]): SpecifiedStyle =>
   new Map(entries.map(([p, v]) => [p as never, { value: v as never, important: false }]))
 
@@ -32,7 +35,14 @@ describe('computeElement', () => {
   it('resolves an em margin against the element own font-size', () => {
     const fs: DeferredLength = { kind: 'deferred-length', unit: 'em', number: 2, prop: 'fontSize' }
     const mt: DeferredLength = { kind: 'deferred-length', unit: 'em', number: 1, prop: 'marginTop' }
-    const out = computeElement(spec([['fontSize', fs], ['marginTop', mt]]), root(16), 16)
+    const out = computeElement(
+      spec([
+        ['fontSize', fs],
+        ['marginTop', mt],
+      ]),
+      root(16),
+      16,
+    )
     expect(out.style.fontSize).toBe(32)
     expect(out.style.marginTop).toBe(32) // 1em * own 32
   })

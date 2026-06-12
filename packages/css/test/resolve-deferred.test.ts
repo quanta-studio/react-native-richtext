@@ -3,8 +3,12 @@ import { resolveDeferred } from '../src/units/resolve-deferred'
 import type { DeferredLength } from '../src/types'
 
 const ctx = { ownFontSize: 20, parentFontSize: 16, rootFontSize: 16 }
-const d = (unit: DeferredLength['unit'], number: number, prop: string): DeferredLength =>
-  ({ kind: 'deferred-length', unit, number, prop: prop as DeferredLength['prop'] })
+const d = (unit: DeferredLength['unit'], number: number, prop: string): DeferredLength => ({
+  kind: 'deferred-length',
+  unit,
+  number,
+  prop: prop as DeferredLength['prop'],
+})
 
 describe('resolveDeferred', () => {
   it('em on font-size uses the parent font-size', () => {

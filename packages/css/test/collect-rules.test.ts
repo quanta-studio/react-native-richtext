@@ -19,7 +19,10 @@ describe('collectRules', () => {
     })
     expect(rules.find((r) => r.origin === Tier.Base)?.match.kind).toBe('element')
     expect(rules.find((r) => r.origin === Tier.Tag)?.match).toEqual({ kind: 'tag', tag: 'p' })
-    expect(rules.find((r) => r.origin === Tier.Class)?.match).toEqual({ kind: 'class', className: 'note' })
+    expect(rules.find((r) => r.origin === Tier.Class)?.match).toEqual({
+      kind: 'class',
+      className: 'note',
+    })
   })
 
   it('parses <style> blocks into author rules', () => {

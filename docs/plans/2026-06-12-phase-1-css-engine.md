@@ -9,6 +9,7 @@
 **Tech Stack:** TypeScript 6 (strict, `verbatimModuleSyntax`, `noUncheckedIndexedAccess`), Vitest 4, tsup, pnpm workspaces. New deps: `css-tree` (parse), `css-select` (selector match on domhandler nodes), `css-to-react-native` (shorthand expansion + value parse). Workspace dep: `@yk-yong/rn-rich-text-dom`. Specificity is hand-rolled from the css-tree selector AST (no `@csstools/selector-specificity`).
 
 **Planning-time resolutions of spec open questions:**
+
 - Specificity: **hand-rolled** from the css-tree selector AST (avoids a second selector parser + AST mismatch with css-select).
 - `RNStyle`: **hand-authored curated subset** (keeps the package free of any `react-native`/React type dependency; the whitelist is the type).
 - `mapping/` calls `css-to-react-native` **per declaration** (clean diagnostic granularity); relative-unit values it cannot parse fall back to our own deferral path.
@@ -72,6 +73,7 @@ Typecheck the package with: `pnpm --filter @yk-yong/rn-rich-text-css typecheck`
 ## Task 0: Scaffold the `@yk-yong/rn-rich-text-css` package
 
 **Files:**
+
 - Create: `packages/css/package.json`, `packages/css/tsconfig.json`, `packages/css/tsconfig.test.json`, `packages/css/tsup.config.ts`, `packages/css/README.md`, `packages/css/LICENSE`, `packages/css/src/index.ts`
 - Modify: `tsconfig.json` (root) — add project reference
 
@@ -215,6 +217,7 @@ git commit -m "chore(css): scaffold @yk-yong/rn-rich-text-css package"
 ## Task 1: Core types (`types.ts`)
 
 **Files:**
+
 - Create: `packages/css/src/types.ts`
 - Test: `packages/css/test/types.test.ts`
 
@@ -243,7 +246,12 @@ describe('types', () => {
   })
 
   it('constructs an RNDecl with a deferred length', () => {
-    const def: DeferredLength = { kind: 'deferred-length', unit: 'em', number: 1.5, prop: 'fontSize' }
+    const def: DeferredLength = {
+      kind: 'deferred-length',
+      unit: 'em',
+      number: 1.5,
+      prop: 'fontSize',
+    }
     const d: RNDecl = { prop: 'fontSize', value: def, important: false }
     expect((d.value as DeferredLength).unit).toBe('em')
   })
@@ -265,7 +273,12 @@ describe('types', () => {
     expect(computed.control.display).toBe('block')
 
     const target: TargetProp = 'display'
-    const diag: Diagnostic = { property: 'float', value: 'left', reason: 'unknown-property', tier: 4 as Tier }
+    const diag: Diagnostic = {
+      property: 'float',
+      value: 'left',
+      reason: 'unknown-property',
+      tier: 4 as Tier,
+    }
     const opts: ResolveOptions = { rootFontSize: 16, collectDiagnostics: true }
     expect([target, diag.reason, opts.rootFontSize]).toEqual(['display', 'unknown-property', 16])
   })
@@ -291,8 +304,17 @@ export interface RNStyle {
   fontSize?: number
   fontStyle?: 'normal' | 'italic'
   fontWeight?:
-    | 'normal' | 'bold'
-    | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900'
+    | 'normal'
+    | 'bold'
+    | '100'
+    | '200'
+    | '300'
+    | '400'
+    | '500'
+    | '600'
+    | '700'
+    | '800'
+    | '900'
   fontVariant?: string[]
   lineHeight?: number
   letterSpacing?: number
@@ -441,6 +463,7 @@ git commit -m "feat(css): add core type definitions"
 ## Task 2: kebab→camel utility (`util/camel-case.ts`)
 
 **Files:**
+
 - Create: `packages/css/src/util/camel-case.ts`
 - Test: `packages/css/test/camel-case.test.ts`
 
@@ -473,9 +496,7 @@ Expected: FAIL — module not found.
 ```ts
 /** Convert a kebab-case CSS property name to camelCase (lower-casing first). */
 export function camelCase(prop: string): string {
-  return prop
-    .toLowerCase()
-    .replace(/-([a-z])/g, (_, ch: string) => ch.toUpperCase())
+  return prop.toLowerCase().replace(/-([a-z])/g, (_, ch: string) => ch.toUpperCase())
 }
 ```
 
@@ -496,6 +517,7 @@ git commit -m "feat(css): add kebab-to-camel property utility"
 ## Task 3: Specificity (`specificity/specificity.ts`)
 
 **Files:**
+
 - Create: `packages/css/src/specificity/specificity.ts`
 - Test: `packages/css/test/specificity.test.ts`
 
@@ -605,6 +627,7 @@ git commit -m "feat(css): hand-roll selector specificity from css-tree AST"
 ## Task 4: Parse stylesheets and inline styles (`parse/`)
 
 **Files:**
+
 - Create: `packages/css/src/parse/parse-stylesheet.ts`, `packages/css/src/parse/parse-inline.ts`
 - Test: `packages/css/test/parse.test.ts`
 
@@ -750,6 +773,7 @@ git commit -m "feat(css): parse stylesheets and inline styles via css-tree"
 ## Task 5: Property whitelist (`mapping/whitelist.ts`)
 
 **Files:**
+
 - Create: `packages/css/src/mapping/whitelist.ts`
 - Test: `packages/css/test/whitelist.test.ts`
 
@@ -802,26 +826,70 @@ Expected: FAIL — module not found.
  */
 const STYLE_PROPS = new Set<string>([
   // text
-  'color', 'fontFamily', 'fontSize', 'fontStyle', 'fontWeight', 'fontVariant',
-  'lineHeight', 'letterSpacing', 'textAlign', 'textTransform',
-  'textDecoration', 'textDecorationLine', 'textDecorationColor', 'textDecorationStyle',
+  'color',
+  'fontFamily',
+  'fontSize',
+  'fontStyle',
+  'fontWeight',
+  'fontVariant',
+  'lineHeight',
+  'letterSpacing',
+  'textAlign',
+  'textTransform',
+  'textDecoration',
+  'textDecorationLine',
+  'textDecorationColor',
+  'textDecorationStyle',
   'font',
   // box
-  'backgroundColor', 'background', 'opacity',
-  'margin', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft',
-  'padding', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
-  'width', 'height', 'minWidth', 'maxWidth', 'minHeight', 'maxHeight',
+  'backgroundColor',
+  'background',
+  'opacity',
+  'margin',
+  'marginTop',
+  'marginRight',
+  'marginBottom',
+  'marginLeft',
+  'padding',
+  'paddingTop',
+  'paddingRight',
+  'paddingBottom',
+  'paddingLeft',
+  'width',
+  'height',
+  'minWidth',
+  'maxWidth',
+  'minHeight',
+  'maxHeight',
   // border
-  'border', 'borderColor', 'borderWidth', 'borderStyle', 'borderRadius',
-  'borderTop', 'borderRight', 'borderBottom', 'borderLeft',
-  'borderTopColor', 'borderRightColor', 'borderBottomColor', 'borderLeftColor',
-  'borderTopWidth', 'borderRightWidth', 'borderBottomWidth', 'borderLeftWidth',
+  'border',
+  'borderColor',
+  'borderWidth',
+  'borderStyle',
+  'borderRadius',
+  'borderTop',
+  'borderRight',
+  'borderBottom',
+  'borderLeft',
+  'borderTopColor',
+  'borderRightColor',
+  'borderBottomColor',
+  'borderLeftColor',
+  'borderTopWidth',
+  'borderRightWidth',
+  'borderBottomWidth',
+  'borderLeftWidth',
   // fabric-widened
-  'gap', 'aspectRatio',
+  'gap',
+  'aspectRatio',
 ])
 
 const CONTROL_PROPS = new Set<string>([
-  'display', 'whiteSpace', 'listStyleType', 'listStylePosition', 'listStyle',
+  'display',
+  'whiteSpace',
+  'listStyleType',
+  'listStylePosition',
+  'listStyle',
 ])
 
 export type PropKind = 'style' | 'control' | 'unsupported'
@@ -851,6 +919,7 @@ git commit -m "feat(css): add curated CSS property whitelist"
 ## Task 6: Deferred-length expansion (`mapping/expand-deferred.ts`)
 
 **Files:**
+
 - Create: `packages/css/src/mapping/expand-deferred.ts`
 - Test: `packages/css/test/expand-deferred.test.ts`
 
@@ -863,25 +932,39 @@ import { describe, expect, it } from 'vitest'
 import { expandDeferred } from '../src/mapping/expand-deferred'
 import type { DeferredLength } from '../src/types'
 
-const def = (unit: DeferredLength['unit'], number: number, prop: string): DeferredLength =>
-  ({ kind: 'deferred-length', unit, number, prop: prop as DeferredLength['prop'] })
+const def = (unit: DeferredLength['unit'], number: number, prop: string): DeferredLength => ({
+  kind: 'deferred-length',
+  unit,
+  number,
+  prop: prop as DeferredLength['prop'],
+})
 
 describe('expandDeferred', () => {
   it('defers em on font-size', () => {
-    expect(expandDeferred('fontSize', '1.5em')).toEqual([{ prop: 'fontSize', value: def('em', 1.5, 'fontSize') }])
+    expect(expandDeferred('fontSize', '1.5em')).toEqual([
+      { prop: 'fontSize', value: def('em', 1.5, 'fontSize') },
+    ])
   })
 
   it('defers rem on a single length prop', () => {
-    expect(expandDeferred('width', '2rem')).toEqual([{ prop: 'width', value: def('rem', 2, 'width') }])
+    expect(expandDeferred('width', '2rem')).toEqual([
+      { prop: 'width', value: def('rem', 2, 'width') },
+    ])
   })
 
   it('defers unitless line-height', () => {
-    expect(expandDeferred('lineHeight', '1.5')).toEqual([{ prop: 'lineHeight', value: def('unitless', 1.5, 'lineHeight') }])
+    expect(expandDeferred('lineHeight', '1.5')).toEqual([
+      { prop: 'lineHeight', value: def('unitless', 1.5, 'lineHeight') },
+    ])
   })
 
   it('resolves % to a deferred number only for font-size and line-height', () => {
-    expect(expandDeferred('fontSize', '120%')).toEqual([{ prop: 'fontSize', value: def('%', 120, 'fontSize') }])
-    expect(expandDeferred('lineHeight', '150%')).toEqual([{ prop: 'lineHeight', value: def('%', 150, 'lineHeight') }])
+    expect(expandDeferred('fontSize', '120%')).toEqual([
+      { prop: 'fontSize', value: def('%', 120, 'fontSize') },
+    ])
+    expect(expandDeferred('lineHeight', '150%')).toEqual([
+      { prop: 'lineHeight', value: def('%', 150, 'lineHeight') },
+    ])
   })
 
   it('passes % through as a string for layout props', () => {
@@ -981,6 +1064,7 @@ git commit -m "feat(css): expand relative-unit values into deferred longhands"
 ## Task 7: Map a declaration (`mapping/map-declaration.ts`)
 
 **Files:**
+
 - Create: `packages/css/src/mapping/map-declaration.ts`
 - Test: `packages/css/test/map-declaration.test.ts`
 
@@ -1029,7 +1113,9 @@ describe('mapDeclaration', () => {
   it('emits unknown-property diagnostic and no decls', () => {
     const out = mapDeclaration({ property: 'float', value: 'left', important: false })
     expect(out.decls).toEqual([])
-    expect(out.diagnostics).toEqual([{ property: 'float', value: 'left', reason: 'unknown-property' }])
+    expect(out.diagnostics).toEqual([
+      { property: 'float', value: 'left', reason: 'unknown-property' },
+    ])
   })
 
   it('emits unsupported-value diagnostic when css-to-react-native throws on a known prop', () => {
@@ -1081,7 +1167,10 @@ export function mapDeclaration(decl: RawDecl): MapResult {
   const kind = classifyProp(camel)
 
   if (kind === 'unsupported') {
-    return { decls: [], diagnostics: [{ property: decl.property, value: decl.value, reason: 'unknown-property' }] }
+    return {
+      decls: [],
+      diagnostics: [{ property: decl.property, value: decl.value, reason: 'unknown-property' }],
+    }
   }
 
   if (kind === 'control') {
@@ -1109,7 +1198,10 @@ export function mapDeclaration(decl: RawDecl): MapResult {
     }))
     return { decls, diagnostics: [] }
   } catch {
-    return { decls: [], diagnostics: [{ property: decl.property, value: decl.value, reason: 'unsupported-value' }] }
+    return {
+      decls: [],
+      diagnostics: [{ property: decl.property, value: decl.value, reason: 'unsupported-value' }],
+    }
   }
 }
 ```
@@ -1131,6 +1223,7 @@ git commit -m "feat(css): map declarations to RN style with diagnostics"
 ## Task 8: Resolve deferred lengths (`units/resolve-deferred.ts`)
 
 **Files:**
+
 - Create: `packages/css/src/units/resolve-deferred.ts`
 - Test: `packages/css/test/resolve-deferred.test.ts`
 
@@ -1142,8 +1235,12 @@ import { resolveDeferred } from '../src/units/resolve-deferred'
 import type { DeferredLength } from '../src/types'
 
 const ctx = { ownFontSize: 20, parentFontSize: 16, rootFontSize: 16 }
-const d = (unit: DeferredLength['unit'], number: number, prop: string): DeferredLength =>
-  ({ kind: 'deferred-length', unit, number, prop: prop as DeferredLength['prop'] })
+const d = (unit: DeferredLength['unit'], number: number, prop: string): DeferredLength => ({
+  kind: 'deferred-length',
+  unit,
+  number,
+  prop: prop as DeferredLength['prop'],
+})
 
 describe('resolveDeferred', () => {
   it('em on font-size uses the parent font-size', () => {
@@ -1220,6 +1317,7 @@ git commit -m "feat(css): resolve deferred relative units against font context"
 ## Task 9: Inherited-property set (`inherit/inherited.ts`)
 
 **Files:**
+
 - Create: `packages/css/src/inherit/inherited.ts`
 - Test: `packages/css/test/inherited.test.ts`
 
@@ -1231,13 +1329,29 @@ import { INHERITED, isInherited } from '../src/inherit/inherited'
 
 describe('INHERITED', () => {
   it('includes the inherited text + control props', () => {
-    for (const p of ['color', 'fontSize', 'fontFamily', 'lineHeight', 'textAlign', 'whiteSpace', 'listStyleType']) {
+    for (const p of [
+      'color',
+      'fontSize',
+      'fontFamily',
+      'lineHeight',
+      'textAlign',
+      'whiteSpace',
+      'listStyleType',
+    ]) {
       expect(isInherited(p)).toBe(true)
     }
   })
 
   it('excludes non-inherited props', () => {
-    for (const p of ['margin', 'marginTop', 'padding', 'width', 'display', 'backgroundColor', 'borderWidth']) {
+    for (const p of [
+      'margin',
+      'marginTop',
+      'padding',
+      'width',
+      'display',
+      'backgroundColor',
+      'borderWidth',
+    ]) {
       expect(isInherited(p)).toBe(false)
     }
   })
@@ -1297,6 +1411,7 @@ git commit -m "feat(css): define the inherited-property set"
 ## Task 10: UA stylesheet (`ua/`)
 
 **Files:**
+
 - Create: `packages/css/src/ua/ua-stylesheet.ts`, `packages/css/src/ua/ua-rules.ts`
 - Test: `packages/css/test/ua-rules.test.ts`
 
@@ -1320,8 +1435,12 @@ describe('buildUaRules', () => {
   it('sets block display for p and inline for span', () => {
     const find = (sel: string) =>
       rules.filter((r) => r.match.kind === 'selector' && r.match.selector === sel)
-    const pDisplay = find('p').flatMap((r) => r.declarations).find((d) => d.prop === 'display')
-    const spanDisplay = find('span').flatMap((r) => r.declarations).find((d) => d.prop === 'display')
+    const pDisplay = find('p')
+      .flatMap((r) => r.declarations)
+      .find((d) => d.prop === 'display')
+    const spanDisplay = find('span')
+      .flatMap((r) => r.declarations)
+      .find((d) => d.prop === 'display')
     expect(pDisplay?.value).toBe('block')
     expect(spanDisplay?.value).toBe('inline')
   })
@@ -1430,6 +1549,7 @@ git commit -m "feat(css): add curated user-agent stylesheet"
 ## Task 11: Collect rules from all tiers (`collect/`)
 
 **Files:**
+
 - Create: `packages/css/src/collect/object-to-decls.ts`, `packages/css/src/collect/collect-rules.ts`
 - Test: `packages/css/test/object-to-decls.test.ts`, `packages/css/test/collect-rules.test.ts`
 
@@ -1499,7 +1619,10 @@ describe('collectRules', () => {
     })
     expect(rules.find((r) => r.origin === Tier.Base)?.match.kind).toBe('element')
     expect(rules.find((r) => r.origin === Tier.Tag)?.match).toEqual({ kind: 'tag', tag: 'p' })
-    expect(rules.find((r) => r.origin === Tier.Class)?.match).toEqual({ kind: 'class', className: 'note' })
+    expect(rules.find((r) => r.origin === Tier.Class)?.match).toEqual({
+      kind: 'class',
+      className: 'note',
+    })
   })
 
   it('parses <style> blocks into author rules', () => {
@@ -1573,25 +1696,46 @@ function topLevelElements(doc: Document): Element[] {
 }
 
 /** Assemble cascade rules from every tier plus diagnostics. */
-export function collectRules(doc: Document, options: ResolveOptions): { rules: Rule[]; diagnostics: Diagnostic[] } {
+export function collectRules(
+  doc: Document,
+  options: ResolveOptions,
+): { rules: Rule[]; diagnostics: Diagnostic[] } {
   const c: Collector = { rules: [...buildUaRules()], diagnostics: [], order: 1000 }
 
   // Tier 1: baseStyle — bound to each top-level element.
   if (options.baseStyle) {
     const decls = objectToDecls(options.baseStyle)
     for (const el of topLevelElements(doc)) {
-      c.rules.push({ origin: Tier.Base, match: { kind: 'element', element: el }, specificity: [0, 0, 0], order: c.order++, declarations: decls })
+      c.rules.push({
+        origin: Tier.Base,
+        match: { kind: 'element', element: el },
+        specificity: [0, 0, 0],
+        order: c.order++,
+        declarations: decls,
+      })
     }
   }
 
   // Tier 2: tagStyles — keyed by tag.
   for (const [tag, style] of Object.entries(options.tagStyles ?? {})) {
-    c.rules.push({ origin: Tier.Tag, match: { kind: 'tag', tag }, specificity: [0, 0, 1], order: c.order++, declarations: objectToDecls(style) })
+    c.rules.push({
+      origin: Tier.Tag,
+      match: { kind: 'tag', tag },
+      specificity: [0, 0, 1],
+      order: c.order++,
+      declarations: objectToDecls(style),
+    })
   }
 
   // Tier 3: classStyles — keyed by class.
   for (const [className, style] of Object.entries(options.classStyles ?? {})) {
-    c.rules.push({ origin: Tier.Class, match: { kind: 'class', className }, specificity: [0, 1, 0], order: c.order++, declarations: objectToDecls(style) })
+    c.rules.push({
+      origin: Tier.Class,
+      match: { kind: 'class', className },
+      specificity: [0, 1, 0],
+      order: c.order++,
+      declarations: objectToDecls(style),
+    })
   }
 
   // Tier 4: <style> blocks.
@@ -1599,7 +1743,13 @@ export function collectRules(doc: Document, options: ResolveOptions): { rules: R
     for (const raw of parseStylesheet(getText(styleEl))) {
       const decls = mapInto(raw.declarations, Tier.Style, raw.selector, c.diagnostics)
       if (decls.length === 0) continue
-      c.rules.push({ origin: Tier.Style, match: { kind: 'selector', selector: raw.selector }, specificity: specificity(raw.selector), order: c.order++, declarations: decls })
+      c.rules.push({
+        origin: Tier.Style,
+        match: { kind: 'selector', selector: raw.selector },
+        specificity: specificity(raw.selector),
+        order: c.order++,
+        declarations: decls,
+      })
     }
   }
 
@@ -1609,7 +1759,13 @@ export function collectRules(doc: Document, options: ResolveOptions): { rules: R
     if (!styleAttr) continue
     const decls = mapInto(parseInline(styleAttr), Tier.Inline, undefined, c.diagnostics)
     if (decls.length === 0) continue
-    c.rules.push({ origin: Tier.Inline, match: { kind: 'element', element: el }, specificity: [1, 0, 0], order: c.order++, declarations: decls })
+    c.rules.push({
+      origin: Tier.Inline,
+      match: { kind: 'element', element: el },
+      specificity: [1, 0, 0],
+      order: c.order++,
+      declarations: decls,
+    })
   }
 
   return { rules: c.rules, diagnostics: c.diagnostics }
@@ -1633,6 +1789,7 @@ git commit -m "feat(css): collect cascade rules from every tier"
 ## Task 12: Match rules to elements (`match/match-rules.ts`)
 
 **Files:**
+
 - Create: `packages/css/src/match/match-rules.ts`
 - Test: `packages/css/test/match-rules.test.ts`
 
@@ -1650,7 +1807,13 @@ import type { Rule } from '../src/types'
 describe('matchRules', () => {
   it('matches a selector rule to descendant elements', () => {
     const doc = parse('<div><p>a</p><p>b</p></div>')
-    const rule: Rule = { origin: Tier.Style, match: { kind: 'selector', selector: 'div > p' }, specificity: [0, 0, 2], order: 0, declarations: [] }
+    const rule: Rule = {
+      origin: Tier.Style,
+      match: { kind: 'selector', selector: 'div > p' },
+      specificity: [0, 0, 2],
+      order: 0,
+      declarations: [],
+    }
     const matched = matchRules(doc, [rule])
     const ps = getElementsByTagName('p', doc)
     expect(matched.get(ps[0]!)).toContain(rule)
@@ -1659,7 +1822,13 @@ describe('matchRules', () => {
 
   it('matches a tag rule by tag name', () => {
     const doc = parse('<p>a</p><span>b</span>')
-    const rule: Rule = { origin: Tier.Tag, match: { kind: 'tag', tag: 'p' }, specificity: [0, 0, 1], order: 0, declarations: [] }
+    const rule: Rule = {
+      origin: Tier.Tag,
+      match: { kind: 'tag', tag: 'p' },
+      specificity: [0, 0, 1],
+      order: 0,
+      declarations: [],
+    }
     const matched = matchRules(doc, [rule])
     const p = getElementsByTagName('p', doc)[0]!
     const span = getElementsByTagName('span', doc)[0]!
@@ -1669,7 +1838,13 @@ describe('matchRules', () => {
 
   it('matches a class rule by class token', () => {
     const doc = parse('<p class="a note">x</p>')
-    const rule: Rule = { origin: Tier.Class, match: { kind: 'class', className: 'note' }, specificity: [0, 1, 0], order: 0, declarations: [] }
+    const rule: Rule = {
+      origin: Tier.Class,
+      match: { kind: 'class', className: 'note' },
+      specificity: [0, 1, 0],
+      order: 0,
+      declarations: [],
+    }
     const matched = matchRules(doc, [rule])
     const p = getElementsByTagName('p', doc)[0]!
     expect(matched.get(p)).toContain(rule)
@@ -1678,7 +1853,13 @@ describe('matchRules', () => {
   it('matches an element-bound rule to exactly that element', () => {
     const doc = parse('<p>a</p><p>b</p>')
     const p0 = getElementsByTagName('p', doc)[0]!
-    const rule: Rule = { origin: Tier.Inline, match: { kind: 'element', element: p0 }, specificity: [1, 0, 0], order: 0, declarations: [] }
+    const rule: Rule = {
+      origin: Tier.Inline,
+      match: { kind: 'element', element: p0 },
+      specificity: [1, 0, 0],
+      order: 0,
+      declarations: [],
+    }
     const matched = matchRules(doc, [rule])
     expect(matched.get(p0)).toContain(rule)
     expect(matched.get(getElementsByTagName('p', doc)[1]!)).toBeUndefined()
@@ -1748,6 +1929,7 @@ git commit -m "feat(css): match rules to elements via css-select and tiers"
 ## Task 13: Cascade (`cascade/cascade.ts`)
 
 **Files:**
+
 - Create: `packages/css/src/cascade/cascade.ts`
 - Test: `packages/css/test/cascade.test.ts`
 
@@ -1761,7 +1943,14 @@ import { cascade } from '../src/cascade/cascade'
 import { Tier } from '../src/types'
 import type { Rule } from '../src/types'
 
-const rule = (origin: number, spec: [number, number, number], order: number, prop: string, value: unknown, important = false): Rule => ({
+const rule = (
+  origin: number,
+  spec: [number, number, number],
+  order: number,
+  prop: string,
+  value: unknown,
+  important = false,
+): Rule => ({
   origin: origin as Rule['origin'],
   match: { kind: 'tag', tag: 'p' },
   specificity: spec,
@@ -1877,6 +2066,7 @@ git commit -m "feat(css): cascade matched declarations to a specified style"
 ## Task 14: Compute an element (`resolve/compute-element.ts`)
 
 **Files:**
+
 - Create: `packages/css/src/resolve/compute-element.ts`
 - Test: `packages/css/test/compute-element.test.ts`
 
@@ -1890,7 +2080,10 @@ import { computeElement, ROOT_PARENT } from '../src/resolve/compute-element'
 import type { ComputedStyle, DeferredLength } from '../src/types'
 import type { SpecifiedStyle } from '../src/cascade/cascade'
 
-const root = (fontSize: number): ComputedStyle => ({ ...ROOT_PARENT, style: { ...ROOT_PARENT.style, fontSize } })
+const root = (fontSize: number): ComputedStyle => ({
+  ...ROOT_PARENT,
+  style: { ...ROOT_PARENT.style, fontSize },
+})
 const spec = (entries: [string, unknown][]): SpecifiedStyle =>
   new Map(entries.map(([p, v]) => [p as never, { value: v as never, important: false }]))
 
@@ -1919,7 +2112,14 @@ describe('computeElement', () => {
   it('resolves an em margin against the element own font-size', () => {
     const fs: DeferredLength = { kind: 'deferred-length', unit: 'em', number: 2, prop: 'fontSize' }
     const mt: DeferredLength = { kind: 'deferred-length', unit: 'em', number: 1, prop: 'marginTop' }
-    const out = computeElement(spec([['fontSize', fs], ['marginTop', mt]]), root(16), 16)
+    const out = computeElement(
+      spec([
+        ['fontSize', fs],
+        ['marginTop', mt],
+      ]),
+      root(16),
+      16,
+    )
     expect(out.style.fontSize).toBe(32)
     expect(out.style.marginTop).toBe(32) // 1em * own 32
   })
@@ -1942,7 +2142,15 @@ describe('computeElement', () => {
 ```ts
 import { isInherited } from '../inherit/inherited'
 import { resolveDeferred } from '../units/resolve-deferred'
-import type { ComputedStyle, ControlProp, ControlStyle, DeclValue, DeferredLength, RNStyle, TargetProp } from '../types'
+import type {
+  ComputedStyle,
+  ControlProp,
+  ControlStyle,
+  DeclValue,
+  DeferredLength,
+  RNStyle,
+  TargetProp,
+} from '../types'
 import type { SpecifiedStyle } from '../cascade/cascade'
 
 /** Synthetic parent for the document roots: CSS initial inherited values. */
@@ -1951,13 +2159,25 @@ export const ROOT_PARENT: ComputedStyle = {
   control: { display: 'block', whiteSpace: 'normal' },
 }
 
-const CONTROL_PROPS = new Set<string>(['display', 'whiteSpace', 'listStyleType', 'listStylePosition'])
+const CONTROL_PROPS = new Set<string>([
+  'display',
+  'whiteSpace',
+  'listStyleType',
+  'listStylePosition',
+])
 const isControl = (p: TargetProp): p is ControlProp => CONTROL_PROPS.has(p)
 const isDeferred = (v: DeclValue): v is DeferredLength =>
-  typeof v === 'object' && v !== null && !Array.isArray(v) && (v as DeferredLength).kind === 'deferred-length'
+  typeof v === 'object' &&
+  v !== null &&
+  !Array.isArray(v) &&
+  (v as DeferredLength).kind === 'deferred-length'
 
 /** Compute one element's style from its specified style and the parent's computed style. */
-export function computeElement(specified: SpecifiedStyle, parent: ComputedStyle, rootFontSize: number): ComputedStyle {
+export function computeElement(
+  specified: SpecifiedStyle,
+  parent: ComputedStyle,
+  rootFontSize: number,
+): ComputedStyle {
   const style: RNStyle = {}
   const control: ControlStyle = { display: 'inline', whiteSpace: 'normal' }
 
@@ -1978,7 +2198,9 @@ export function computeElement(specified: SpecifiedStyle, parent: ComputedStyle,
   let ownFontSize = style.fontSize ?? parentFontSize
   if (fsEntry) {
     const v = fsEntry.value
-    ownFontSize = isDeferred(v) ? resolveDeferred(v, { ownFontSize: parentFontSize, parentFontSize, rootFontSize }) : (v as number)
+    ownFontSize = isDeferred(v)
+      ? resolveDeferred(v, { ownFontSize: parentFontSize, parentFontSize, rootFontSize })
+      : (v as number)
   }
   style.fontSize = ownFontSize
 
@@ -2012,6 +2234,7 @@ git commit -m "feat(css): compute per-element style with inheritance and units"
 ## Task 15: Orchestrator `resolveStyles` (`resolve/resolve-styles.ts`) + public barrel
 
 **Files:**
+
 - Create: `packages/css/src/resolve/resolve-styles.ts`
 - Modify: `packages/css/src/index.ts`
 - Test: `packages/css/test/resolve-styles.test.ts`
@@ -2150,6 +2373,7 @@ git commit -m "feat(css): add resolveStyles orchestrator and public API"
 ## Task 16: Integration fixtures (`test/fixtures/`)
 
 **Files:**
+
 - Create: `packages/css/test/fixtures/article.html`, `packages/css/test/integration.test.ts`
 
 End-to-end assertions over realistic CMS-style markup, the corpus the spec requires.
@@ -2158,8 +2382,13 @@ End-to-end assertions over realistic CMS-style markup, the corpus the spec requi
 
 ```html
 <style>
-  .lead { font-size: 1.25em; color: #333333 }
-  blockquote { color: #666666 }
+  .lead {
+    font-size: 1.25em;
+    color: #333333;
+  }
+  blockquote {
+    color: #666666;
+  }
 </style>
 <article>
   <h1>Heading</h1>
@@ -2182,7 +2411,10 @@ import { fileURLToPath } from 'node:url'
 import { parse, getElementsByTagName, findOne, isTag } from '@yk-yong/rn-rich-text-dom'
 import { resolveStyles } from '../src'
 
-const html = readFileSync(fileURLToPath(new URL('./fixtures/article.html', import.meta.url)), 'utf8')
+const html = readFileSync(
+  fileURLToPath(new URL('./fixtures/article.html', import.meta.url)),
+  'utf8',
+)
 
 describe('integration: article.html', () => {
   const doc = parse(html)
@@ -2243,6 +2475,7 @@ git commit -m "test(css): add end-to-end article fixture integration test"
 ## Task 17: Changeset, full build, and green gate
 
 **Files:**
+
 - Create: `.changeset/<name>.md`
 
 - [ ] **Step 1: Add a changeset** — create `.changeset/phase-1-css-engine.md`
@@ -2287,6 +2520,7 @@ gh pr create --title "Phase 1: @scope/css engine" --body "Implements the Phase 1
 ## Self-Review (completed during planning)
 
 **1. Spec coverage** — every spec section maps to a task:
+
 - Module decomposition → Tasks 0–15 (one module per task).
 - Data model (`RNDecl`, `Rule`, `ComputedStyle.control`, `Diagnostic`) → Task 1.
 - Cascade tiers + `baseStyle` root-only + `!important` + selectors → Tasks 11 (tiers), 12 (selector match), 13 (cascade incl. `!important`).

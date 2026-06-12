@@ -38,7 +38,9 @@ describe('mapDeclaration', () => {
   it('emits unknown-property diagnostic and no decls', () => {
     const out = mapDeclaration({ property: 'float', value: 'left', important: false })
     expect(out.decls).toEqual([])
-    expect(out.diagnostics).toEqual([{ property: 'float', value: 'left', reason: 'unknown-property' }])
+    expect(out.diagnostics).toEqual([
+      { property: 'float', value: 'left', reason: 'unknown-property' },
+    ])
   })
 
   it('emits unsupported-value diagnostic for unmappable values like calc()', () => {
@@ -49,12 +51,22 @@ describe('mapDeclaration', () => {
 
   it('defers a % font-size through mapDeclaration', () => {
     const out = mapDeclaration({ property: 'font-size', value: '120%', important: false })
-    expect(out.decls[0]!.value).toEqual({ kind: 'deferred-length', unit: '%', number: 120, prop: 'fontSize' })
+    expect(out.decls[0]!.value).toEqual({
+      kind: 'deferred-length',
+      unit: '%',
+      number: 120,
+      prop: 'fontSize',
+    })
   })
 
   it('defers a % line-height through mapDeclaration', () => {
     const out = mapDeclaration({ property: 'line-height', value: '150%', important: false })
-    expect(out.decls[0]!.value).toEqual({ kind: 'deferred-length', unit: '%', number: 150, prop: 'lineHeight' })
+    expect(out.decls[0]!.value).toEqual({
+      kind: 'deferred-length',
+      unit: '%',
+      number: 150,
+      prop: 'lineHeight',
+    })
   })
 
   it('passes a layout % through as a string', () => {

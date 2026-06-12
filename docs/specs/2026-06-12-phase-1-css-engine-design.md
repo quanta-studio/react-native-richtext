@@ -26,12 +26,12 @@ DOM ─▶ [2] Collect CSS  parse <style> blocks + inline style attrs; merge wit
 
 ## Decisions locked during brainstorming (do not re-litigate)
 
-| Question | Decision |
-| --- | --- |
-| Phase 1 coverage | **Machinery-complete, curated coverage**: full cascade/specificity/inheritance/relative-unit engine with exhaustive tests; UA stylesheet + property whitelist curated to the v1 tag set; the long tail of properties expands iteratively. |
-| Output contract | **Eager computed-style map**: `resolveStyles(document, options) → { styles: Map<Element, ComputedStyle>, diagnostics }`, computed in a single top-down pass. |
-| Unsupported CSS | **Skip + optional diagnostics**: never throw on bad CSS; drop the declaration; collect a structured diagnostics list only when `collectDiagnostics` is set (off by default). |
-| Resolution strategy | **Approach B — match → cascade → compute as separate stages.** Stages 1–3 are pure/stateless and table-testable; only the compute pass needs tree order. |
+| Question            | Decision                                                                                                                                                                                                                                  |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Phase 1 coverage    | **Machinery-complete, curated coverage**: full cascade/specificity/inheritance/relative-unit engine with exhaustive tests; UA stylesheet + property whitelist curated to the v1 tag set; the long tail of properties expands iteratively. |
+| Output contract     | **Eager computed-style map**: `resolveStyles(document, options) → { styles: Map<Element, ComputedStyle>, diagnostics }`, computed in a single top-down pass.                                                                              |
+| Unsupported CSS     | **Skip + optional diagnostics**: never throw on bad CSS; drop the declaration; collect a structured diagnostics list only when `collectDiagnostics` is set (off by default).                                                              |
+| Resolution strategy | **Approach B — match → cascade → compute as separate stages.** Stages 1–3 are pure/stateless and table-testable; only the compute pass needs tree order.                                                                                  |
 
 ## Package
 
@@ -77,7 +77,7 @@ src/
   part of an earlier `margin` shorthand — how browsers actually cascade). Consumer RN objects
   (`tagStyles`, `classStyles`, `baseStyle`) are already longhand RN form and enter the same way.
 - **`Rule`** — `{ origin: Tier, selectorText?: string, specificity: Specificity, order: number,
-  important: boolean, declarations: RNDecl[] }`.
+important: boolean, declarations: RNDecl[] }`.
 - **`SpecifiedStyle`** — the cascade winner per property for one element. May still hold
   `DeferredLength` tokens and have gaps for inherited properties not set on this element.
 - **`ComputedStyle`** — the per-node map value:
@@ -102,14 +102,14 @@ src/
 The architecture's `UA < tag < class < <style> < inline`, with `baseStyle` inserted as a
 root-only tier just above UA. Precedence low → high:
 
-| # | Tier | Source | Ordering within tier |
-| --- | --- | --- | --- |
-| 0 | UA | built-in stylesheet | specificity + source order |
-| 1 | `baseStyle` | consumer; **applies to the root element only**, inherits down | — |
-| 2 | `tagStyles` | consumer; keyed by tag name | — |
-| 3 | `classStyles` | consumer; keyed by class name | — |
-| 4 | `<style>` blocks | author CSS in the document | **specificity, then source order** |
-| 5 | inline `style=""` | author, per-element | — |
+| #   | Tier              | Source                                                        | Ordering within tier               |
+| --- | ----------------- | ------------------------------------------------------------- | ---------------------------------- |
+| 0   | UA                | built-in stylesheet                                           | specificity + source order         |
+| 1   | `baseStyle`       | consumer; **applies to the root element only**, inherits down | —                                  |
+| 2   | `tagStyles`       | consumer; keyed by tag name                                   | —                                  |
+| 3   | `classStyles`     | consumer; keyed by class name                                 | —                                  |
+| 4   | `<style>` blocks  | author CSS in the document                                    | **specificity, then source order** |
+| 5   | inline `style=""` | author, per-element                                           | —                                  |
 
 Each element's matched declarations are sorted by `(important, tier, specificity, order)` and the
 highest wins per property.
@@ -121,7 +121,7 @@ highest wins per property.
   `tagStyles={{ p: {…} }}`, `classStyles={{ note: {…} }}`), not full selectors. Complex selectors
   come from `<style>` blocks.
 - **Selectors supported**: full combinators (`>`, `+`, `~`, descendant), attribute selectors, and
-  *structural* pseudo-classes (`:first-child`, `:nth-child`, `:last-child`) — all free from
+  _structural_ pseudo-classes (`:first-child`, `:nth-child`, `:last-child`) — all free from
   css-select and common in CMS CSS. **Excluded**: interactive/state pseudo-classes (`:hover`,
   `:focus`) and pseudo-elements (`::before`) — already out of scope for v1.
 - **`!important`** is supported as a cascade modifier (author-important beats author-normal); it is
@@ -129,7 +129,7 @@ highest wins per property.
 
 ## Inheritance
 
-The compute pass fills any *unspecified* inherited property from the parent's computed value.
+The compute pass fills any _unspecified_ inherited property from the parent's computed value.
 
 Curated **inherited-property set** (CSS-inherited props relevant to RN/v1):
 `color`, `fontFamily`, `fontSize`, `fontStyle`, `fontWeight`, `fontVariant`, `lineHeight`,
@@ -171,7 +171,7 @@ tokens**; `units/` finalizes them in the compute pass. This split is exactly why
 - A declaration that is an unknown property, an unsupported value, an unsupported unit, or a parse
   failure is **skipped — never thrown**.
 - `Diagnostic = { property: string, value: string, reason: 'unknown-property' | 'unsupported-value'
-  | 'unsupported-unit' | 'parse-error', selector?: string, tier: Tier }`. Diagnostics are collected
+| 'unsupported-unit' | 'parse-error', selector?: string, tier: Tier }`. Diagnostics are collected
   only when `options.collectDiagnostics` is true.
 
 ## Public API
@@ -195,7 +195,7 @@ interface ResolveOptions {
 ```
 
 `diagnostics` is always present (empty `[]` when collection is off) so the return type is stable.
-`RNStyle` is a typed subset of React Native's `TextStyle & ViewStyle` (RN *types* only — no React
+`RNStyle` is a typed subset of React Native's `TextStyle & ViewStyle` (RN _types_ only — no React
 import), curated to the whitelist.
 
 ## Testing strategy (TDD — Red → Green → Refactor)

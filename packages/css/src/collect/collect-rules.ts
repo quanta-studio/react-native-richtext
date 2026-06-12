@@ -30,7 +30,10 @@ function topLevelElements(doc: Document): Element[] {
 }
 
 /** Assemble cascade rules from every tier plus diagnostics. */
-export function collectRules(doc: Document, options: ResolveOptions): { rules: Rule[]; diagnostics: Diagnostic[] } {
+export function collectRules(
+  doc: Document,
+  options: ResolveOptions,
+): { rules: Rule[]; diagnostics: Diagnostic[] } {
   const rules: Rule[] = [...buildUaRules()]
   const diagnostics: Diagnostic[] = []
   let order = 1000
@@ -39,18 +42,36 @@ export function collectRules(doc: Document, options: ResolveOptions): { rules: R
   if (options.baseStyle) {
     const decls = objectToDecls(options.baseStyle)
     for (const el of topLevelElements(doc)) {
-      rules.push({ origin: Tier.Base, match: { kind: 'element', element: el }, specificity: [0, 0, 0], order: order++, declarations: decls })
+      rules.push({
+        origin: Tier.Base,
+        match: { kind: 'element', element: el },
+        specificity: [0, 0, 0],
+        order: order++,
+        declarations: decls,
+      })
     }
   }
 
   // Tier 2: tagStyles — keyed by tag.
   for (const [tag, style] of Object.entries(options.tagStyles ?? {})) {
-    rules.push({ origin: Tier.Tag, match: { kind: 'tag', tag }, specificity: [0, 0, 1], order: order++, declarations: objectToDecls(style) })
+    rules.push({
+      origin: Tier.Tag,
+      match: { kind: 'tag', tag },
+      specificity: [0, 0, 1],
+      order: order++,
+      declarations: objectToDecls(style),
+    })
   }
 
   // Tier 3: classStyles — keyed by class.
   for (const [className, style] of Object.entries(options.classStyles ?? {})) {
-    rules.push({ origin: Tier.Class, match: { kind: 'class', className }, specificity: [0, 1, 0], order: order++, declarations: objectToDecls(style) })
+    rules.push({
+      origin: Tier.Class,
+      match: { kind: 'class', className },
+      specificity: [0, 1, 0],
+      order: order++,
+      declarations: objectToDecls(style),
+    })
   }
 
   // Tier 4: <style> blocks.
@@ -58,7 +79,13 @@ export function collectRules(doc: Document, options: ResolveOptions): { rules: R
     for (const raw of parseStylesheet(getText(styleEl))) {
       const decls = mapInto(raw.declarations, Tier.Style, raw.selector, diagnostics)
       if (decls.length === 0) continue
-      rules.push({ origin: Tier.Style, match: { kind: 'selector', selector: raw.selector }, specificity: specificity(raw.selector), order: order++, declarations: decls })
+      rules.push({
+        origin: Tier.Style,
+        match: { kind: 'selector', selector: raw.selector },
+        specificity: specificity(raw.selector),
+        order: order++,
+        declarations: decls,
+      })
     }
   }
 
@@ -68,7 +95,13 @@ export function collectRules(doc: Document, options: ResolveOptions): { rules: R
     if (!styleAttr) continue
     const decls = mapInto(parseInline(styleAttr), Tier.Inline, undefined, diagnostics)
     if (decls.length === 0) continue
-    rules.push({ origin: Tier.Inline, match: { kind: 'element', element: el }, specificity: [1, 0, 0], order: order++, declarations: decls })
+    rules.push({
+      origin: Tier.Inline,
+      match: { kind: 'element', element: el },
+      specificity: [1, 0, 0],
+      order: order++,
+      declarations: decls,
+    })
   }
 
   return { rules, diagnostics }

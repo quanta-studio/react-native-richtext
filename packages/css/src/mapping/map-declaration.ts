@@ -65,7 +65,11 @@ export function mapDeclaration(decl: RawDecl): MapResult {
     const rn = getStylesForProperty(camel, decl.value)
     const decls: RNDecl[] = []
     for (const [prop, value] of Object.entries(rn)) {
-      decls.push({ prop: prop as TargetProp, value: value as RNDecl['value'], important: decl.important })
+      decls.push({
+        prop: prop as TargetProp,
+        value: value as RNDecl['value'],
+        important: decl.important,
+      })
     }
     return { decls, diagnostics: NO_DIAGNOSTICS }
   } catch {
