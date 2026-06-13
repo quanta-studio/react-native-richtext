@@ -13,6 +13,7 @@
 **Branch:** `phase-4b-tables-measurement` (already created; the spec commit is its first commit).
 
 ## How to run things (repo conventions)
+
 - Tests run from the ROOT (packages have NO `test` script): `pnpm exec vitest run packages/<pkg>` or a single file `pnpm exec vitest run packages/<pkg>/test/<file>`. Do NOT use `pnpm --filter <pkg> test` (no-op).
 - Per-package typecheck: `pnpm --filter @yk-yong/react-native-richtext-core typecheck` / `pnpm --filter @yk-yong/react-native-richtext typecheck`.
 - Whole-repo gates: `pnpm test`, `pnpm typecheck`, `pnpm lint`, `pnpm format:check`, `pnpm build`.
@@ -22,11 +23,13 @@
 ## File Structure
 
 **Create:**
+
 - `packages/react-native/src/renderers/column-widths.ts` — pure `computeColumnWidths(...)` + `CellMeasure`/I-O types.
 - `packages/react-native/test/column-widths.test.ts` — unit tests for the helper.
 - `packages/react-native/test/table-measure.test.tsx` — stateful `Table` measurement tests (onLayout via `act()`).
 
 **Modify:**
+
 - `packages/core/src/types.ts` — add `colWidths?: (number | undefined)[]` to `TableNode`.
 - `packages/core/src/split.ts` — parse `<colgroup>/<col>` into `colWidths` in `buildTable`.
 - `packages/core/test/table.test.ts` — assertions for `colWidths`.
@@ -43,6 +46,7 @@
 ## Task 1: core — parse `<col>` widths into `colWidths`
 
 **Files:**
+
 - Modify: `packages/core/src/types.ts` (the `TableNode` interface)
 - Modify: `packages/core/src/split.ts` (`buildTable` + helpers)
 - Test: `packages/core/test/table.test.ts`
@@ -52,31 +56,29 @@
 In `packages/core/test/table.test.ts`, add inside `describe('buildTable', ...)`:
 
 ```ts
-  it('parses <col width> into colWidths', () => {
-    const t = firstTable(
-      '<table><colgroup><col width="80"><col></colgroup><tr><td>a</td><td>b</td></tr></table>',
-    )
-    expect(t.colWidths).toEqual([80, undefined])
-  })
+it('parses <col width> into colWidths', () => {
+  const t = firstTable(
+    '<table><colgroup><col width="80"><col></colgroup><tr><td>a</td><td>b</td></tr></table>',
+  )
+  expect(t.colWidths).toEqual([80, undefined])
+})
 
-  it('repeats a <col span> width across columns', () => {
-    const t = firstTable(
-      '<table><colgroup><col span="2" width="50"></colgroup><tr><td>a</td><td>b</td></tr></table>',
-    )
-    expect(t.colWidths).toEqual([50, 50])
-  })
+it('repeats a <col span> width across columns', () => {
+  const t = firstTable(
+    '<table><colgroup><col span="2" width="50"></colgroup><tr><td>a</td><td>b</td></tr></table>',
+  )
+  expect(t.colWidths).toEqual([50, 50])
+})
 
-  it('ignores percentage col widths (deferred)', () => {
-    const t = firstTable(
-      '<table><colgroup><col width="50%"></colgroup><tr><td>a</td></tr></table>',
-    )
-    expect(t.colWidths).toEqual([undefined])
-  })
+it('ignores percentage col widths (deferred)', () => {
+  const t = firstTable('<table><colgroup><col width="50%"></colgroup><tr><td>a</td></tr></table>')
+  expect(t.colWidths).toEqual([undefined])
+})
 
-  it('leaves colWidths undefined when there is no colgroup', () => {
-    const t = firstTable('<table><tr><td>a</td></tr></table>')
-    expect(t.colWidths).toBeUndefined()
-  })
+it('leaves colWidths undefined when there is no colgroup', () => {
+  const t = firstTable('<table><tr><td>a</td></tr></table>')
+  expect(t.colWidths).toBeUndefined()
+})
 ```
 
 - [ ] **Step 2: Run the tests to verify they fail**
@@ -140,19 +142,19 @@ function collectColWidths(el: Element): (number | undefined)[] | undefined {
 Then in `buildTable`, set the field on the returned node (add `colWidths: collectColWidths(el),` alongside `columnCount`):
 
 ```ts
-  const { rows, columnCount } = normalizeGrid([...headRows, ...bodyRows, ...footRows])
-  return {
-    type: 'table',
-    tag: 'table',
-    style,
-    control,
-    attribs: el.attribs,
-    caption,
-    columnCount,
-    colWidths: collectColWidths(el),
-    rows,
-    key,
-  }
+const { rows, columnCount } = normalizeGrid([...headRows, ...bodyRows, ...footRows])
+return {
+  type: 'table',
+  tag: 'table',
+  style,
+  control,
+  attribs: el.attribs,
+  caption,
+  columnCount,
+  colWidths: collectColWidths(el),
+  rows,
+  key,
+}
 ```
 
 (`clampSpan`, `isTag`, `AnyNode`, `Element` are already imported/defined in `split.ts`.)
@@ -174,6 +176,7 @@ git commit -m "feat(core): parse <col> widths into TableNode.colWidths"
 ## Task 2: react-native — pure `computeColumnWidths` helper
 
 **Files:**
+
 - Create: `packages/react-native/src/renderers/column-widths.ts`
 - Test: `packages/react-native/test/column-widths.test.ts`
 
@@ -242,7 +245,9 @@ describe('computeColumnWidths', () => {
   })
 
   it('returns empty for zero columns', () => {
-    expect(computeColumnWidths({ columnCount: 0, cells: [], explicit: [], container: 300 })).toEqual({
+    expect(
+      computeColumnWidths({ columnCount: 0, cells: [], explicit: [], container: 300 }),
+    ).toEqual({
       widths: [],
       overflow: false,
     })
@@ -342,6 +347,7 @@ git commit -m "feat(react-native): add pure column-widths helper for measured ta
 This is the core change. `Table` becomes stateful and the column layout switches from weighted `flexGrow` (4a) to measured fixed widths (4b). `TableCell` and the 4a renderer tests change in the same commit so the suite stays green.
 
 **Files:**
+
 - Modify: `packages/react-native/src/renderers/TableCell.tsx`
 - Modify: `packages/react-native/src/renderers/Table.tsx`
 - Modify: `packages/react-native/test/table.test.tsx` (replace 4a `flexGrow` assertions)
@@ -444,8 +450,7 @@ export function Table({ node }: RendererProps) {
   const RowComp = registry['tr'] ?? TableRow
 
   const explicit = deriveExplicit(table)
-  const allExplicit =
-    table.columnCount > 0 && explicit.every((w): w is number => w !== undefined)
+  const allExplicit = table.columnCount > 0 && explicit.every((w): w is number => w !== undefined)
   const expected = countCells(table)
 
   const [container, setContainer] = useState<number | undefined>(undefined)
@@ -647,8 +652,30 @@ const twoColTable = (overrides: Partial<TableNode> = {}): TableNode => ({
       attribs: {},
       key: 'r0',
       items: [
-        { type: 'table-cell', tag: 'td', isHeader: false, colSpan: 1, rowSpan: 1, style: {}, control: { display: 'table-cell', whiteSpace: 'normal' }, attribs: {}, children: [], key: 'r0.0' },
-        { type: 'table-cell', tag: 'td', isHeader: false, colSpan: 1, rowSpan: 1, style: {}, control: { display: 'table-cell', whiteSpace: 'normal' }, attribs: {}, children: [], key: 'r0.1' },
+        {
+          type: 'table-cell',
+          tag: 'td',
+          isHeader: false,
+          colSpan: 1,
+          rowSpan: 1,
+          style: {},
+          control: { display: 'table-cell', whiteSpace: 'normal' },
+          attribs: {},
+          children: [],
+          key: 'r0.0',
+        },
+        {
+          type: 'table-cell',
+          tag: 'td',
+          isHeader: false,
+          colSpan: 1,
+          rowSpan: 1,
+          style: {},
+          control: { display: 'table-cell', whiteSpace: 'normal' },
+          attribs: {},
+          children: [],
+          key: 'r0.1',
+        },
       ],
     },
   ],
@@ -663,11 +690,11 @@ Ensure `ScrollView` is imported in this test file: `import { View, ScrollView } 
 In `packages/react-native/test/table-integration.test.tsx`, the test `gives the colspan=2 header cell flexGrow 2` is invalid under 4b (no `flexGrow`; widths come from measurement which doesn't auto-fire in react-test-renderer). Replace that single `it` with a structure assertion that doesn't depend on measured widths:
 
 ```tsx
-  it('renders the colspan header cell across the table without crashing', () => {
-    const tree = create(<RichText source={{ html }} />)
-    // Pre-measurement: the table renders its content (measure pass) without throwing.
-    expect(JSON.stringify(tree.toJSON())).toContain('Score')
-  })
+it('renders the colspan header cell across the table without crashing', () => {
+  const tree = create(<RichText source={{ html }} />)
+  // Pre-measurement: the table renders its content (measure pass) without throwing.
+  expect(JSON.stringify(tree.toJSON())).toContain('Score')
+})
 ```
 
 Leave the other two integration tests (header/body text; centered `th`) unchanged.
@@ -689,6 +716,7 @@ git commit -m "feat(react-native): measure table columns and apply content-propo
 ## Task 4: react-native — measurement integration tests via `<RichText>`
 
 **Files:**
+
 - Create: `packages/react-native/test/table-measure.test.tsx`
 
 - [ ] **Step 1: Write the failing test**
@@ -724,8 +752,7 @@ const widthsOf = (tree: ReturnType<typeof create>) =>
     .filter((w): w is number => typeof w === 'number')
 
 describe('integration: table measurement', () => {
-  const html =
-    '<table><tr><td>Name</td><td>A much longer description cell</td></tr></table>'
+  const html = '<table><tr><td>Name</td><td>A much longer description cell</td></tr></table>'
 
   it('fills the container with content-proportional columns when it fits', () => {
     let tree!: ReturnType<typeof create>
@@ -781,6 +808,7 @@ git commit -m "test(react-native): integration tests for measured table widths a
 ## Task 5: Verify the whole repo + changeset
 
 **Files:**
+
 - Create: `.changeset/phase-4b-tables-measurement.md`
 
 - [ ] **Step 1: Run the full workspace gates**
@@ -826,6 +854,7 @@ Run: `pnpm test` → PASS across all packages. Branch `phase-4b-tables-measureme
 ## Self-Review
 
 **Spec coverage:**
+
 - Measured max-content column widths → Task 2 (helper) + Task 3 (measure pass). ✅
 - Proportional fill on fit / h-scroll on overflow → Task 2 (algorithm) + Task 3 (ScrollView). ✅
 - Explicit `<col>` widths → Task 1 (core parse) + Task 3 (`deriveExplicit`). Cell `width` → Task 3 (`deriveExplicit`/`toPx`). ✅

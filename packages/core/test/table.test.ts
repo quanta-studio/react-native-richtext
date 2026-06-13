@@ -114,9 +114,7 @@ describe('buildTable', () => {
   })
 
   it('ignores percentage col widths (deferred)', () => {
-    const t = firstTable(
-      '<table><colgroup><col width="50%"></colgroup><tr><td>a</td></tr></table>',
-    )
+    const t = firstTable('<table><colgroup><col width="50%"></colgroup><tr><td>a</td></tr></table>')
     expect(t.colWidths).toEqual([undefined])
   })
 

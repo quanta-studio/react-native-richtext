@@ -58,7 +58,9 @@ describe('computeColumnWidths', () => {
   })
 
   it('returns empty for zero columns', () => {
-    expect(computeColumnWidths({ columnCount: 0, cells: [], explicit: [], container: 300 })).toEqual({
+    expect(
+      computeColumnWidths({ columnCount: 0, cells: [], explicit: [], container: 300 }),
+    ).toEqual({
       widths: [],
       overflow: false,
     })

@@ -17,13 +17,13 @@ widths (`<col width>` and cell `width`). Out: true vertical `rowspan` and border
 
 ## Decisions locked during brainstorming (do not re-litigate)
 
-| Question              | Decision                                                                                                                                                  |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 4b scope              | Measured content-proportional column widths + horizontal scroll + explicit px widths. `rowspan` stays **flat** (4a fillers); border-spacing/collapse → 4c. |
-| Measurement basis     | **max-content per column**, from a single `onLayout` pass. Full CSS auto-layout (min-content + distribution) is **not** done — needs a 2nd constrained pass. |
-| Overflow behavior     | Fits (`Σ widths ≤ container`) → **expand columns proportionally to fill**. Overflows → **natural widths inside a horizontal `ScrollView`**, cells single-line. |
-| Architecture          | Stateful `Table` (onLayout, mirroring the `Img`/`Image.getSize` precedent) + a **pure `column-widths` helper in `react-native`** (tested like `image-style.ts`). |
-| Where width math lives | `react-native` (RN-pixel-specific), **not** `core`. `core` stays structural. Rejected: an off-screen measuring probe (double-renders content).            |
+| Question               | Decision                                                                                                                                                         |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 4b scope               | Measured content-proportional column widths + horizontal scroll + explicit px widths. `rowspan` stays **flat** (4a fillers); border-spacing/collapse → 4c.       |
+| Measurement basis      | **max-content per column**, from a single `onLayout` pass. Full CSS auto-layout (min-content + distribution) is **not** done — needs a 2nd constrained pass.     |
+| Overflow behavior      | Fits (`Σ widths ≤ container`) → **expand columns proportionally to fill**. Overflows → **natural widths inside a horizontal `ScrollView`**, cells single-line.   |
+| Architecture           | Stateful `Table` (onLayout, mirroring the `Img`/`Image.getSize` precedent) + a **pure `column-widths` helper in `react-native`** (tested like `image-style.ts`). |
+| Where width math lives | `react-native` (RN-pixel-specific), **not** `core`. `core` stays structural. Rejected: an off-screen measuring probe (double-renders content).                   |
 
 ## Important correction vs. the brainstorm
 

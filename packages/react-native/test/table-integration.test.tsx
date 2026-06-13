@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { create } from 'react-test-renderer'
-import { View, Text } from 'react-native'
+import { Text } from 'react-native'
 import { RichText } from '../src'
 
 const html =

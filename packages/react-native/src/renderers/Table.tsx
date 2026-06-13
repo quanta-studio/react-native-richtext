@@ -72,8 +72,7 @@ export function Table({ node }: RendererProps) {
   const RowComp = registry['tr'] ?? TableRow
 
   const explicit = deriveExplicit(table)
-  const allExplicit =
-    table.columnCount > 0 && explicit.every((w): w is number => w !== undefined)
+  const allExplicit = table.columnCount > 0 && explicit.every((w): w is number => w !== undefined)
   const expected = countCells(table)
 
   const [container, setContainer] = useState<number | undefined>(undefined)
