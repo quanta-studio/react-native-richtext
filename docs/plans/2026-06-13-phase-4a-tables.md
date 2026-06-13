@@ -17,6 +17,7 @@
 ## File Structure
 
 **Create:**
+
 - `packages/core/src/table-grid.ts` — pure occupancy normalizer: `normalizeGrid(RawRow[]) → { rows, columnCount }`. No DOM/style deps; exhaustively unit-tested.
 - `packages/core/test/table-grid.test.ts` — unit tests for `normalizeGrid`.
 - `packages/core/test/table.test.ts` — end-to-end `buildTable` tests (parse → resolve → split → text → markers).
@@ -28,6 +29,7 @@
 - `.changeset/phase-4a-tables.md` — user-facing changelog entry.
 
 **Modify:**
+
 - `packages/css/src/types.ts` — extend `ControlStyle.display` union; add `borderCollapse`.
 - `packages/css/src/mapping/whitelist.ts` — add `borderCollapse` to `CONTROL_PROPS`.
 - `packages/css/src/resolve/compute-element.ts` — add `borderCollapse` to its `CONTROL_PROPS`.
@@ -50,6 +52,7 @@
 ## Task 1: CSS — `display: table*` values + `border-collapse` control prop
 
 **Files:**
+
 - Modify: `packages/css/src/types.ts:69` (the `display` union) and `:68-73` (`ControlStyle`)
 - Modify: `packages/css/src/mapping/whitelist.ts:66-72` (`CONTROL_PROPS`)
 - Modify: `packages/css/src/resolve/compute-element.ts:20-25` (`CONTROL_PROPS`)
@@ -60,22 +63,22 @@
 In `packages/css/test/whitelist.test.ts`, add inside `describe('classifyProp', ...)`:
 
 ```ts
-  it('classifies border-collapse as control', () => {
-    expect(classifyProp('borderCollapse')).toBe('control')
-  })
+it('classifies border-collapse as control', () => {
+  expect(classifyProp('borderCollapse')).toBe('control')
+})
 ```
 
 In `packages/css/test/map-declaration.test.ts`, add (match the existing `RawDecl` shape used in that file — `{ property, value, important }`):
 
 ```ts
-  it('maps border-collapse to a control decl', () => {
-    const { decls } = mapDeclaration({
-      property: 'border-collapse',
-      value: 'collapse',
-      important: false,
-    })
-    expect(decls).toEqual([{ prop: 'borderCollapse', value: 'collapse', important: false }])
+it('maps border-collapse to a control decl', () => {
+  const { decls } = mapDeclaration({
+    property: 'border-collapse',
+    value: 'collapse',
+    important: false,
   })
+  expect(decls).toEqual([{ prop: 'borderCollapse', value: 'collapse', important: false }])
+})
 ```
 
 - [ ] **Step 2: Run tests to verify they fail**
@@ -156,6 +159,7 @@ git commit -m "feat(css): recognize table display values and border-collapse"
 ## Task 2: CSS — table UA stylesheet rules
 
 **Files:**
+
 - Modify: `packages/css/src/ua/ua-stylesheet.ts`
 - Test: `packages/css/test/ua-rules.test.ts`
 
@@ -164,18 +168,18 @@ git commit -m "feat(css): recognize table display values and border-collapse"
 In `packages/css/test/ua-rules.test.ts`, add inside `describe('buildUaRules', ...)`:
 
 ```ts
-  it('makes table display table', () => {
-    const table = rules.filter((r) => r.match.kind === 'selector' && r.match.selector === 'table')
-    const display = table.flatMap((r) => r.declarations).find((d) => d.prop === 'display')
-    expect(display?.value).toBe('table')
-  })
+it('makes table display table', () => {
+  const table = rules.filter((r) => r.match.kind === 'selector' && r.match.selector === 'table')
+  const display = table.flatMap((r) => r.declarations).find((d) => d.prop === 'display')
+  expect(display?.value).toBe('table')
+})
 
-  it('makes th bold and centered', () => {
-    const th = rules.filter((r) => r.match.kind === 'selector' && r.match.selector === 'th')
-    const decls = th.flatMap((r) => r.declarations)
-    expect(decls.find((d) => d.prop === 'fontWeight')?.value).toBe('bold')
-    expect(decls.find((d) => d.prop === 'textAlign')?.value).toBe('center')
-  })
+it('makes th bold and centered', () => {
+  const th = rules.filter((r) => r.match.kind === 'selector' && r.match.selector === 'th')
+  const decls = th.flatMap((r) => r.declarations)
+  expect(decls.find((d) => d.prop === 'fontWeight')?.value).toBe('bold')
+  expect(decls.find((d) => d.prop === 'textAlign')?.value).toBe('center')
+})
 ```
 
 - [ ] **Step 2: Run tests to verify they fail**
@@ -215,6 +219,7 @@ git commit -m "feat(css): add table UA stylesheet rules"
 ## Task 3: Core — table render-tree node types
 
 **Files:**
+
 - Modify: `packages/core/src/types.ts`
 - Modify: `packages/core/src/index.ts`
 
@@ -329,6 +334,7 @@ git commit -m "feat(core): add table render-tree node types"
 ## Task 4: Core — pure grid normalizer (`normalizeGrid`)
 
 **Files:**
+
 - Create: `packages/core/src/table-grid.ts`
 - Test: `packages/core/test/table-grid.test.ts`
 
@@ -516,6 +522,7 @@ git commit -m "feat(core): add pure table grid normalizer (colspan/rowspan)"
 ## Task 5: Core — `buildTable` in the split phase
 
 **Files:**
+
 - Modify: `packages/core/src/classify.ts:29-31` (`isBlockLevel`)
 - Modify: `packages/core/src/split.ts`
 - Test: `packages/core/test/table.test.ts`, `packages/core/test/classify.test.ts`
@@ -608,9 +615,7 @@ describe('buildTable', () => {
   })
 
   it('supports a nested table inside a cell', () => {
-    const t = firstTable(
-      '<table><tr><td><table><tr><td>inner</td></tr></table></td></tr></table>',
-    )
+    const t = firstTable('<table><tr><td><table><tr><td>inner</td></tr></table></td></tr></table>')
     const c = t.rows[0]!.items[0]!
     expect(c.type === 'table-cell' && JSON.stringify(c.children)).toContain('"type":"table"')
   })
@@ -620,9 +625,9 @@ describe('buildTable', () => {
 In `packages/core/test/classify.test.ts`, add an assertion that `'table'` is block-level (match the file's existing import of `isBlockLevel`):
 
 ```ts
-  it('treats table as block-level', () => {
-    expect(isBlockLevel('table')).toBe(true)
-  })
+it('treats table as block-level', () => {
+  expect(isBlockLevel('table')).toBe(true)
+})
 ```
 
 - [ ] **Step 2: Run the tests to verify they fail**
@@ -690,7 +695,13 @@ function buildCell(el: Element, key: string, styles: Styles): TableCellNode {
   const style = cs?.style ?? EMPTY_STYLE
   const control = cs?.control ?? DEFAULT_CONTROL
   const isHeader = el.name === 'th'
-  const children = buildBlockContext(el.children as AnyNode[], style, control.whiteSpace, key, styles)
+  const children = buildBlockContext(
+    el.children as AnyNode[],
+    style,
+    control.whiteSpace,
+    key,
+    styles,
+  )
   return {
     type: 'table-cell',
     tag: isHeader ? 'th' : 'td',
@@ -808,6 +819,7 @@ git commit -m "feat(core): build TableNode from table DOM in the split phase"
 ## Task 6: Core — text + marker passes recurse into tables
 
 **Files:**
+
 - Modify: `packages/core/src/text/process-text.ts:61-73`
 - Modify: `packages/core/src/markers.ts:23-50`
 - Test: `packages/core/test/table.test.ts` (add cases)
@@ -817,18 +829,18 @@ git commit -m "feat(core): build TableNode from table DOM in the split phase"
 Add to `packages/core/test/table.test.ts` inside `describe('buildTable', ...)`:
 
 ```ts
-  it('collapses whitespace inside a cell', () => {
-    const t = firstTable('<table><tr><td>  a   b  </td></tr></table>')
-    const c = t.rows[0]!.items[0]!
-    const json = c.type === 'table-cell' ? JSON.stringify(c.children) : ''
-    expect(json).toContain('a b')
-    expect(json).not.toContain('a   b')
-  })
+it('collapses whitespace inside a cell', () => {
+  const t = firstTable('<table><tr><td>  a   b  </td></tr></table>')
+  const c = t.rows[0]!.items[0]!
+  const json = c.type === 'table-cell' ? JSON.stringify(c.children) : ''
+  expect(json).toContain('a b')
+  expect(json).not.toContain('a   b')
+})
 
-  it('annotates list markers inside a cell', () => {
-    const t = firstTable('<table><tr><td><ul><li>x</li></ul></td></tr></table>')
-    expect(JSON.stringify(t)).toContain('•')
-  })
+it('annotates list markers inside a cell', () => {
+  const t = firstTable('<table><tr><td><ul><li>x</li></ul></td></tr></table>')
+  expect(JSON.stringify(t)).toContain('•')
+})
 ```
 
 - [ ] **Step 2: Run the tests to verify they fail**
@@ -929,6 +941,7 @@ git commit -m "feat(core): recurse text and marker passes into table cells"
 ## Task 7: react-native — `TableCell` + `TableRow` components
 
 **Files:**
+
 - Create: `packages/react-native/src/renderers/TableCell.tsx`
 - Create: `packages/react-native/src/renderers/TableRow.tsx`
 - Test: `packages/react-native/test/table.test.tsx`
@@ -1044,6 +1057,7 @@ git commit -m "feat(react-native): add TableCell and TableRow renderers"
 ## Task 8: react-native — `Table` component, dispatch, defaults
 
 **Files:**
+
 - Create: `packages/react-native/src/renderers/Table.tsx`
 - Modify: `packages/react-native/src/NodeRenderer.tsx`
 - Modify: `packages/react-native/src/renderers/defaults.ts`
@@ -1140,9 +1154,7 @@ describe('Table', () => {
   it('lets a consumer override td via the registry', () => {
     const MyCell: Renderer = ({ children }) => <View testID="custom-cell">{children}</View>
     const tree = wrapTable(<Table node={tableNode()} />, { ...defaultRenderers, td: MyCell })
-    const custom = tree.root
-      .findAllByType(View)
-      .find((v) => v.props.testID === 'custom-cell')
+    const custom = tree.root.findAllByType(View).find((v) => v.props.testID === 'custom-cell')
     expect(custom).toBeDefined()
   })
 })
@@ -1301,6 +1313,7 @@ git commit -m "feat(react-native): add Table renderer, dispatch, and registry de
 ## Task 9: react-native — `<RichText>` table integration
 
 **Files:**
+
 - Create: `packages/react-native/test/table-integration.test.tsx`
 
 - [ ] **Step 1: Write the failing test**
@@ -1365,6 +1378,7 @@ git commit -m "test(react-native): add RichText table integration test"
 ## Task 10: Verify the whole repo + changeset
 
 **Files:**
+
 - Create: `.changeset/phase-4a-tables.md`
 
 - [ ] **Step 1: Run the full workspace gates**
@@ -1417,6 +1431,7 @@ Expected: PASS across all packages. The branch `phase-4a-tables` is ready for a 
 ## Self-Review
 
 **Spec coverage:**
+
 - Normalized grid model (TableNode, colspan/rowspan via occupancy) → Tasks 3–4. ✅
 - `buildTable` trigger on `display: table`, forgiving collection, thead→tbody→tfoot order, implicit tbody, caption → Task 5. ✅
 - Text/marker passes recurse into cells → Task 6. ✅

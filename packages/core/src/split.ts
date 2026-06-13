@@ -103,7 +103,13 @@ function buildCell(el: Element, key: string, styles: Styles): TableCellNode {
   const style = cs?.style ?? EMPTY_STYLE
   const control = cs?.control ?? DEFAULT_CONTROL
   const isHeader = el.name === 'th'
-  const children = buildBlockContext(el.children as AnyNode[], style, control.whiteSpace, key, styles)
+  const children = buildBlockContext(
+    el.children as AnyNode[],
+    style,
+    control.whiteSpace,
+    key,
+    styles,
+  )
   return {
     type: 'table-cell',
     tag: isHeader ? 'th' : 'td',

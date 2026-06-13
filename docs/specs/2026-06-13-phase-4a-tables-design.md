@@ -31,14 +31,14 @@ before layout. 4a takes path (b); 4b adds path (a).
 
 ## Decisions locked during brainstorming (do not re-litigate)
 
-| Question                | Decision                                                                                                                                                       |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Ambition                | **Parity** with `react-native-render-html` table capability — colspan/rowspan, nested tables, captions, sections — reached **incrementally** (4a → 4b).         |
-| Column-width strategy   | **4a:** weighted flex columns (equal by default, weight = `colspan`), no measurement. **4b:** two-pass `onLayout` measurement → content-proportional widths.    |
-| Where grid logic lives  | **Approach A** — a dedicated normalized `TableNode` grid in the React-free `core` package. The occupancy algorithm is pure and exhaustively unit-tested.        |
+| Question                | Decision                                                                                                                                                                                                                  |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Ambition                | **Parity** with `react-native-render-html` table capability — colspan/rowspan, nested tables, captions, sections — reached **incrementally** (4a → 4b).                                                                   |
+| Column-width strategy   | **4a:** weighted flex columns (equal by default, weight = `colspan`), no measurement. **4b:** two-pass `onLayout` measurement → content-proportional widths.                                                              |
+| Where grid logic lives  | **Approach A** — a dedicated normalized `TableNode` grid in the React-free `core` package. The occupancy algorithm is pure and exhaustively unit-tested.                                                                  |
 | `rowspan` in 4a         | **Modeled fully in core** (correct grid occupancy, so 4b renders it for free); **rendered flat in 4a** — the cell renders only in its origin row, covered positions render as empty filler cells so columns stay aligned. |
-| Default table borders   | **Borderless by default** (browser-faithful; honor CSS). Legacy `<table border="N">` bridges to visible cell borders so old CMS HTML shows grid lines.          |
-| Cell renderer overrides | `td` / `th` / `tr` are **registry-overridable** in 4a (parity-nice), alongside `table`.                                                                         |
+| Default table borders   | **Borderless by default** (browser-faithful; honor CSS). Legacy `<table border="N">` bridges to visible cell borders so old CMS HTML shows grid lines.                                                                    |
+| Cell renderer overrides | `td` / `th` / `tr` are **registry-overridable** in 4a (parity-nice), alongside `table`.                                                                                                                                   |
 
 ## 1. `core` — normalized grid model
 
@@ -225,7 +225,8 @@ the separate model / pixel-perfect collapse → 4b polish.
 `colspan` widens cells; `rowspan` is correctly modeled in the core grid and rendered flat with
 fillers; nested tables and lists-in-cells work; `th` is bold + centered; `<table border>` shows
 grid lines; `td/th/tr/table` are consumer-overridable. Green CI. core grid model + CSS UA/display
-+ react-native table renderers.
+
+- react-native table renderers.
 
 ## Out of scope (this cycle → 4b or later)
 

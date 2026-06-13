@@ -81,9 +81,7 @@ describe('buildTable', () => {
   })
 
   it('supports a nested table inside a cell', () => {
-    const t = firstTable(
-      '<table><tr><td><table><tr><td>inner</td></tr></table></td></tr></table>',
-    )
+    const t = firstTable('<table><tr><td><table><tr><td>inner</td></tr></table></td></tr></table>')
     const c = t.rows[0]!.items[0]!
     expect(c.type === 'table-cell' && JSON.stringify(c.children)).toContain('"type":"table"')
   })
