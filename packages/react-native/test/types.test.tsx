@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { RichTextProps, Renderer, RendererProps, FontMap } from '../src/types'
+import type { RichTextProps, Renderer, FontMap } from '../src/types'
 
 describe('types', () => {
   it('constructs the public prop shapes', () => {
