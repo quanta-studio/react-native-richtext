@@ -15,6 +15,8 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      # Required to publish the packages to GitHub Packages with GITHUB_TOKEN.
+      packages: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -24,8 +26,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          # Writes a CI-only ~/.npmrc wired to NODE_AUTH_TOKEN (keeps auth out of the repo).
-          registry-url: 'https://registry.npmjs.org'
+          # Writes a CI-only ~/.npmrc that routes the @yk-yong scope to GitHub Packages
+          # and wires NODE_AUTH_TOKEN for it (keeps auth out of the repo).
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@yk-yong'
 
       # standalone: true installs pnpm as a self-contained binary (bundled Node), so
       # pnpm 11.5.2 (whose npm manifest requires Node >=22.13) installs regardless of
@@ -43,4 +47,6 @@ jobs:
           publish: pnpm release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # GitHub Packages authenticates with the workflow's built-in token —
+          # no separate NPM_TOKEN secret needed.
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

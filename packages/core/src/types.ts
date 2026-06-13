@@ -1,4 +1,4 @@
-import type { RNStyle, ControlStyle } from '@yk-yong/rn-rich-text-css'
+import type { RNStyle, ControlStyle } from '@yk-yong/react-native-richtext-css'
 
 export type { RNStyle, ControlStyle }
 export type WhiteSpace = ControlStyle['whiteSpace']

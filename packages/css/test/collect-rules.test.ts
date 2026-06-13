@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { parse } from '@yk-yong/rn-rich-text-dom'
+import { parse } from '@yk-yong/react-native-richtext-dom'
 import { collectRules } from '../src/collect/collect-rules'
 import { Tier } from '../src/types'
 

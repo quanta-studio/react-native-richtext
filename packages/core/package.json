@@ -1,7 +1,7 @@
 {
-  "name": "@yk-yong/rn-rich-text-core",
-  "version": "0.0.0",
-  "description": "Render-model builder for rn-rich-text: DOM + computed styles -> renderer-agnostic styled tree. React-free.",
+  "name": "@yk-yong/react-native-richtext-core",
+  "version": "0.1.0",
+  "description": "Render-model builder for react-native-richtext: DOM + computed styles -> renderer-agnostic styled tree. React-free.",
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
@@ -25,8 +25,14 @@
     "typecheck": "tsc -p tsconfig.test.json",
     "clean": "rimraf dist"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yk-yong/react-native-richtext.git",
+    "directory": "packages/core"
+  },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://npm.pkg.github.com"
   },
   "keywords": [
     "html",
@@ -35,8 +41,8 @@
     "render-tree"
   ],
   "dependencies": {
-    "@yk-yong/rn-rich-text-css": "workspace:*",
-    "@yk-yong/rn-rich-text-dom": "workspace:*",
+    "@yk-yong/react-native-richtext-css": "workspace:*",
+    "@yk-yong/react-native-richtext-dom": "workspace:*",
     "entities": "^8.0.0"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping build `rn-rich-text`!
+Thanks for helping build `react-native-richtext`!
 
 ## Setup
 

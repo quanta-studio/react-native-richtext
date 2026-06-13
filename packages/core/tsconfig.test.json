@@ -5,8 +5,8 @@
     "noEmit": true,
     "types": ["node"],
     "paths": {
-      "@yk-yong/rn-rich-text-dom": ["../dom/src/index.ts"],
-      "@yk-yong/rn-rich-text-css": ["../css/src/index.ts"]
+      "@yk-yong/react-native-richtext-dom": ["../dom/src/index.ts"],
+      "@yk-yong/react-native-richtext-css": ["../css/src/index.ts"]
     }
   },
   "include": ["src", "test"]

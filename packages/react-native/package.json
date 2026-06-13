@@ -1,6 +1,6 @@
 {
-  "name": "@yk-yong/rn-rich-text",
-  "version": "0.0.0",
+  "name": "@yk-yong/react-native-richtext",
+  "version": "0.1.0",
   "description": "Fabric-native HTML renderer for React Native: the <RichText> component.",
   "license": "MIT",
   "type": "module",
@@ -25,8 +25,14 @@
     "typecheck": "tsc -p tsconfig.test.json",
     "clean": "rimraf dist"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yk-yong/react-native-richtext.git",
+    "directory": "packages/react-native"
+  },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://npm.pkg.github.com"
   },
   "keywords": [
     "react-native",
@@ -36,9 +42,9 @@
     "fabric"
   ],
   "dependencies": {
-    "@yk-yong/rn-rich-text-core": "workspace:*",
-    "@yk-yong/rn-rich-text-css": "workspace:*",
-    "@yk-yong/rn-rich-text-dom": "workspace:*"
+    "@yk-yong/react-native-richtext-core": "workspace:*",
+    "@yk-yong/react-native-richtext-css": "workspace:*",
+    "@yk-yong/react-native-richtext-dom": "workspace:*"
   },
   "peerDependencies": {
     "react": ">=18.2.0",

@@ -1,5 +1,5 @@
-import type { Document, Element } from '@yk-yong/rn-rich-text-dom'
-import type { ComputedStyle } from '@yk-yong/rn-rich-text-css'
+import type { Document, Element } from '@yk-yong/react-native-richtext-dom'
+import type { ComputedStyle } from '@yk-yong/react-native-richtext-css'
 import { splitDocument } from './split'
 import { processText } from './text/process-text'
 import { annotateMarkers } from './markers'

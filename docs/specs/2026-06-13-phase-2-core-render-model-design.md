@@ -1,8 +1,8 @@
-# rn-rich-text — Phase 2 (sub-project 2a): `@scope/core` Render-Model Design
+# react-native-richtext — Phase 2 (sub-project 2a): `@scope/core` Render-Model Design
 
 Date: 2026-06-13
 Status: Draft for review
-Depends on: Phase 0 (`@yk-yong/rn-rich-text-dom`) and Phase 1 (`@yk-yong/rn-rich-text-css`),
+Depends on: Phase 0 (`@yk-yong/react-native-richtext-dom`) and Phase 1 (`@yk-yong/react-native-richtext-css`),
 both merged. Read `docs/specs/2026-06-09-architecture-and-phase-0-design.md` and
 `docs/specs/2026-06-12-phase-1-css-engine-design.md` first.
 
@@ -36,8 +36,8 @@ DOM + Map<Element, ComputedStyle>  ─▶  buildRenderTree  ─▶  Array<BlockN
 
 ## Package
 
-- Name: `@yk-yong/rn-rich-text-core`. React-free. Depends on the `@yk-yong/rn-rich-text-dom` and
-  `@yk-yong/rn-rich-text-css` workspace packages (the latter for the `ComputedStyle`/`RNStyle`
+- Name: `@yk-yong/react-native-richtext-core`. React-free. Depends on the `@yk-yong/react-native-richtext-dom` and
+  `@yk-yong/react-native-richtext-css` workspace packages (the latter for the `ComputedStyle`/`RNStyle`
   types; core consumes the `Map<Element, ComputedStyle>` that `resolveStyles` returns).
 - New direct dependency: **`entities`** (complete HTML entity decoding).
 - Build/test/tsconfig mirror `packages/css` exactly: tsup, Vitest, TS project references, and the
@@ -170,8 +170,8 @@ fall back to `decimal` and are completed in Phase 3.
 ## Public API
 
 ```ts
-import type { Document, Element } from '@yk-yong/rn-rich-text-dom'
-import type { ComputedStyle } from '@yk-yong/rn-rich-text-css'
+import type { Document, Element } from '@yk-yong/react-native-richtext-dom'
+import type { ComputedStyle } from '@yk-yong/react-native-richtext-css'
 
 function buildRenderTree(
   document: Document,
@@ -200,7 +200,7 @@ shape and final text. Extend the real-world HTML corpus from Phase 1.
 
 ## Deliverable
 
-A tested, React-free `@yk-yong/rn-rich-text-core` package exposing `buildRenderTree(document,
+A tested, React-free `@yk-yong/react-native-richtext-core` package exposing `buildRenderTree(document,
 styles)` that returns the renderer-agnostic styled tree (block/inline split, whitespace-collapsed
 and entity-decoded text, basic list markers), with green CI. No rendering.
 

@@ -1,7 +1,7 @@
 import { View } from 'react-native'
 import { splitStyle } from '../style/split-style'
 import type { RendererProps } from '../types'
-import type { BlockNode } from '@yk-yong/rn-rich-text-core'
+import type { BlockNode } from '@yk-yong/react-native-richtext-core'
 
 export function Rule({ node }: RendererProps) {
   const { view } = splitStyle((node as BlockNode).style)

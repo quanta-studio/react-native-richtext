@@ -5,7 +5,11 @@ import { Block } from '../src/renderers/Block'
 import { InlineContainer } from '../src/renderers/InlineContainer'
 import { Inline } from '../src/renderers/Inline'
 import { RichTextContext } from '../src/context'
-import type { BlockNode, InlineContainerNode, InlineNode } from '@yk-yong/rn-rich-text-core'
+import type {
+  BlockNode,
+  InlineContainerNode,
+  InlineNode,
+} from '@yk-yong/react-native-richtext-core'
 
 const ctx = {
   registry: {},

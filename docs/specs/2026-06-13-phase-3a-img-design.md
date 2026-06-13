@@ -1,4 +1,4 @@
-# rn-rich-text — Phase 3 (sub-project 3a): `img` → `<Image>` Design
+# react-native-richtext — Phase 3 (sub-project 3a): `img` → `<Image>` Design
 
 Date: 2026-06-13
 Status: Draft for review

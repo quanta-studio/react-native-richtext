@@ -1,15 +1,15 @@
-# rn-rich-text — Architecture & Phase 0 Design
+# react-native-richtext — Architecture & Phase 0 Design
 
 Date: 2026-06-09
 Status: Draft for review
-Working name: `rn-rich-text` (repo + npm scope are placeholders; rename freely)
+Working name: `react-native-richtext` (repo + npm scope are placeholders; rename freely)
 
 ## What this is
 
 A modern, **Fabric-native** HTML renderer for React Native, intended to grow into a
 full, community-maintained replacement for `react-native-render-html` (which is heavy,
 lightly maintained, and not New-Architecture-first). It lives in its own standalone
-public monorepo at `repositories/rn-rich-text`, independent of any consuming app.
+public monorepo at `repositories/react-native-richtext`, independent of any consuming app.
 
 It originated from a small in-app seed (`@packages/rich-text` in the fonerewards
 mobile app) that validated the rendering model. This library is a **clean-room build on
@@ -181,7 +181,7 @@ the hand-rolled entity decoder (→ `entities`), the flat AST (→ a queryable D
 
 MIT license. Conventional Commits + Changesets + automated releases. Semver. Public GitHub
 repo with issue/PR templates and a `CONTRIBUTING` guide. Final library/npm name TBD by the
-maintainer (placeholder `rn-rich-text`).
+maintainer (placeholder `react-native-richtext`).
 
 ## Open questions (resolve during planning)
 

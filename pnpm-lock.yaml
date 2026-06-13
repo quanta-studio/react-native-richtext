@@ -56,10 +56,10 @@ importers:
 
   packages/core:
     dependencies:
-      '@yk-yong/rn-rich-text-css':
+      '@yk-yong/react-native-richtext-css':
         specifier: workspace:*
         version: link:../css
-      '@yk-yong/rn-rich-text-dom':
+      '@yk-yong/react-native-richtext-dom':
         specifier: workspace:*
         version: link:../dom
       entities:
@@ -72,7 +72,7 @@ importers:
 
   packages/css:
     dependencies:
-      '@yk-yong/rn-rich-text-dom':
+      '@yk-yong/react-native-richtext-dom':
         specifier: workspace:*
         version: link:../dom
       css-select:
@@ -109,13 +109,13 @@ importers:
 
   packages/react-native:
     dependencies:
-      '@yk-yong/rn-rich-text-core':
+      '@yk-yong/react-native-richtext-core':
         specifier: workspace:*
         version: link:../core
-      '@yk-yong/rn-rich-text-css':
+      '@yk-yong/react-native-richtext-css':
         specifier: workspace:*
         version: link:../css
-      '@yk-yong/rn-rich-text-dom':
+      '@yk-yong/react-native-richtext-dom':
         specifier: workspace:*
         version: link:../dom
     devDependencies:

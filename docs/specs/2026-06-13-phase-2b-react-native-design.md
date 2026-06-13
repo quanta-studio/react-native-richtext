@@ -1,15 +1,15 @@
-# rn-rich-text — Phase 2 (sub-project 2b): `@scope/react-native` Design
+# react-native-richtext — Phase 2 (sub-project 2b): `@scope/react-native` Design
 
 Date: 2026-06-13
 Status: Draft for review
-Depends on: Phase 0 (`@yk-yong/rn-rich-text-dom`), Phase 1 (`@yk-yong/rn-rich-text-css`),
-Phase 2a (`@yk-yong/rn-rich-text-core`) — all merged. Read the architecture doc
+Depends on: Phase 0 (`@yk-yong/react-native-richtext-dom`), Phase 1 (`@yk-yong/react-native-richtext-css`),
+Phase 2a (`@yk-yong/react-native-richtext-core`) — all merged. Read the architecture doc
 (`docs/specs/2026-06-09-architecture-and-phase-0-design.md`) and the 2a spec
 (`docs/specs/2026-06-13-phase-2-core-render-model-design.md`) first.
 
 ## What this is
 
-Sub-project 2b: **`@yk-yong/rn-rich-text`**, the flagship public package. It is the first
+Sub-project 2b: **`@yk-yong/react-native-richtext`**, the flagship public package. It is the first
 **React/RN** package (everything before it is React-free). It provides the `<RichText>` component:
 it orchestrates `parse → resolveStyles → buildRenderTree` (the three lower packages) and walks the
 resulting `RenderNode` tree to React Native elements via a **renderer registry**, with font
@@ -23,18 +23,18 @@ source.html ─▶ parse (dom) ─▶ resolveStyles (css) ─▶ buildRenderTree
 
 ## Decisions locked during brainstorming (do not re-litigate)
 
-| Question               | Decision                                                                                                                                                                                                                                                                     |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Cycle scope            | **Package + minimal example app.** Build `@yk-yong/rn-rich-text` (tested) plus a minimal Expo screen for visual validation. The cross-repo dogfood (`OutletAboutScreen`) and the canary publish are deferred to a follow-on (they need the fonerewards repo + an NPM token). |
-| Test setup             | **Vitest + a `react-native` mock + react-test-renderer.** One runner across the monorepo; mock `react-native` so View/Text/etc. are host components; assert structure + styles. No snapshots.                                                                                |
-| Rendering architecture | **Approach A — component registry + context.** A recursive `NodeRenderer` dispatches by node type and looks up `registry[tag]` (consumer override merged over built-in defaults); shared concerns (`registry`, `fonts`, `onLinkPress`) live in `RichTextContext`.            |
+| Question               | Decision                                                                                                                                                                                                                                                                              |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Cycle scope            | **Package + minimal example app.** Build `@yk-yong/react-native-richtext` (tested) plus a minimal Expo screen for visual validation. The cross-repo dogfood (`OutletAboutScreen`) and the canary publish are deferred to a follow-on (they need the fonerewards repo + an NPM token). |
+| Test setup             | **Vitest + a `react-native` mock + react-test-renderer.** One runner across the monorepo; mock `react-native` so View/Text/etc. are host components; assert structure + styles. No snapshots.                                                                                         |
+| Rendering architecture | **Approach A — component registry + context.** A recursive `NodeRenderer` dispatches by node type and looks up `registry[tag]` (consumer override merged over built-in defaults); shared concerns (`registry`, `fonts`, `onLinkPress`) live in `RichTextContext`.                     |
 
 ## Package
 
-- Name: **`@yk-yong/rn-rich-text`** (the headline public package), directory `packages/react-native`.
+- Name: **`@yk-yong/react-native-richtext`** (the headline public package), directory `packages/react-native`.
   This is the first React/RN package — **not** React-free.
-- Runtime dependencies: the three workspace packages `@yk-yong/rn-rich-text-dom`,
-  `@yk-yong/rn-rich-text-css`, `@yk-yong/rn-rich-text-core`.
+- Runtime dependencies: the three workspace packages `@yk-yong/react-native-richtext-dom`,
+  `@yk-yong/react-native-richtext-css`, `@yk-yong/react-native-richtext-core`.
 - **Peer** dependencies: `react`, `react-native` (New-Architecture-stable floors; exact ranges
   pinned in planning).
 - Dev dependencies: `react`, `react-native`, `react-test-renderer`, `@types/react`, `@types/node`.
@@ -67,7 +67,7 @@ example/                   # minimal Expo screen (manual validation; not in CI)
 ## Public API
 
 ```ts
-import type { RenderNode } from '@yk-yong/rn-rich-text-core'
+import type { RenderNode } from '@yk-yong/react-native-richtext-core'
 import type { StyleProp, ViewStyle } from 'react-native'
 
 interface RichTextProps {
@@ -91,7 +91,7 @@ type FontFaces = { normal?: string; italic?: string }
 type FontMap = Record<string, Record<string, FontFaces>> // family -> weight -> faces
 ```
 
-`RNStyle` is re-exported from `@yk-yong/rn-rich-text-css` (via core). `useRichTextContext()` returns
+`RNStyle` is re-exported from `@yk-yong/react-native-richtext-css` (via core). `useRichTextContext()` returns
 `{ registry, fonts, onLinkPress }`.
 
 ## Orchestration (`RichText.tsx`)
@@ -177,7 +177,7 @@ New-Architecture configuration are settled in planning.
 
 ## Deliverable
 
-A tested `@yk-yong/rn-rich-text` package exposing `<RichText>` (orchestration + registry + default
+A tested `@yk-yong/react-native-richtext` package exposing `<RichText>` (orchestration + registry + default
 renderers + font resolution + `onLinkPress`) with green CI, plus a minimal Expo example screen for
 manual validation. No cross-repo dogfood, no publish.
 

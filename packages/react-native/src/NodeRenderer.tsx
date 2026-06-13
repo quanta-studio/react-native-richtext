@@ -3,7 +3,7 @@ import { useRichTextContext } from './context'
 import { Block } from './renderers/Block'
 import { InlineContainer } from './renderers/InlineContainer'
 import { Inline } from './renderers/Inline'
-import type { RenderNode } from '@yk-yong/rn-rich-text-core'
+import type { RenderNode } from '@yk-yong/react-native-richtext-core'
 
 export function NodeRenderer({ node }: { node: RenderNode }) {
   const { registry } = useRichTextContext()

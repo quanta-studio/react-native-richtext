@@ -1,10 +1,10 @@
-# @yk-yong/rn-rich-text-dom
+# @yk-yong/react-native-richtext-dom
 
-Forgiving HTML → DOM parsing and traversal for the `rn-rich-text` renderer.
+Forgiving HTML → DOM parsing and traversal for the `react-native-richtext` renderer.
 React-free; built on `htmlparser2` / `domhandler` / `domutils`.
 
 ```ts
-import { parse, getElementsByTagName, isTag } from '@yk-yong/rn-rich-text-dom'
+import { parse, getElementsByTagName, isTag } from '@yk-yong/react-native-richtext-dom'
 
 const doc = parse('<p>Hello <b>world</b></p>')
 const paragraphs = getElementsByTagName('p', doc)

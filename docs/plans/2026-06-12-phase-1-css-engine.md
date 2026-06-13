@@ -2,11 +2,11 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build `@yk-yong/rn-rich-text-css` — a React-free package whose `resolveStyles(document, options)` turns a parsed DOM plus consumer styles into a fully-computed `Map<Element, ComputedStyle>` (cascade + inheritance applied, relative units resolved), with optional diagnostics.
+**Goal:** Build `@yk-yong/react-native-richtext-css` — a React-free package whose `resolveStyles(document, options)` turns a parsed DOM plus consumer styles into a fully-computed `Map<Element, ComputedStyle>` (cascade + inheritance applied, relative units resolved), with optional diagnostics.
 
 **Architecture:** Approach B — `collect → match → cascade → compute` as separate, independently-testable stages. CSS-text declarations are shorthand-expanded and mapped to RN longhand props at collection time so the cascade competes at longhand granularity. Relative units that need element context (`em`/`rem`/`%`/unitless `line-height`) are carried as deferred tokens and finalized in a single top-down compute pass. The output `ComputedStyle` carries a pure `RNStyle` plus a small typed `control` block (`display`/`whiteSpace`/`listStyle*`) the renderer needs but that aren't RN style keys.
 
-**Tech Stack:** TypeScript 6 (strict, `verbatimModuleSyntax`, `noUncheckedIndexedAccess`), Vitest 4, tsup, pnpm workspaces. New deps: `css-tree` (parse), `css-select` (selector match on domhandler nodes), `css-to-react-native` (shorthand expansion + value parse). Workspace dep: `@yk-yong/rn-rich-text-dom`. Specificity is hand-rolled from the css-tree selector AST (no `@csstools/selector-specificity`).
+**Tech Stack:** TypeScript 6 (strict, `verbatimModuleSyntax`, `noUncheckedIndexedAccess`), Vitest 4, tsup, pnpm workspaces. New deps: `css-tree` (parse), `css-select` (selector match on domhandler nodes), `css-to-react-native` (shorthand expansion + value parse). Workspace dep: `@yk-yong/react-native-richtext-dom`. Specificity is hand-rolled from the css-tree selector AST (no `@csstools/selector-specificity`).
 
 **Planning-time resolutions of spec open questions:**
 
@@ -66,11 +66,11 @@ packages/css/
 ```
 
 Run a single test file with: `pnpm exec vitest run packages/css/test/<name>.test.ts`
-Typecheck the package with: `pnpm --filter @yk-yong/rn-rich-text-css typecheck`
+Typecheck the package with: `pnpm --filter @yk-yong/react-native-richtext-css typecheck`
 
 ---
 
-## Task 0: Scaffold the `@yk-yong/rn-rich-text-css` package
+## Task 0: Scaffold the `@yk-yong/react-native-richtext-css` package
 
 **Files:**
 
@@ -81,9 +81,9 @@ Typecheck the package with: `pnpm --filter @yk-yong/rn-rich-text-css typecheck`
 
 ```json
 {
-  "name": "@yk-yong/rn-rich-text-css",
+  "name": "@yk-yong/react-native-richtext-css",
   "version": "0.0.0",
-  "description": "CSS engine for rn-rich-text: cascade, specificity, inheritance, and declaration->RN style resolution. React-free.",
+  "description": "CSS engine for react-native-richtext: cascade, specificity, inheritance, and declaration->RN style resolution. React-free.",
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
@@ -106,7 +106,7 @@ Typecheck the package with: `pnpm --filter @yk-yong/rn-rich-text-css typecheck`
   "publishConfig": { "access": "public" },
   "keywords": ["css", "cascade", "react-native", "rich-text", "stylesheet"],
   "dependencies": {
-    "@yk-yong/rn-rich-text-dom": "workspace:*",
+    "@yk-yong/react-native-richtext-dom": "workspace:*",
     "css-select": "^6.0.0",
     "css-to-react-native": "^3.2.0",
     "css-tree": "^3.1.0"
@@ -169,13 +169,13 @@ export default defineConfig({
 `packages/css/README.md`:
 
 ```md
-# @yk-yong/rn-rich-text-css
+# @yk-yong/react-native-richtext-css
 
-CSS engine for rn-rich-text: parses stylesheets and inline styles, matches
+CSS engine for react-native-richtext: parses stylesheets and inline styles, matches
 selectors, applies the cascade + inheritance, and resolves declarations into
 React Native style objects. React-free pure logic.
 
-Not yet published — internal to the rn-rich-text monorepo.
+Not yet published — internal to the react-native-richtext monorepo.
 ```
 
 Copy the license: `cp packages/dom/LICENSE packages/css/LICENSE`
@@ -202,14 +202,14 @@ Expected: resolves the new workspace package and deps; lockfile updates; exit 0.
 
 - [ ] **Step 8: Verify it builds and typechecks**
 
-Run: `pnpm --filter @yk-yong/rn-rich-text-css typecheck && pnpm --filter @yk-yong/rn-rich-text-css build`
+Run: `pnpm --filter @yk-yong/react-native-richtext-css typecheck && pnpm --filter @yk-yong/react-native-richtext-css build`
 Expected: exit 0; `packages/css/dist/index.js` + `index.cjs` produced.
 
 - [ ] **Step 9: Commit**
 
 ```bash
 git add packages/css tsconfig.json pnpm-lock.yaml
-git commit -m "chore(css): scaffold @yk-yong/rn-rich-text-css package"
+git commit -m "chore(css): scaffold @yk-yong/react-native-richtext-css package"
 ```
 
 ---
@@ -293,7 +293,7 @@ Expected: FAIL — cannot resolve `../src/types`.
 - [ ] **Step 3: Write `packages/css/src/types.ts`**
 
 ```ts
-import type { Element, Document } from '@yk-yong/rn-rich-text-dom'
+import type { Element, Document } from '@yk-yong/react-native-richtext-dom'
 
 export type { Element, Document }
 
@@ -1599,7 +1599,7 @@ Run: `pnpm exec vitest run packages/css/test/object-to-decls.test.ts` → PASS.
 
 ```ts
 import { describe, expect, it } from 'vitest'
-import { parse } from '@yk-yong/rn-rich-text-dom'
+import { parse } from '@yk-yong/react-native-richtext-dom'
 import { collectRules } from '../src/collect/collect-rules'
 import { Tier } from '../src/types'
 
@@ -1658,8 +1658,8 @@ describe('collectRules', () => {
 - [ ] **Step 4: Run it — FAIL**, then implement `packages/css/src/collect/collect-rules.ts`
 
 ```ts
-import { getElementsByTagName, getText, isTag } from '@yk-yong/rn-rich-text-dom'
-import type { Document, Element } from '@yk-yong/rn-rich-text-dom'
+import { getElementsByTagName, getText, isTag } from '@yk-yong/react-native-richtext-dom'
+import type { Document, Element } from '@yk-yong/react-native-richtext-dom'
 import { parseStylesheet } from '../parse/parse-stylesheet'
 import { parseInline } from '../parse/parse-inline'
 import { mapDeclaration } from '../mapping/map-declaration'
@@ -1799,7 +1799,7 @@ Maps each rule to the elements it applies to. Selector rules use css-select; tag
 
 ```ts
 import { describe, expect, it } from 'vitest'
-import { parse, getElementsByTagName } from '@yk-yong/rn-rich-text-dom'
+import { parse, getElementsByTagName } from '@yk-yong/react-native-richtext-dom'
 import { matchRules } from '../src/match/match-rules'
 import { Tier } from '../src/types'
 import type { Rule } from '../src/types'
@@ -1871,8 +1871,8 @@ describe('matchRules', () => {
 
 ```ts
 import { selectAll } from 'css-select'
-import { getElementsByTagName, getAttributeValue } from '@yk-yong/rn-rich-text-dom'
-import type { Document, Element } from '@yk-yong/rn-rich-text-dom'
+import { getElementsByTagName, getAttributeValue } from '@yk-yong/react-native-richtext-dom'
+import type { Document, Element } from '@yk-yong/react-native-richtext-dom'
 import type { Rule } from '../types'
 
 function classTokens(el: Element): string[] {
@@ -2243,7 +2243,7 @@ git commit -m "feat(css): compute per-element style with inheritance and units"
 
 ```ts
 import { describe, expect, it } from 'vitest'
-import { parse, getElementsByTagName } from '@yk-yong/rn-rich-text-dom'
+import { parse, getElementsByTagName } from '@yk-yong/react-native-richtext-dom'
 import { resolveStyles } from '../src/resolve/resolve-styles'
 
 describe('resolveStyles', () => {
@@ -2296,8 +2296,8 @@ describe('resolveStyles', () => {
 - [ ] **Step 2: Run it — FAIL**, then implement `packages/css/src/resolve/resolve-styles.ts`
 
 ```ts
-import { isTag } from '@yk-yong/rn-rich-text-dom'
-import type { Document, Element } from '@yk-yong/rn-rich-text-dom'
+import { isTag } from '@yk-yong/react-native-richtext-dom'
+import type { Document, Element } from '@yk-yong/react-native-richtext-dom'
 import { collectRules } from '../collect/collect-rules'
 import { matchRules } from '../match/match-rules'
 import { cascade } from '../cascade/cascade'
@@ -2358,7 +2358,7 @@ Expected: PASS (6 tests).
 
 - [ ] **Step 5: Typecheck the whole package**
 
-Run: `pnpm --filter @yk-yong/rn-rich-text-css typecheck`
+Run: `pnpm --filter @yk-yong/react-native-richtext-css typecheck`
 Expected: exit 0.
 
 - [ ] **Step 6: Commit**
@@ -2408,7 +2408,7 @@ End-to-end assertions over realistic CMS-style markup, the corpus the spec requi
 import { describe, expect, it } from 'vitest'
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { parse, getElementsByTagName, findOne, isTag } from '@yk-yong/rn-rich-text-dom'
+import { parse, getElementsByTagName, findOne, isTag } from '@yk-yong/react-native-richtext-dom'
 import { resolveStyles } from '../src'
 
 const html = readFileSync(
@@ -2482,7 +2482,7 @@ git commit -m "test(css): add end-to-end article fixture integration test"
 
 ```md
 ---
-'@yk-yong/rn-rich-text-css': minor
+'@yk-yong/react-native-richtext-css': minor
 ---
 
 Add the CSS engine: `resolveStyles(document, options)` resolves a parsed DOM plus

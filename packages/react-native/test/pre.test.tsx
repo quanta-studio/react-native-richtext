@@ -3,7 +3,7 @@ import { create } from 'react-test-renderer'
 import { View, ScrollView, Text } from 'react-native'
 import { Pre } from '../src/renderers/Pre'
 import { defaultRenderers } from '../src/renderers/defaults'
-import type { BlockNode } from '@yk-yong/rn-rich-text-core'
+import type { BlockNode } from '@yk-yong/react-native-richtext-core'
 
 const preNode = (style: Record<string, unknown> = {}): BlockNode => ({
   type: 'block',

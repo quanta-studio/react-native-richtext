@@ -3,7 +3,7 @@ import { Image } from 'react-native'
 import { splitStyle } from '../style/split-style'
 import { imageStyle, type IntrinsicSize } from './image-style'
 import type { RendererProps } from '../types'
-import type { BlockNode } from '@yk-yong/rn-rich-text-core'
+import type { BlockNode } from '@yk-yong/react-native-richtext-core'
 
 // Only a positive, finite number counts as an explicit dimension. Empty/whitespace
 // attributes (common in CMS HTML) and 0/negative values fall through to intrinsic

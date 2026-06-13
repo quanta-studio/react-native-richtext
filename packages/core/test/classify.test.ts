@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { parse, getElementsByTagName } from '@yk-yong/rn-rich-text-dom'
-import { resolveStyles } from '@yk-yong/rn-rich-text-css'
+import { parse, getElementsByTagName } from '@yk-yong/react-native-richtext-dom'
+import { resolveStyles } from '@yk-yong/react-native-richtext-css'
 import { isBlockLevel, isInlineLevel, isHidden, isNonRendered, displayOf } from '../src/classify'
 
 describe('classify', () => {
