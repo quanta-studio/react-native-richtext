@@ -23,12 +23,12 @@ jobs:
       # Required to publish the packages to GitHub Packages with GITHUB_TOKEN.
       packages: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           # Changesets needs full history to diff against the base branch.
           fetch-depth: 0
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 22
           # Writes a CI-only ~/.npmrc that routes the @yk-yong scope to GitHub Packages
@@ -38,8 +38,8 @@ jobs:
 
       # standalone: true installs pnpm as a self-contained binary (bundled Node), so
       # pnpm 11.5.2 (whose npm manifest requires Node >=22.13) installs regardless of
-      # the Actions runner's Node 20 runtime. Node 22 above runs the scripts.
-      - uses: pnpm/action-setup@v4
+      # the Actions runner's Node runtime. Node 22 above runs the scripts.
+      - uses: pnpm/action-setup@v6
         with:
           version: 11.5.2
           standalone: true
