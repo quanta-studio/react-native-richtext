@@ -1,6 +1,6 @@
 # Phase 0 — deferred follow-ups (resolve before the first npm publish)
 
-Phase 0's deliverable (a tested, React-free `@yk-yong/rn-rich-text-dom` package + green CI) is
+Phase 0's deliverable (a tested, React-free `@yk-yong/react-native-richtext-dom` package + green CI) is
 complete and merged. These items are **not** blockers for Phase 0 — the package resolves
 correctly for `bundler` and `node10` module resolution, which covers every real current
 consumer: the in-repo Phase 1/2 packages (built under `moduleResolution: Bundler`) and
@@ -63,4 +63,4 @@ aren't published. Either exclude `*.d.ts.map` from the published files or includ
 ## 5. Minor: `engines` on the published package
 
 The root `engines: { node: ">=20.18.0" }` does not propagate to the published
-`@yk-yong/rn-rich-text-dom`. Consider adding an `engines` field to the package itself.
+`@yk-yong/react-native-richtext-dom`. Consider adding an `engines` field to the package itself.

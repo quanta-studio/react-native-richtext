@@ -1,5 +1,5 @@
-import { isTag } from '@yk-yong/rn-rich-text-dom'
-import type { Document, Element } from '@yk-yong/rn-rich-text-dom'
+import { isTag } from '@yk-yong/react-native-richtext-dom'
+import type { Document, Element } from '@yk-yong/react-native-richtext-dom'
 import { collectRules } from '../collect/collect-rules'
 import { matchRules } from '../match/match-rules'
 import { cascade } from '../cascade/cascade'

@@ -6,7 +6,7 @@ import { ListItem } from '../src/renderers/ListItem'
 import { Rule } from '../src/renderers/Rule'
 import { defaultRenderers } from '../src/renderers/defaults'
 import { RichTextContext } from '../src/context'
-import type { BlockNode, InlineNode } from '@yk-yong/rn-rich-text-core'
+import type { BlockNode, InlineNode } from '@yk-yong/react-native-richtext-core'
 
 const makeCtx = (onLinkPress = () => {}) => ({ registry: {}, fonts: undefined, onLinkPress })
 const wrap = (ui: React.ReactNode, ctx = makeCtx()) =>

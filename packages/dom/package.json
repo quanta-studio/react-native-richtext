@@ -1,7 +1,7 @@
 {
-  "name": "@yk-yong/rn-rich-text-dom",
+  "name": "@yk-yong/react-native-richtext-dom",
   "version": "0.1.0",
-  "description": "Forgiving HTML → DOM parsing, traversal, and node guards for rn-rich-text. React-free.",
+  "description": "Forgiving HTML → DOM parsing, traversal, and node guards for react-native-richtext. React-free.",
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
@@ -27,7 +27,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yk-yong/rn-rich-text.git",
+    "url": "git+https://github.com/yk-yong/react-native-richtext.git",
     "directory": "packages/dom"
   },
   "publishConfig": {

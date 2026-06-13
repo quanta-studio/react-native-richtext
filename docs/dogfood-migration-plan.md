@@ -1,4 +1,4 @@
-# Dogfood: migrating the fonerewards seed → `@yk-yong/rn-rich-text`
+# Dogfood: migrating the fonerewards seed → `@yk-yong/react-native-richtext`
 
 Instructions to replace the in-app `@packages/rich-text` seed in
 `fonerewards-user-app/mobile-app` with the published library. **Plan only — apply in the app repo.**
@@ -42,8 +42,8 @@ or CI secret — don't commit the token). Then, after 0.1.0 is published:
 
 ```bash
 cd fonerewards-user-app/mobile-app
-npm install @yk-yong/rn-rich-text
-# pulls @yk-yong/rn-rich-text-{dom,css,core} transitively
+npm install @yk-yong/react-native-richtext
+# pulls @yk-yong/react-native-richtext-{dom,css,core} transitively
 ```
 
 It is a normal npm dependency (not a workspace), so Metro resolves it from `node_modules` with **no
@@ -57,7 +57,7 @@ Map the seed props to the library's `<RichText>`. The seed's `emphasisStyles` be
 
 ```tsx
 import { StyleSheet } from 'react-native'
-import { RichText as LibRichText } from '@yk-yong/rn-rich-text'
+import { RichText as LibRichText } from '@yk-yong/react-native-richtext'
 import type { RichTextProps } from './RichText.types'
 
 const flat = (s: unknown): Record<string, unknown> | undefined =>

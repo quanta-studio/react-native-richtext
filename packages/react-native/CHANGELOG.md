@@ -1,4 +1,4 @@
-# @yk-yong/rn-rich-text
+# @yk-yong/react-native-richtext
 
 ## 0.1.0
 
@@ -24,6 +24,6 @@
 - Updated dependencies [721df22]
 - Updated dependencies [64c5d21]
 - Updated dependencies [e01df31]
-  - @yk-yong/rn-rich-text-css@0.1.0
-  - @yk-yong/rn-rich-text-dom@0.1.0
-  - @yk-yong/rn-rich-text-core@0.1.0
+  - @yk-yong/react-native-richtext-css@0.1.0
+  - @yk-yong/react-native-richtext-dom@0.1.0
+  - @yk-yong/react-native-richtext-core@0.1.0

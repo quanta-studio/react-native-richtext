@@ -1,6 +1,6 @@
 # Phase 2a (`@scope/core`) — deferred follow-ups
 
-The Phase 2a deliverable — a tested, React-free `@yk-yong/rn-rich-text-core` whose
+The Phase 2a deliverable — a tested, React-free `@yk-yong/react-native-richtext-core` whose
 `buildRenderTree(document, styles)` returns the renderer-agnostic styled tree (block/inline split,
 whitespace collapse, entity decode, basic list markers) — is complete and green (lint + format +
 typecheck + tests + build). The items below were surfaced during implementation/review. **None are

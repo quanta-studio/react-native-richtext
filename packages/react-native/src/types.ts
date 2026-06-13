@@ -1,6 +1,6 @@
 import type { ReactNode, ComponentType } from 'react'
 import type { StyleProp, ViewStyle } from 'react-native'
-import type { RenderNode, RNStyle } from '@yk-yong/rn-rich-text-core'
+import type { RenderNode, RNStyle } from '@yk-yong/react-native-richtext-core'
 
 export type { RenderNode, RNStyle }
 

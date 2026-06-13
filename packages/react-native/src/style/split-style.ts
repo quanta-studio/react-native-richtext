@@ -1,4 +1,4 @@
-import type { RNStyle } from '@yk-yong/rn-rich-text-core'
+import type { RNStyle } from '@yk-yong/react-native-richtext-core'
 
 const TEXT_PROPS = new Set<string>([
   'color',

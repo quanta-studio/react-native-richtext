@@ -1,4 +1,4 @@
-# rn-rich-text — Phase 3 (sub-project 3b): List / Quote / Code Polish Design
+# react-native-richtext — Phase 3 (sub-project 3b): List / Quote / Code Polish Design
 
 Date: 2026-06-13
 Status: Draft for review
@@ -102,7 +102,7 @@ A new renderer, registered as `pre` in `defaultRenderers`:
 import { View, ScrollView } from 'react-native'
 import { splitStyle } from '../style/split-style'
 import type { RendererProps } from '../types'
-import type { BlockNode } from '@yk-yong/rn-rich-text-core'
+import type { BlockNode } from '@yk-yong/react-native-richtext-core'
 
 export function Pre({ node, children }: RendererProps) {
   const { view } = splitStyle((node as BlockNode).style)

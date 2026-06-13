@@ -1,6 +1,11 @@
 import { selectAll } from 'css-select'
-import { getElementsByTagName, getAttributeValue, findAll, isTag } from '@yk-yong/rn-rich-text-dom'
-import type { Document, Element } from '@yk-yong/rn-rich-text-dom'
+import {
+  getElementsByTagName,
+  getAttributeValue,
+  findAll,
+  isTag,
+} from '@yk-yong/react-native-richtext-dom'
+import type { Document, Element } from '@yk-yong/react-native-richtext-dom'
 import type { Rule } from '../types'
 
 function classTokens(el: Element): string[] {

@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { parse } from '@yk-yong/rn-rich-text-dom'
-import { resolveStyles } from '@yk-yong/rn-rich-text-css'
+import { parse } from '@yk-yong/react-native-richtext-dom'
+import { resolveStyles } from '@yk-yong/react-native-richtext-css'
 import { buildRenderTree } from '../src'
 import type { BlockNode, InlineContainerNode, InlineNode, TextNode } from '../src'
 

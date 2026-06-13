@@ -1,9 +1,9 @@
 import { SafeAreaView, ScrollView } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
-import { RichText } from '@yk-yong/rn-rich-text'
+import { RichText } from '@yk-yong/react-native-richtext'
 
 const html = `
-  <h1>rn-rich-text</h1>
+  <h1>react-native-richtext</h1>
   <p>A <strong>Fabric-native</strong> HTML renderer with <em>inline styles</em>,
      <a href="https://example.com">links</a>, and lists:</p>
   <ul><li>first item</li><li>second item</li></ul>

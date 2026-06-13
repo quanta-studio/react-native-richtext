@@ -189,7 +189,7 @@ export function orderedMarker(index: number, listStyleType: string): string {
 }
 ```
 
-- [ ] **Step 4: Run → PASS**; `pnpm --filter @yk-yong/rn-rich-text-core typecheck` + `pnpm lint` clean.
+- [ ] **Step 4: Run → PASS**; `pnpm --filter @yk-yong/react-native-richtext-core typecheck` + `pnpm lint` clean.
 
 - [ ] **Step 5: Commit**
 
@@ -288,7 +288,7 @@ export function annotateMarkers(nodes: BlockChild[]): BlockChild[] {
 }
 ```
 
-- [ ] **Step 4: Run → PASS** (the new 4 tests + the existing 3 markers tests). Run `pnpm exec vitest run packages/core` (whole core suite green), `pnpm --filter @yk-yong/rn-rich-text-core typecheck` + `pnpm lint` clean. Note: `node.attribs`/`child.attribs` are accessible because `node.type === 'block'` and `child.tag === 'li'` narrow to `BlockNode`.
+- [ ] **Step 4: Run → PASS** (the new 4 tests + the existing 3 markers tests). Run `pnpm exec vitest run packages/core` (whole core suite green), `pnpm --filter @yk-yong/react-native-richtext-core typecheck` + `pnpm lint` clean. Note: `node.attribs`/`child.attribs` are accessible because `node.type === 'block'` and `child.tag === 'li'` narrow to `BlockNode`.
 
 - [ ] **Step 5: Commit**
 
@@ -327,7 +327,7 @@ to:
 blockquote { display: block; margin: 1em 0; border-left-width: 4px; border-left-color: #dddddd; padding-left: 16px }
 ```
 
-- [ ] **Step 4: Run → PASS**; `pnpm exec vitest run packages/css` (full css suite green) + `pnpm --filter @yk-yong/rn-rich-text-css typecheck` clean. (css-to-react-native maps `border-left-width: 4px` → `borderLeftWidth: 4`.)
+- [ ] **Step 4: Run → PASS**; `pnpm exec vitest run packages/css` (full css suite green) + `pnpm --filter @yk-yong/react-native-richtext-css typecheck` clean. (css-to-react-native maps `border-left-width: 4px` → `borderLeftWidth: 4`.)
 
 - [ ] **Step 5: Commit**
 
@@ -356,7 +356,7 @@ import { create } from 'react-test-renderer'
 import { View, ScrollView, Text } from 'react-native'
 import { Pre } from '../src/renderers/Pre'
 import { defaultRenderers } from '../src/renderers/defaults'
-import type { BlockNode } from '@yk-yong/rn-rich-text-core'
+import type { BlockNode } from '@yk-yong/react-native-richtext-core'
 
 const preNode = (style: Record<string, unknown> = {}): BlockNode => ({
   type: 'block',
@@ -394,7 +394,7 @@ describe('Pre', () => {
 import { View, ScrollView } from 'react-native'
 import { splitStyle } from '../style/split-style'
 import type { RendererProps } from '../types'
-import type { BlockNode } from '@yk-yong/rn-rich-text-core'
+import type { BlockNode } from '@yk-yong/react-native-richtext-core'
 
 export function Pre({ node, children }: RendererProps) {
   const { view } = splitStyle((node as BlockNode).style)
@@ -428,7 +428,7 @@ export const defaultRenderers: Record<string, Renderer> = {
 }
 ```
 
-- [ ] **Step 6: Run → PASS** (2 tests); `pnpm exec vitest run packages/react-native` (whole rn suite green), `pnpm --filter @yk-yong/rn-rich-text typecheck` + `pnpm lint` clean.
+- [ ] **Step 6: Run → PASS** (2 tests); `pnpm exec vitest run packages/react-native` (whole rn suite green), `pnpm --filter @yk-yong/react-native-richtext typecheck` + `pnpm lint` clean.
 
 - [ ] **Step 7: Commit**
 
@@ -498,9 +498,9 @@ git commit -m "test(rn): end-to-end list/quote/pre polish integration test"
 
 ```md
 ---
-'@yk-yong/rn-rich-text-core': minor
-'@yk-yong/rn-rich-text-css': patch
-'@yk-yong/rn-rich-text': minor
+'@yk-yong/react-native-richtext-core': minor
+'@yk-yong/react-native-richtext-css': patch
+'@yk-yong/react-native-richtext': minor
 ---
 
 List/quote/code polish: ordered lists render `a.`/`i.`/`A.`/`I.` markers (lower/upper alpha + roman) and

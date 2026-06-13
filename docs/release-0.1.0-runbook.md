@@ -45,7 +45,7 @@ A `dom` changeset is already added (`.changeset/dom-initial-release.md`) so all 
 pnpm build                 # tsup (esm+cjs) + tsc -b (.d.ts) for all 4
 for p in dom css core react-native; do (cd packages/$p && npm pack --dry-run); done
 # confirm each tarball includes dist/ + README + LICENSE, and that the published deps
-# (@yk-yong/rn-rich-text-* in css/core/react-native) are real ^0.1.0 ranges, not workspace:*
+# (@yk-yong/react-native-richtext-* in css/core/react-native) are real ^0.1.0 ranges, not workspace:*
 ```
 
 ### C. Publish to GitHub Packages
@@ -74,14 +74,14 @@ Pick one:
 git push --follow-tags        # changeset version created the git tags
 ```
 
-Verify on the repo's **Packages** page (github.com/yk-yong/rn-rich-text → Packages), or, with the
+Verify on the repo's **Packages** page (github.com/yk-yong/react-native-richtext → Packages), or, with the
 `~/.npmrc` token set:
 
 ```bash
-npm view @yk-yong/rn-rich-text --registry=https://npm.pkg.github.com version   # 0.1.0
+npm view @yk-yong/react-native-richtext --registry=https://npm.pkg.github.com version   # 0.1.0
 ```
 
-Then the dogfood (`docs/dogfood-migration-plan.md`) can install `@yk-yong/rn-rich-text@0.1.0` once
+Then the dogfood (`docs/dogfood-migration-plan.md`) can install `@yk-yong/react-native-richtext@0.1.0` once
 its app `.npmrc` routes the `@yk-yong` scope to GitHub Packages (see that doc's Step 1).
 
 ## What I've prepared in this branch

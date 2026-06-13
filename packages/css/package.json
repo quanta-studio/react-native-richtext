@@ -1,7 +1,7 @@
 {
-  "name": "@yk-yong/rn-rich-text-css",
+  "name": "@yk-yong/react-native-richtext-css",
   "version": "0.1.0",
-  "description": "CSS engine for rn-rich-text: cascade, specificity, inheritance, and declaration->RN style resolution. React-free.",
+  "description": "CSS engine for react-native-richtext: cascade, specificity, inheritance, and declaration->RN style resolution. React-free.",
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
@@ -27,7 +27,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yk-yong/rn-rich-text.git",
+    "url": "git+https://github.com/yk-yong/react-native-richtext.git",
     "directory": "packages/css"
   },
   "publishConfig": {
@@ -42,7 +42,7 @@
     "stylesheet"
   ],
   "dependencies": {
-    "@yk-yong/rn-rich-text-dom": "workspace:*",
+    "@yk-yong/react-native-richtext-dom": "workspace:*",
     "css-select": "^7.0.0",
     "css-to-react-native": "^3.2.0",
     "css-tree": "^3.2.1"

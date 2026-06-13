@@ -1,6 +1,6 @@
 # Example app
 
-Minimal Expo (New Architecture) screen dogfooding `@yk-yong/rn-rich-text`.
+Minimal Expo (New Architecture) screen dogfooding `@yk-yong/react-native-richtext`.
 
 To run it, add `example` to the `packages:` list in `pnpm-workspace.yaml`, then from the repo root:
 

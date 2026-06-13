@@ -3,7 +3,7 @@ import { splitStyle } from '../style/split-style'
 import { resolveFont } from '../fonts/resolve-font'
 import { useRichTextContext } from '../context'
 import type { RendererProps } from '../types'
-import type { InlineContainerNode } from '@yk-yong/rn-rich-text-core'
+import type { InlineContainerNode } from '@yk-yong/react-native-richtext-core'
 
 export function InlineContainer({ node, children }: RendererProps) {
   const { fonts } = useRichTextContext()

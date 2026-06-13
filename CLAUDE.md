@@ -4,7 +4,7 @@ Guidance for Claude Code working in this repository.
 
 ## Project Overview
 
-`rn-rich-text` (working name — repo/npm scope are placeholders, rename freely) is a modern,
+`react-native-richtext` (working name — repo/npm scope are placeholders, rename freely) is a modern,
 **Fabric-native HTML renderer for React Native**, built to grow into a full,
 community-maintained replacement for `react-native-render-html` (which is heavy, lightly
 maintained, and not New-Architecture-first).
