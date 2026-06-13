@@ -27,7 +27,18 @@ migrate screens to the native API and delete the seed.
 
 ### Step 1 — install the library
 
-After 0.1.0 is published:
+The packages publish to **GitHub Packages** (`@yk-yong` scope → `https://npm.pkg.github.com`), so the
+app must route that scope to GitHub Packages and authenticate (GitHub Packages requires a token even
+for reads). Add an `.npmrc` at the app root:
+
+```ini
+# fonerewards-user-app/mobile-app/.npmrc
+@yk-yong:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
+Set `GITHUB_TOKEN` in the environment to a GitHub PAT with the `read:packages` scope (use an env var
+or CI secret — don't commit the token). Then, after 0.1.0 is published:
 
 ```bash
 cd fonerewards-user-app/mobile-app
@@ -36,8 +47,8 @@ npm install @yk-yong/rn-rich-text
 ```
 
 It is a normal npm dependency (not a workspace), so Metro resolves it from `node_modules` with **no
-metro.config change**. (Pre-publish testing instead: `pnpm build && npm pack` each of the 4 packages
-in the library repo, then `npm install <4 tarball paths>` here.)
+metro.config change**. (Pre-publish testing instead, no registry needed: `pnpm build && pnpm pack`
+each of the 4 packages in the library repo, then `npm install <4 tarball paths>` here.)
 
 ### Step 2 — replace `src/packages/rich-text/RichText.tsx` with the adapter
 

@@ -1,8 +1,13 @@
 # Release 0.1.0 runbook (first publish)
 
-The first npm publish of the four packages at `0.1.0`. Versioning/build/pack are prepared in this
-repo; the **`npm publish` step needs your credentials** (there is no npm auth in the dev
-environment).
+The first publish of the four packages at `0.1.0`, to **GitHub Packages**
+(`https://npm.pkg.github.com`, owner `yk-yong`). Versioning/build/pack are prepared in this repo;
+the **publish step needs a token** (there is no registry auth in the dev environment).
+
+Registry wiring (already in the repo): each package has
+`publishConfig.registry = https://npm.pkg.github.com` + a `repository` field, and
+`.github/workflows/release.yml` is set up with `registry-url`/`scope` + `packages: write` and
+authenticates via the workflow's built-in `GITHUB_TOKEN`.
 
 ## Prerequisites / decisions
 
@@ -15,8 +20,9 @@ environment).
    - **Fix first** (its own small cycle): switch to `moduleResolution: NodeNext` + extensioned imports (or
      ship ESM-only), emit a CJS `.d.cts`, add an `engines` field, and wire `@arethetypeswrong/cli`
      `--pack` into CI. Recommended before a _widely-consumed_ release; optional for a first canary.
-3. **NPM token**: either set the `NPM_TOKEN` GitHub Actions secret (the `release.yml` workflow then
-   publishes on push to `main` via `changeset publish`), or publish locally with your own `npm login`.
+3. **Auth**: the `release.yml` workflow uses the built-in `GITHUB_TOKEN` (no secret to set) — it
+   publishes on push to `main` via `changeset publish`. To publish locally instead, create a GitHub
+   PAT with the `write:packages` scope and put it in your `~/.npmrc` (see Step C).
 
 ## Steps
 
@@ -42,23 +48,41 @@ for p in dom css core react-native; do (cd packages/$p && npm pack --dry-run); d
 # (@yk-yong/rn-rich-text-* in css/core/react-native) are real ^0.1.0 ranges, not workspace:*
 ```
 
-### C. Publish (your credentials)
+### C. Publish to GitHub Packages
 
 Pick one:
 
-- **CI (recommended)**: set the `NPM_TOKEN` repo secret, then merge the release/version commit to
-  `main`. `.github/workflows/release.yml` runs `changeset publish` and publishes the bumped packages.
-- **Local**: with `npm login` done, from the repo root run `pnpm -r publish --access public` (or
-  `pnpm changeset publish`). Publish order doesn't matter — npm resolves the `^0.1.0` inter-deps.
+- **CI (recommended)**: merge the release/version commit to `main`.
+  `.github/workflows/release.yml` runs `changeset publish` and publishes the bumped packages to
+  GitHub Packages, authenticating with the built-in `GITHUB_TOKEN`. **No secret to set.**
+- **Local**: add a GitHub PAT (`write:packages` scope) to `~/.npmrc`, then publish from the repo
+  root. The packages' `publishConfig.registry` already points at GitHub Packages.
+
+  ```bash
+  # ~/.npmrc
+  //npm.pkg.github.com/:_authToken=YOUR_GITHUB_PAT
+  ```
+
+  ```bash
+  pnpm -r publish --no-git-checks   # or: pnpm changeset publish
+  # publish order doesn't matter — the ^0.1.0 inter-deps resolve from the same registry
+  ```
 
 ### D. Tag & verify
 
 ```bash
-git push --follow-tags                       # changeset version created the git tags
-npm view @yk-yong/rn-rich-text version        # should report 0.1.0
+git push --follow-tags        # changeset version created the git tags
 ```
 
-Then the dogfood (`docs/dogfood-migration-plan.md`) can `npm install @yk-yong/rn-rich-text@0.1.0`.
+Verify on the repo's **Packages** page (github.com/yk-yong/rn-rich-text → Packages), or, with the
+`~/.npmrc` token set:
+
+```bash
+npm view @yk-yong/rn-rich-text --registry=https://npm.pkg.github.com version   # 0.1.0
+```
+
+Then the dogfood (`docs/dogfood-migration-plan.md`) can install `@yk-yong/rn-rich-text@0.1.0` once
+its app `.npmrc` routes the `@yk-yong` scope to GitHub Packages (see that doc's Step 1).
 
 ## What I've prepared in this branch
 

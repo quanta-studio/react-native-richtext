@@ -25,8 +25,14 @@
     "typecheck": "tsc -p tsconfig.test.json",
     "clean": "rimraf dist"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yk-yong/rn-rich-text.git",
+    "directory": "packages/css"
+  },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://npm.pkg.github.com"
   },
   "keywords": [
     "css",
