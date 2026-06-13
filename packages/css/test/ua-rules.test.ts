@@ -46,4 +46,15 @@ describe('buildUaRules', () => {
     const decls = bq.flatMap((r) => r.declarations)
     expect(decls.find((d) => d.prop === 'borderLeftWidth')?.value).toBe(4)
   })
+
+  it('decorates del/strike with line-through and ins with underline', () => {
+    const decoration = (sel: string) =>
+      rules
+        .filter((r) => r.match.kind === 'selector' && r.match.selector === sel)
+        .flatMap((r) => r.declarations)
+        .find((d) => d.prop === 'textDecorationLine')?.value
+    expect(decoration('del')).toBe('line-through')
+    expect(decoration('strike')).toBe('line-through')
+    expect(decoration('ins')).toBe('underline')
+  })
 })

@@ -33,7 +33,10 @@ strong { font-weight: bold }
 i { font-style: italic }
 em { font-style: italic }
 u { text-decoration-line: underline }
+ins { text-decoration-line: underline }
 s { text-decoration-line: line-through }
+del { text-decoration-line: line-through }
+strike { text-decoration-line: line-through }
 span { display: inline }
 a { display: inline; text-decoration-line: underline; color: #0000ee }
 code { font-family: monospace }
