@@ -70,6 +70,19 @@ describe('Img', () => {
     expect(images(tree)[0]!.props.accessibilityLabel).toBe('a cat')
   })
 
+  it('treats empty width/height attributes as missing and fetches the intrinsic size', () => {
+    let tree!: ReturnType<typeof create>
+    act(() => {
+      tree = create(<Img node={imgNode({ src: 'https://x/d.png', width: '', height: '' })} />)
+    })
+    expect(Image.getSize).toHaveBeenCalledTimes(1)
+    const onSuccess = vi.mocked(Image.getSize).mock.calls[0]![1]
+    act(() => {
+      onSuccess(300, 150)
+    })
+    expect(images(tree)[0]!.props.style).toMatchObject({ aspectRatio: 2, maxWidth: '100%' })
+  })
+
   it('is registered as the img default renderer', () => {
     expect(defaultRenderers.img).toBe(Img)
   })

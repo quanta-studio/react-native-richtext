@@ -5,11 +5,15 @@ import { imageStyle, type IntrinsicSize } from './image-style'
 import type { RendererProps } from '../types'
 import type { BlockNode } from '@yk-yong/rn-rich-text-core'
 
+// Only a positive, finite number counts as an explicit dimension. Empty/whitespace
+// attributes (common in CMS HTML) and 0/negative values fall through to intrinsic
+// sizing rather than collapsing the image to 0x0. Note: Number('') === 0.
 function toNumber(value: unknown): number | undefined {
-  if (typeof value === 'number') return Number.isFinite(value) ? value : undefined
+  if (typeof value === 'number') return Number.isFinite(value) && value > 0 ? value : undefined
   if (typeof value === 'string') {
+    if (value.trim() === '') return undefined
     const n = Number(value)
-    return Number.isFinite(n) ? n : undefined
+    return Number.isFinite(n) && n > 0 ? n : undefined
   }
   return undefined
 }
