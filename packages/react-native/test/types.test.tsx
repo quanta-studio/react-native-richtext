@@ -14,7 +14,7 @@ describe('types', () => {
       fonts,
       onLinkPress: (href) => void href,
     }
-    const renderer: Renderer = ({ node }: RendererProps) => null
+    const renderer: Renderer = () => null
     expect([props.source.html, typeof renderer, fonts.Montserrat!['700']!.normal]).toEqual([
       '<p>x</p>',
       'function',

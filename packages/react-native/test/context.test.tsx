@@ -10,7 +10,7 @@ function Probe() {
 
 describe('RichTextContext', () => {
   it('provides registry, fonts, and onLinkPress to consumers', () => {
-    const value = { registry: {}, fonts: undefined, onLinkPress: (_h: string) => {} }
+    const value = { registry: {}, fonts: undefined, onLinkPress: () => {} }
     const tree = create(
       <RichTextContext.Provider value={value}>
         <Probe />

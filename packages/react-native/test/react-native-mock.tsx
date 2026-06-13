@@ -22,7 +22,7 @@ export const StyleSheet = {
   },
 }
 
-export const Linking = { openURL: vi.fn((_url: string) => Promise.resolve()) }
+export const Linking = { openURL: vi.fn(() => Promise.resolve()) }
 
 // Minimal type stand-ins used by source imports (the real react-native types are
 // used at typecheck time; this mock is only swapped in at test runtime via the alias).
