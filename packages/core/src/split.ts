@@ -217,7 +217,7 @@ function buildTable(el: Element, key: string, styles: Styles): TableNode {
         bodyRows.push(buildRow(child, childK, styles, false))
         return
       default:
-        return // colgroup/col/unknown ignored in 4a
+        return // colgroup/col handled by collectColWidths; other elements ignored
     }
   })
 

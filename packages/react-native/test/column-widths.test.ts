@@ -57,6 +57,37 @@ describe('computeColumnWidths', () => {
     expect(r.widths).toEqual([500, 500]) // then expanded to fill 1000 proportionally (equal)
   })
 
+  it('keeps exact-fit widths without expansion', () => {
+    const r = computeColumnWidths({
+      columnCount: 2,
+      cells: [m(0, 1, 150), m(1, 1, 150)],
+      explicit: [undefined, undefined],
+      container: 300,
+    })
+    expect(r).toEqual({ widths: [150, 150], overflow: false }) // Σ === container, slack 0
+  })
+
+  it('expands a single column to fill the container', () => {
+    const r = computeColumnWidths({
+      columnCount: 1,
+      cells: [m(0, 1, 100)],
+      explicit: [undefined],
+      container: 300,
+    })
+    expect(r).toEqual({ widths: [300], overflow: false })
+  })
+
+  it('treats a colspan cell narrower than its columns as a no-op', () => {
+    const r = computeColumnWidths({
+      columnCount: 2,
+      cells: [m(0, 1, 100), m(1, 1, 100), m(0, 2, 50)],
+      explicit: [undefined, undefined],
+      container: 200,
+    })
+    // span cell 50 < sum 200 -> no deficit; columns stay [100,100] at exact fit
+    expect(r).toEqual({ widths: [100, 100], overflow: false })
+  })
+
   it('returns empty for zero columns', () => {
     expect(
       computeColumnWidths({ columnCount: 0, cells: [], explicit: [], container: 300 }),
