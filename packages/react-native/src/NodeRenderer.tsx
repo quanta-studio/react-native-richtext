@@ -47,6 +47,8 @@ export function NodeRenderer({ node }: { node: RenderNode }) {
       return <Comp node={node} />
     }
     default:
+      // table-row / table-cell / table-filler are rendered internally by Table.tsx,
+      // never dispatched here directly.
       return null
   }
 }
