@@ -29,7 +29,9 @@ describe('resolveFont', () => {
   })
 
   it('keeps other style props', () => {
-    expect(resolveFont({ fontFamily: 'Montserrat', fontWeight: 'bold', color: 'red' }, fonts)).toEqual({
+    expect(
+      resolveFont({ fontFamily: 'Montserrat', fontWeight: 'bold', color: 'red' }, fonts),
+    ).toEqual({
       fontFamily: 'Montserrat-Bold',
       color: 'red',
     })
@@ -44,7 +46,9 @@ describe('resolveFont', () => {
   })
 
   it('uses the first family from a comma list', () => {
-    expect(resolveFont({ fontFamily: '"Montserrat", sans-serif', fontWeight: 'bold' }, fonts)).toEqual({
+    expect(
+      resolveFont({ fontFamily: '"Montserrat", sans-serif', fontWeight: 'bold' }, fonts),
+    ).toEqual({
       fontFamily: 'Montserrat-Bold',
     })
   })

@@ -1,0 +1,14 @@
+{
+  "name": "rn-rich-text-example",
+  "version": "0.0.0",
+  "private": true,
+  "main": "expo/AppEntry.js",
+  "scripts": { "start": "expo start", "ios": "expo start --ios", "android": "expo start --android" },
+  "dependencies": {
+    "@yk-yong/rn-rich-text": "workspace:*",
+    "expo": "~52.0.0",
+    "expo-status-bar": "~2.0.0",
+    "react": "18.3.1",
+    "react-native": "0.76.5"
+  }
+}

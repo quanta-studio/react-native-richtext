@@ -23,11 +23,11 @@ source.html ─▶ parse (dom) ─▶ resolveStyles (css) ─▶ buildRenderTree
 
 ## Decisions locked during brainstorming (do not re-litigate)
 
-| Question | Decision |
-| --- | --- |
-| Cycle scope | **Package + minimal example app.** Build `@yk-yong/rn-rich-text` (tested) plus a minimal Expo screen for visual validation. The cross-repo dogfood (`OutletAboutScreen`) and the canary publish are deferred to a follow-on (they need the fonerewards repo + an NPM token). |
-| Test setup | **Vitest + a `react-native` mock + react-test-renderer.** One runner across the monorepo; mock `react-native` so View/Text/etc. are host components; assert structure + styles. No snapshots. |
-| Rendering architecture | **Approach A — component registry + context.** A recursive `NodeRenderer` dispatches by node type and looks up `registry[tag]` (consumer override merged over built-in defaults); shared concerns (`registry`, `fonts`, `onLinkPress`) live in `RichTextContext`. |
+| Question               | Decision                                                                                                                                                                                                                                                                     |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Cycle scope            | **Package + minimal example app.** Build `@yk-yong/rn-rich-text` (tested) plus a minimal Expo screen for visual validation. The cross-repo dogfood (`OutletAboutScreen`) and the canary publish are deferred to a follow-on (they need the fonerewards repo + an NPM token). |
+| Test setup             | **Vitest + a `react-native` mock + react-test-renderer.** One runner across the monorepo; mock `react-native` so View/Text/etc. are host components; assert structure + styles. No snapshots.                                                                                |
+| Rendering architecture | **Approach A — component registry + context.** A recursive `NodeRenderer` dispatches by node type and looks up `registry[tag]` (consumer override merged over built-in defaults); shared concerns (`registry`, `fonts`, `onLinkPress`) live in `RichTextContext`.            |
 
 ## Package
 

@@ -16,8 +16,13 @@ describe('specializations', () => {
   it('Anchor calls onLinkPress(href) on press', () => {
     const onLinkPress = vi.fn()
     const node: InlineNode = {
-      type: 'inline', tag: 'a', style: {}, control: { display: 'inline', whiteSpace: 'normal' },
-      attribs: { href: 'https://x.com' }, children: [], key: '0',
+      type: 'inline',
+      tag: 'a',
+      style: {},
+      control: { display: 'inline', whiteSpace: 'normal' },
+      attribs: { href: 'https://x.com' },
+      children: [],
+      key: '0',
     }
     const tree = wrap(<Anchor node={node}>link</Anchor>, makeCtx(onLinkPress))
     tree.root.findByType(Text).props.onPress()
@@ -26,18 +31,36 @@ describe('specializations', () => {
 
   it('ListItem renders the marker text and content', () => {
     const node: BlockNode = {
-      type: 'block', tag: 'li', style: {}, control: { display: 'list-item', whiteSpace: 'normal' },
-      attribs: {}, key: '0', marker: { ordered: false, index: 1, listStyleType: 'disc', text: '•' }, children: [],
+      type: 'block',
+      tag: 'li',
+      style: {},
+      control: { display: 'list-item', whiteSpace: 'normal' },
+      attribs: {},
+      key: '0',
+      marker: { ordered: false, index: 1, listStyleType: 'disc', text: '•' },
+      children: [],
     }
-    const tree = wrap(<ListItem node={node}><Text>item</Text></ListItem>)
-    const markerText = tree.root.findAllByType(Text).map((t) => t.props.children).flat()
+    const tree = wrap(
+      <ListItem node={node}>
+        <Text>item</Text>
+      </ListItem>,
+    )
+    const markerText = tree.root
+      .findAllByType(Text)
+      .map((t) => t.props.children)
+      .flat()
     expect(JSON.stringify(markerText)).toContain('•')
   })
 
   it('Rule renders a View', () => {
     const node: BlockNode = {
-      type: 'block', tag: 'hr', style: { borderBottomWidth: 1 }, control: { display: 'block', whiteSpace: 'normal' },
-      attribs: {}, key: '0', children: [],
+      type: 'block',
+      tag: 'hr',
+      style: { borderBottomWidth: 1 },
+      control: { display: 'block', whiteSpace: 'normal' },
+      attribs: {},
+      key: '0',
+      children: [],
     }
     const tree = wrap(<Rule node={node} />)
     expect(tree.root.findByType(View).props.style).toMatchObject({ borderBottomWidth: 1 })

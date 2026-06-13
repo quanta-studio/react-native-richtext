@@ -9,7 +9,10 @@ export default defineConfig({
       { find: '@yk-yong/rn-rich-text-dom', replacement: src('./packages/dom/src/index.ts') },
       { find: '@yk-yong/rn-rich-text-css', replacement: src('./packages/css/src/index.ts') },
       { find: '@yk-yong/rn-rich-text-core', replacement: src('./packages/core/src/index.ts') },
-      { find: /^react-native$/, replacement: src('./packages/react-native/test/react-native-mock.tsx') },
+      {
+        find: /^react-native$/,
+        replacement: src('./packages/react-native/test/react-native-mock.tsx'),
+      },
     ],
   },
   test: {

@@ -17,7 +17,10 @@ const TEXT_PROPS = new Set<string>([
 ])
 
 /** Partition an RNStyle into text props (for <Text>) and the rest (for <View>). */
-export function splitStyle(style: RNStyle): { view: Record<string, unknown>; text: Record<string, unknown> } {
+export function splitStyle(style: RNStyle): {
+  view: Record<string, unknown>
+  text: Record<string, unknown>
+} {
   const view: Record<string, unknown> = {}
   const text: Record<string, unknown> = {}
   for (const [prop, value] of Object.entries(style)) {

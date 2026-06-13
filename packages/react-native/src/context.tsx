@@ -12,7 +12,9 @@ export const RichTextContext = createContext<RichTextContextValue | null>(null)
 export function useRichTextContext(): RichTextContextValue {
   const value = useContext(RichTextContext)
   if (value === null) {
-    throw new Error('useRichTextContext must be used within a <RichText> (RichTextContext.Provider)')
+    throw new Error(
+      'useRichTextContext must be used within a <RichText> (RichTextContext.Provider)',
+    )
   }
   return value
 }

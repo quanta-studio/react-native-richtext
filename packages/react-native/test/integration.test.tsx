@@ -24,7 +24,10 @@ describe('integration: RichText', () => {
 
   it('resolves a registered bold face for <strong>', () => {
     const tree = create(
-      <RichText source={{ html: '<p style="font-family: System"><strong>x</strong></p>' }} fonts={fonts} />,
+      <RichText
+        source={{ html: '<p style="font-family: System"><strong>x</strong></p>' }}
+        fonts={fonts}
+      />,
     )
     const boldFace = tree.root.findAllByType(Text).some((t) => {
       const s = t.props.style as Record<string, unknown> | undefined

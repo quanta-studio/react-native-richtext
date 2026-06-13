@@ -11,6 +11,7 @@
 **Reference:** spec at `docs/specs/2026-06-13-phase-2b-react-native-design.md`. Mirror `packages/core` for base config; this package adds JSX + the RN peer/test setup.
 
 **New infra this plan introduces (call-outs):**
+
 - First TSX package → `jsx: react-jsx` in tsconfigs; tests are `.test.tsx`.
 - The root `vitest.config.ts` must (a) add a `@yk-yong/rn-rich-text-core` source alias, (b) add an **exact** `react-native` → mock alias, and (c) widen the `include` glob to `*.test.{ts,tsx}`. The alias block is converted to the **array form** so `react-native` can use a `/^react-native$/` regex (exact match, no prefix bleed).
 - `react`/`react-native` are **peer** deps; dev-installed for typecheck + tests. `react`/`react-test-renderer` are pinned to the same 18.x line for stable react-test-renderer.
@@ -62,7 +63,11 @@ Typecheck: `pnpm --filter @yk-yong/rn-rich-text typecheck`
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "require": "./dist/index.cjs" }
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
   },
   "files": ["dist", "README.md", "LICENSE"],
   "scripts": { "build": "tsup", "typecheck": "tsc -p tsconfig.test.json", "clean": "rimraf dist" },
@@ -111,6 +116,7 @@ Typecheck: `pnpm --filter @yk-yong/rn-rich-text typecheck`
 - [ ] **Step 4: `packages/react-native/tsup.config.ts`** (identical to core's — tsup externalizes deps + peerDeps automatically, so react/react-native/workspace pkgs are not bundled), `README.md`, copy `LICENSE`
 
 `tsup.config.ts`:
+
 ```ts
 import { defineConfig } from 'tsup'
 
@@ -125,7 +131,9 @@ export default defineConfig({
   target: 'es2022',
 })
 ```
+
 `README.md`:
+
 ```md
 # @yk-yong/rn-rich-text
 
@@ -135,6 +143,7 @@ per-weight/style font resolution, and `onLinkPress`.
 
 Not yet published — internal to the rn-rich-text monorepo.
 ```
+
 Copy: `cp packages/dom/LICENSE packages/react-native/LICENSE`
 
 - [ ] **Step 5: root `tsconfig.json`** — add the react-native reference:
@@ -167,7 +176,10 @@ export default defineConfig({
       { find: '@yk-yong/rn-rich-text-dom', replacement: src('./packages/dom/src/index.ts') },
       { find: '@yk-yong/rn-rich-text-css', replacement: src('./packages/css/src/index.ts') },
       { find: '@yk-yong/rn-rich-text-core', replacement: src('./packages/core/src/index.ts') },
-      { find: /^react-native$/, replacement: src('./packages/react-native/test/react-native-mock.tsx') },
+      {
+        find: /^react-native$/,
+        replacement: src('./packages/react-native/test/react-native-mock.tsx'),
+      },
     ],
   },
   test: {
@@ -189,6 +201,7 @@ pnpm --filter @yk-yong/rn-rich-text add @yk-yong/rn-rich-text-dom@workspace:* @y
 pnpm --filter @yk-yong/rn-rich-text add -P --save-peer react@">=18.2.0" react-native@">=0.74.0"
 pnpm --filter @yk-yong/rn-rich-text add -D react@18.3.1 react-test-renderer@18.3.1 react-native @types/react@18 @types/node
 ```
+
 (If pnpm balks at the peer-range syntax, set `peerDependencies` directly in package.json to `{"react": ">=18.2.0", "react-native": ">=0.74.0"}` and dev-install `react@18.3.1 react-test-renderer@18.3.1 react-native @types/react@18 @types/node`. Report the resolved versions.)
 
 - [ ] **Step 8: Placeholder `packages/react-native/src/index.ts`**
@@ -423,7 +436,10 @@ const TEXT_PROPS = new Set<string>([
 ])
 
 /** Partition an RNStyle into text props (for <Text>) and the rest (for <View>). */
-export function splitStyle(style: RNStyle): { view: Record<string, unknown>; text: Record<string, unknown> } {
+export function splitStyle(style: RNStyle): {
+  view: Record<string, unknown>
+  text: Record<string, unknown>
+} {
   const view: Record<string, unknown> = {}
   const text: Record<string, unknown> = {}
   for (const [prop, value] of Object.entries(style)) {
@@ -484,7 +500,9 @@ describe('resolveFont', () => {
   })
 
   it('keeps other style props', () => {
-    expect(resolveFont({ fontFamily: 'Montserrat', fontWeight: 'bold', color: 'red' }, fonts)).toEqual({
+    expect(
+      resolveFont({ fontFamily: 'Montserrat', fontWeight: 'bold', color: 'red' }, fonts),
+    ).toEqual({
       fontFamily: 'Montserrat-Bold',
       color: 'red',
     })
@@ -499,7 +517,9 @@ describe('resolveFont', () => {
   })
 
   it('uses the first family from a comma list', () => {
-    expect(resolveFont({ fontFamily: '"Montserrat", sans-serif', fontWeight: 'bold' }, fonts)).toEqual({
+    expect(
+      resolveFont({ fontFamily: '"Montserrat", sans-serif', fontWeight: 'bold' }, fonts),
+    ).toEqual({
       fontFamily: 'Montserrat-Bold',
     })
   })
@@ -602,7 +622,9 @@ export const RichTextContext = createContext<RichTextContextValue | null>(null)
 export function useRichTextContext(): RichTextContextValue {
   const value = useContext(RichTextContext)
   if (value === null) {
-    throw new Error('useRichTextContext must be used within a <RichText> (RichTextContext.Provider)')
+    throw new Error(
+      'useRichTextContext must be used within a <RichText> (RichTextContext.Provider)',
+    )
   }
   return value
 }
@@ -637,24 +659,41 @@ import { Inline } from '../src/renderers/Inline'
 import { RichTextContext } from '../src/context'
 import type { BlockNode, InlineContainerNode, InlineNode } from '@yk-yong/rn-rich-text-core'
 
-const ctx = { registry: {}, fonts: { Mont: { '700': { normal: 'Mont-Bold' } } }, onLinkPress: () => {} }
+const ctx = {
+  registry: {},
+  fonts: { Mont: { '700': { normal: 'Mont-Bold' } } },
+  onLinkPress: () => {},
+}
 const wrap = (ui: React.ReactNode) =>
   create(<RichTextContext.Provider value={ctx}>{ui}</RichTextContext.Provider>)
 
 describe('generic renderers', () => {
   it('Block renders a View with box style only', () => {
     const node: BlockNode = {
-      type: 'block', tag: 'div', style: { marginTop: 10, color: 'red' },
-      control: { display: 'block', whiteSpace: 'normal' }, attribs: {}, children: [], key: '0',
+      type: 'block',
+      tag: 'div',
+      style: { marginTop: 10, color: 'red' },
+      control: { display: 'block', whiteSpace: 'normal' },
+      attribs: {},
+      children: [],
+      key: '0',
     }
-    const tree = wrap(<Block node={node}><Text>x</Text></Block>)
+    const tree = wrap(
+      <Block node={node}>
+        <Text>x</Text>
+      </Block>,
+    )
     const view = tree.root.findByType(View)
     expect(view.props.style).toEqual({ marginTop: 10 })
   })
 
   it('InlineContainer renders a Text with text style', () => {
     const node: InlineContainerNode = {
-      type: 'inline-container', style: { color: 'red', marginTop: 10 }, whiteSpace: 'normal', children: [], key: '0',
+      type: 'inline-container',
+      style: { color: 'red', marginTop: 10 },
+      whiteSpace: 'normal',
+      children: [],
+      key: '0',
     }
     const tree = wrap(<InlineContainer node={node}>hi</InlineContainer>)
     const text = tree.root.findByType(Text)
@@ -663,8 +702,13 @@ describe('generic renderers', () => {
 
   it('Inline font-resolves bold to a concrete face', () => {
     const node: InlineNode = {
-      type: 'inline', tag: 'b', style: { fontFamily: 'Mont', fontWeight: 'bold' },
-      control: { display: 'inline', whiteSpace: 'normal' }, attribs: {}, children: [], key: '0',
+      type: 'inline',
+      tag: 'b',
+      style: { fontFamily: 'Mont', fontWeight: 'bold' },
+      control: { display: 'inline', whiteSpace: 'normal' },
+      attribs: {},
+      children: [],
+      key: '0',
     }
     const tree = wrap(<Inline node={node}>x</Inline>)
     expect(tree.root.findByType(Text).props.style).toEqual({ fontFamily: 'Mont-Bold' })
@@ -677,6 +721,7 @@ describe('generic renderers', () => {
 - [ ] **Step 3: Implement the three renderers**
 
 `packages/react-native/src/renderers/Block.tsx`:
+
 ```tsx
 import { View } from 'react-native'
 import { splitStyle } from '../style/split-style'
@@ -690,6 +735,7 @@ export function Block({ node, children }: RendererProps) {
 ```
 
 `packages/react-native/src/renderers/InlineContainer.tsx`:
+
 ```tsx
 import { Text } from 'react-native'
 import { splitStyle } from '../style/split-style'
@@ -706,6 +752,7 @@ export function InlineContainer({ node, children }: RendererProps) {
 ```
 
 `packages/react-native/src/renderers/Inline.tsx`:
+
 ```tsx
 import { Text } from 'react-native'
 import { splitStyle } from '../style/split-style'
@@ -752,15 +799,27 @@ const wrap = (ui: React.ReactNode) =>
 
 // p (block) > inline-container > text "hi" + inline <b> > text "bold"
 const tree: BlockNode = {
-  type: 'block', tag: 'p', style: {}, control: { display: 'block', whiteSpace: 'normal' }, attribs: {}, key: '0',
+  type: 'block',
+  tag: 'p',
+  style: {},
+  control: { display: 'block', whiteSpace: 'normal' },
+  attribs: {},
+  key: '0',
   children: [
     {
-      type: 'inline-container', style: {}, whiteSpace: 'normal', key: '0.0',
+      type: 'inline-container',
+      style: {},
+      whiteSpace: 'normal',
+      key: '0.0',
       children: [
         { type: 'text', text: 'hi ', key: '0.0.0' },
         {
-          type: 'inline', tag: 'b', style: { fontWeight: 'bold' },
-          control: { display: 'inline', whiteSpace: 'normal' }, attribs: {}, key: '0.0.1',
+          type: 'inline',
+          tag: 'b',
+          style: { fontWeight: 'bold' },
+          control: { display: 'inline', whiteSpace: 'normal' },
+          attribs: {},
+          key: '0.0.1',
           children: [{ type: 'text', text: 'bold', key: '0.0.1.0' }],
         },
       ],
@@ -782,12 +841,17 @@ describe('NodeRenderer', () => {
   it('renders text and linebreak leaves', () => {
     const r = wrap(
       <NodeRenderer
-        node={{ type: 'inline-container', style: {}, whiteSpace: 'normal', key: '0',
+        node={{
+          type: 'inline-container',
+          style: {},
+          whiteSpace: 'normal',
+          key: '0',
           children: [
             { type: 'text', text: 'a', key: '0.0' },
             { type: 'linebreak', key: '0.1' },
             { type: 'text', text: 'b', key: '0.2' },
-          ] }}
+          ],
+        }}
       />,
     )
     const text = r.root.findAllByType(Text)[0]!
@@ -886,8 +950,13 @@ describe('specializations', () => {
   it('Anchor calls onLinkPress(href) on press', () => {
     const onLinkPress = vi.fn()
     const node: InlineNode = {
-      type: 'inline', tag: 'a', style: {}, control: { display: 'inline', whiteSpace: 'normal' },
-      attribs: { href: 'https://x.com' }, children: [], key: '0',
+      type: 'inline',
+      tag: 'a',
+      style: {},
+      control: { display: 'inline', whiteSpace: 'normal' },
+      attribs: { href: 'https://x.com' },
+      children: [],
+      key: '0',
     }
     const tree = wrap(<Anchor node={node}>link</Anchor>, makeCtx(onLinkPress))
     tree.root.findByType(Text).props.onPress()
@@ -896,18 +965,36 @@ describe('specializations', () => {
 
   it('ListItem renders the marker text and content', () => {
     const node: BlockNode = {
-      type: 'block', tag: 'li', style: {}, control: { display: 'list-item', whiteSpace: 'normal' },
-      attribs: {}, key: '0', marker: { ordered: false, index: 1, listStyleType: 'disc', text: '•' }, children: [],
+      type: 'block',
+      tag: 'li',
+      style: {},
+      control: { display: 'list-item', whiteSpace: 'normal' },
+      attribs: {},
+      key: '0',
+      marker: { ordered: false, index: 1, listStyleType: 'disc', text: '•' },
+      children: [],
     }
-    const tree = wrap(<ListItem node={node}><Text>item</Text></ListItem>)
-    const markerText = tree.root.findAllByType(Text).map((t) => t.props.children).flat()
+    const tree = wrap(
+      <ListItem node={node}>
+        <Text>item</Text>
+      </ListItem>,
+    )
+    const markerText = tree.root
+      .findAllByType(Text)
+      .map((t) => t.props.children)
+      .flat()
     expect(JSON.stringify(markerText)).toContain('•')
   })
 
   it('Rule renders a View', () => {
     const node: BlockNode = {
-      type: 'block', tag: 'hr', style: { borderBottomWidth: 1 }, control: { display: 'block', whiteSpace: 'normal' },
-      attribs: {}, key: '0', children: [],
+      type: 'block',
+      tag: 'hr',
+      style: { borderBottomWidth: 1 },
+      control: { display: 'block', whiteSpace: 'normal' },
+      attribs: {},
+      key: '0',
+      children: [],
     }
     const tree = wrap(<Rule node={node} />)
     expect(tree.root.findByType(View).props.style).toMatchObject({ borderBottomWidth: 1 })
@@ -926,6 +1013,7 @@ describe('specializations', () => {
 - [ ] **Step 3: Implement the renderers**
 
 `packages/react-native/src/renderers/Anchor.tsx`:
+
 ```tsx
 import { Text } from 'react-native'
 import { splitStyle } from '../style/split-style'
@@ -948,6 +1036,7 @@ export function Anchor({ node, children }: RendererProps) {
 ```
 
 `packages/react-native/src/renderers/ListItem.tsx`:
+
 ```tsx
 import { View, Text } from 'react-native'
 import { splitStyle } from '../style/split-style'
@@ -968,6 +1057,7 @@ export function ListItem({ node, children }: RendererProps) {
 ```
 
 `packages/react-native/src/renderers/Rule.tsx`:
+
 ```tsx
 import { View } from 'react-native'
 import { splitStyle } from '../style/split-style'
@@ -981,6 +1071,7 @@ export function Rule({ node }: RendererProps) {
 ```
 
 `packages/react-native/src/renderers/defaults.ts`:
+
 ```ts
 import { Anchor } from './Anchor'
 import { ListItem } from './ListItem'
@@ -1043,7 +1134,10 @@ describe('RichText', () => {
   it('wires onLinkPress for anchors', () => {
     const onLinkPress = vi.fn()
     const tree = create(
-      <RichText source={{ html: '<p><a href="https://x.com">link</a></p>' }} onLinkPress={onLinkPress} />,
+      <RichText
+        source={{ html: '<p><a href="https://x.com">link</a></p>' }}
+        onLinkPress={onLinkPress}
+      />,
     )
     const anchor = tree.root.findAllByType(Text).find((t) => typeof t.props.onPress === 'function')!
     anchor.props.onPress()
@@ -1052,9 +1146,7 @@ describe('RichText', () => {
 
   it('lets a custom renderer override a tag', () => {
     const Custom = () => <View testID="custom" />
-    const tree = create(
-      <RichText source={{ html: '<p>x</p>' }} renderers={{ p: Custom }} />,
-    )
+    const tree = create(<RichText source={{ html: '<p>x</p>' }} renderers={{ p: Custom }} />)
     expect(tree.root.findAll((n) => n.props.testID === 'custom').length).toBe(1)
   })
 })
@@ -1170,7 +1262,10 @@ describe('integration: RichText', () => {
 
   it('resolves a registered bold face for <strong>', () => {
     const tree = create(
-      <RichText source={{ html: '<p style="font-family: System"><strong>x</strong></p>' }} fonts={fonts} />,
+      <RichText
+        source={{ html: '<p style="font-family: System"><strong>x</strong></p>' }}
+        fonts={fonts}
+      />,
     )
     const boldFace = tree.root.findAllByType(Text).some((t) => {
       const s = t.props.style as Record<string, unknown> | undefined
@@ -1214,7 +1309,11 @@ This is hand-authored (no `expo init`); it is **run manually** by the maintainer
   "version": "0.0.0",
   "private": true,
   "main": "expo/AppEntry.js",
-  "scripts": { "start": "expo start", "ios": "expo start --ios", "android": "expo start --android" },
+  "scripts": {
+    "start": "expo start",
+    "ios": "expo start --ios",
+    "android": "expo start --android"
+  },
   "dependencies": {
     "@yk-yong/rn-rich-text": "workspace:*",
     "expo": "~52.0.0",
@@ -1301,7 +1400,7 @@ export default function App() {
 
 - [ ] **Step 6: Create `example/README.md`**
 
-```md
+````md
 # Example app
 
 Minimal Expo (New Architecture) screen dogfooding `@yk-yong/rn-rich-text`.
@@ -1310,11 +1409,13 @@ Minimal Expo (New Architecture) screen dogfooding `@yk-yong/rn-rich-text`.
 pnpm install            # from the repo root
 cd example && pnpm start
 ```
+````
 
 Run on a simulator/device via the Expo CLI. Not part of CI — this is for manual
 visual validation. If Metro fails to resolve the workspace packages, build them
 once from the root (`pnpm build`) so their `dist/` exists.
-```
+
+````
 
 - [ ] **Step 7: Verify the App.tsx typechecks in isolation is NOT required** (the example is outside the TS project graph). Just confirm the files exist and are syntactically valid. Do NOT add `example` to the pnpm workspace `packages:` glob unless `pnpm install` from root succeeds with it; if it causes resolution issues, keep `example` out of the workspace and document the manual `pnpm install` inside `example/`.
 
@@ -1323,7 +1424,7 @@ once from the root (`pnpm build`) so their `dist/` exists.
 ```bash
 git add example
 git commit -m "docs(example): add minimal Expo screen dogfooding RichText"
-```
+````
 
 ---
 
@@ -1362,6 +1463,7 @@ git commit -m "chore(rn): add changeset for the Phase 2b RichText package"
 ## Self-Review (completed during planning)
 
 **1. Spec coverage** — every spec section maps to a task:
+
 - Package + peers + deps + jsx + source-resolution + RN-mock alias + `.tsx` test glob → Task 0 + Task 1.
 - Public API (`RichTextProps`, `Renderer`, `RendererProps`, `FontMap`) → Task 2.
 - View/Text style split (the fixed text-prop set) → Task 3.
@@ -1377,5 +1479,6 @@ git commit -m "chore(rn): add changeset for the Phase 2b RichText package"
 **3. Type consistency** — `RichTextProps`, `Renderer`, `RendererProps`, `FontMap`, `FontFaces`, `RichTextContextValue`, `splitStyle`, `resolveFont`, `NodeRenderer`, `defaultRenderers`, `RichText` are defined in Tasks 2/3/4/5/7/8/9 and used identically downstream. `node as BlockNode|InlineNode|InlineContainerNode` casts are consistent (RendererProps.node is the RenderNode union; NodeRenderer only routes each node type to its matching renderer).
 
 **Two items flagged for execution:**
+
 - The `react@18.3.1`/`react-test-renderer@18.3.1` pin keeps react-test-renderer stable; if pnpm's peer resolution warns about react-native wanting react 19, the dev pin still governs the test runtime (peer ranges are advisory for a library). Report any unavoidable conflict.
 - If react-test-renderer emits `act(...)` warnings on `create(...)`, wrap renders in `import { act } from 'react-test-renderer'; let tree; act(() => { tree = create(<.../>) })`. The components have no effects, so this is usually unnecessary — add only if warnings appear.

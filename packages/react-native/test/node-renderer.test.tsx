@@ -10,15 +10,27 @@ const wrap = (ui: React.ReactNode) =>
   create(<RichTextContext.Provider value={ctx}>{ui}</RichTextContext.Provider>)
 
 const tree: BlockNode = {
-  type: 'block', tag: 'p', style: {}, control: { display: 'block', whiteSpace: 'normal' }, attribs: {}, key: '0',
+  type: 'block',
+  tag: 'p',
+  style: {},
+  control: { display: 'block', whiteSpace: 'normal' },
+  attribs: {},
+  key: '0',
   children: [
     {
-      type: 'inline-container', style: {}, whiteSpace: 'normal', key: '0.0',
+      type: 'inline-container',
+      style: {},
+      whiteSpace: 'normal',
+      key: '0.0',
       children: [
         { type: 'text', text: 'hi ', key: '0.0.0' },
         {
-          type: 'inline', tag: 'b', style: { fontWeight: 'bold' },
-          control: { display: 'inline', whiteSpace: 'normal' }, attribs: {}, key: '0.0.1',
+          type: 'inline',
+          tag: 'b',
+          style: { fontWeight: 'bold' },
+          control: { display: 'inline', whiteSpace: 'normal' },
+          attribs: {},
+          key: '0.0.1',
           children: [{ type: 'text', text: 'bold', key: '0.0.1.0' }],
         },
       ],
@@ -38,12 +50,17 @@ describe('NodeRenderer', () => {
   it('renders text and linebreak leaves', () => {
     const r = wrap(
       <NodeRenderer
-        node={{ type: 'inline-container', style: {}, whiteSpace: 'normal', key: '0',
+        node={{
+          type: 'inline-container',
+          style: {},
+          whiteSpace: 'normal',
+          key: '0',
           children: [
             { type: 'text', text: 'a', key: '0.0' },
             { type: 'linebreak', key: '0.1' },
             { type: 'text', text: 'b', key: '0.2' },
-          ] }}
+          ],
+        }}
       />,
     )
     const text = r.root.findAllByType(Text)[0]!

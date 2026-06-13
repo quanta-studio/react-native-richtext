@@ -27,7 +27,10 @@ describe('RichText', () => {
   it('wires onLinkPress for anchors', () => {
     const onLinkPress = vi.fn()
     const tree = create(
-      <RichText source={{ html: '<p><a href="https://x.com">link</a></p>' }} onLinkPress={onLinkPress} />,
+      <RichText
+        source={{ html: '<p><a href="https://x.com">link</a></p>' }}
+        onLinkPress={onLinkPress}
+      />,
     )
     const anchor = tree.root.findAllByType(Text).find((t) => typeof t.props.onPress === 'function')!
     anchor.props.onPress()
@@ -36,9 +39,7 @@ describe('RichText', () => {
 
   it('lets a custom renderer override a tag', () => {
     const Custom = () => <View testID="custom" />
-    const tree = create(
-      <RichText source={{ html: '<p>x</p>' }} renderers={{ p: Custom }} />,
-    )
+    const tree = create(<RichText source={{ html: '<p>x</p>' }} renderers={{ p: Custom }} />)
     expect(tree.root.findAll((n) => n.props.testID === 'custom').length).toBe(1)
   })
 })
