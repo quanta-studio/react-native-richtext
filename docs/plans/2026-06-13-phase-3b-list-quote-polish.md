@@ -39,7 +39,14 @@ import { toAlpha, toRoman, mapTypeAttr, orderedMarker } from '../src/list-style'
 
 describe('toAlpha', () => {
   it.each<[number, string]>([
-    [1, 'a'], [2, 'b'], [26, 'z'], [27, 'aa'], [28, 'ab'], [52, 'az'], [53, 'ba'], [703, 'aaa'],
+    [1, 'a'],
+    [2, 'b'],
+    [26, 'z'],
+    [27, 'aa'],
+    [28, 'ab'],
+    [52, 'az'],
+    [53, 'ba'],
+    [703, 'aaa'],
   ])('%i -> %s', (n, expected) => {
     expect(toAlpha(n, false)).toBe(expected)
   })
@@ -50,7 +57,13 @@ describe('toAlpha', () => {
 
 describe('toRoman', () => {
   it.each<[number, string]>([
-    [1, 'i'], [4, 'iv'], [9, 'ix'], [40, 'xl'], [90, 'xc'], [2024, 'mmxxiv'], [3999, 'mmmcmxcix'],
+    [1, 'i'],
+    [4, 'iv'],
+    [9, 'ix'],
+    [40, 'xl'],
+    [90, 'xc'],
+    [2024, 'mmxxiv'],
+    [3999, 'mmmcmxcix'],
   ])('%i -> %s', (n, expected) => {
     expect(toRoman(n, false)).toBe(expected)
   })
@@ -65,8 +78,13 @@ describe('toRoman', () => {
 
 describe('mapTypeAttr', () => {
   it.each<[string | undefined, string | undefined]>([
-    ['a', 'lower-alpha'], ['A', 'upper-alpha'], ['i', 'lower-roman'], ['I', 'upper-roman'],
-    ['1', 'decimal'], ['x', undefined], [undefined, undefined],
+    ['a', 'lower-alpha'],
+    ['A', 'upper-alpha'],
+    ['i', 'lower-roman'],
+    ['I', 'upper-roman'],
+    ['1', 'decimal'],
+    ['x', undefined],
+    [undefined, undefined],
   ])('%s -> %s', (type, expected) => {
     expect(mapTypeAttr(type)).toBe(expected)
   })
@@ -74,8 +92,12 @@ describe('mapTypeAttr', () => {
 
 describe('orderedMarker', () => {
   it.each<[number, string, string]>([
-    [1, 'decimal', '1.'], [3, 'lower-alpha', 'c.'], [3, 'upper-alpha', 'C.'],
-    [4, 'lower-roman', 'iv.'], [4, 'upper-roman', 'IV.'], [2, 'unknown-style', '2.'],
+    [1, 'decimal', '1.'],
+    [3, 'lower-alpha', 'c.'],
+    [3, 'upper-alpha', 'C.'],
+    [4, 'lower-roman', 'iv.'],
+    [4, 'upper-roman', 'IV.'],
+    [2, 'unknown-style', '2.'],
   ])('%i %s -> %s', (index, type, expected) => {
     expect(orderedMarker(index, type)).toBe(expected)
   })
@@ -101,8 +123,19 @@ export function toAlpha(n: number, upper: boolean): string {
 }
 
 const ROMAN: ReadonlyArray<readonly [number, string]> = [
-  [1000, 'm'], [900, 'cm'], [500, 'd'], [400, 'cd'], [100, 'c'], [90, 'xc'],
-  [50, 'l'], [40, 'xl'], [10, 'x'], [9, 'ix'], [5, 'v'], [4, 'iv'], [1, 'i'],
+  [1000, 'm'],
+  [900, 'cm'],
+  [500, 'd'],
+  [400, 'cd'],
+  [100, 'c'],
+  [90, 'xc'],
+  [50, 'l'],
+  [40, 'xl'],
+  [10, 'x'],
+  [9, 'ix'],
+  [5, 'v'],
+  [4, 'iv'],
+  [1, 'i'],
 ]
 
 /** Subtractive roman numerals for 1..3999; falls back to String(n) outside that range. */
@@ -122,12 +155,18 @@ export function toRoman(n: number, upper: boolean): string {
 /** Map an HTML <ol type> attribute to a CSS list-style-type. */
 export function mapTypeAttr(type: string | undefined): string | undefined {
   switch (type) {
-    case 'a': return 'lower-alpha'
-    case 'A': return 'upper-alpha'
-    case 'i': return 'lower-roman'
-    case 'I': return 'upper-roman'
-    case '1': return 'decimal'
-    default: return undefined
+    case 'a':
+      return 'lower-alpha'
+    case 'A':
+      return 'upper-alpha'
+    case 'i':
+      return 'lower-roman'
+    case 'I':
+      return 'upper-roman'
+    case '1':
+      return 'decimal'
+    default:
+      return undefined
   }
 }
 
@@ -168,26 +207,28 @@ git commit -m "feat(core): add list-style marker converters"
 - [ ] **Step 1: Add failing tests** — append inside the existing `describe('annotateMarkers', ...)` in `packages/core/test/markers.test.ts` (it already has `run` and `lis` helpers — reuse them):
 
 ```ts
-  it('renders lower-alpha markers from a CSS list-style-type', () => {
-    const items = lis(run('<ol style="list-style-type: lower-alpha"><li>a</li><li>b</li><li>c</li></ol>'))
-    expect(items.map((li) => li.marker?.text)).toEqual(['a.', 'b.', 'c.'])
-  })
+it('renders lower-alpha markers from a CSS list-style-type', () => {
+  const items = lis(
+    run('<ol style="list-style-type: lower-alpha"><li>a</li><li>b</li><li>c</li></ol>'),
+  )
+  expect(items.map((li) => li.marker?.text)).toEqual(['a.', 'b.', 'c.'])
+})
 
-  it('honors the type attribute (lower-roman)', () => {
-    const items = lis(run('<ol type="i"><li>a</li><li>b</li></ol>'))
-    expect(items.map((li) => li.marker?.text)).toEqual(['i.', 'ii.'])
-  })
+it('honors the type attribute (lower-roman)', () => {
+  const items = lis(run('<ol type="i"><li>a</li><li>b</li></ol>'))
+  expect(items.map((li) => li.marker?.text)).toEqual(['i.', 'ii.'])
+})
 
-  it('honors the start attribute', () => {
-    const items = lis(run('<ol start="3"><li>a</li><li>b</li></ol>'))
-    expect(items.map((li) => li.marker?.index)).toEqual([3, 4])
-    expect(items.map((li) => li.marker?.text)).toEqual(['3.', '4.'])
-  })
+it('honors the start attribute', () => {
+  const items = lis(run('<ol start="3"><li>a</li><li>b</li></ol>'))
+  expect(items.map((li) => li.marker?.index)).toEqual([3, 4])
+  expect(items.map((li) => li.marker?.text)).toEqual(['3.', '4.'])
+})
 
-  it('honors a li value attribute and continues from it', () => {
-    const items = lis(run('<ol><li>a</li><li value="9">b</li><li>c</li></ol>'))
-    expect(items.map((li) => li.marker?.index)).toEqual([1, 9, 10])
-  })
+it('honors a li value attribute and continues from it', () => {
+  const items = lis(run('<ol><li>a</li><li value="9">b</li><li>c</li></ol>'))
+  expect(items.map((li) => li.marker?.index)).toEqual([1, 9, 10])
+})
 ```
 
 - [ ] **Step 2: Run → FAIL** (`pnpm exec vitest run packages/core/test/markers.test.ts`) — current code ignores type/start/value and renders decimal.
@@ -231,7 +272,12 @@ export function annotateMarkers(nodes: BlockChild[]): BlockChild[] {
           const listStyleType = ordered
             ? (typeStyle ?? child.control.listStyleType ?? 'decimal')
             : (child.control.listStyleType ?? 'disc')
-          child.marker = { ordered, index, listStyleType, text: markerText(ordered, index, listStyleType) }
+          child.marker = {
+            ordered,
+            index,
+            listStyleType,
+            text: markerText(ordered, index, listStyleType),
+          }
           next = index + 1
         }
       }
@@ -260,11 +306,11 @@ git commit -m "feat(core): honor list-style-type, start, type, and value in mark
 - [ ] **Step 1: Add failing test** — append inside `describe('buildUaRules', ...)` in `packages/css/test/ua-rules.test.ts`:
 
 ```ts
-  it('gives blockquote a left border', () => {
-    const bq = rules.filter((r) => r.match.kind === 'selector' && r.match.selector === 'blockquote')
-    const decls = bq.flatMap((r) => r.declarations)
-    expect(decls.find((d) => d.prop === 'borderLeftWidth')?.value).toBe(4)
-  })
+it('gives blockquote a left border', () => {
+  const bq = rules.filter((r) => r.match.kind === 'selector' && r.match.selector === 'blockquote')
+  const decls = bq.flatMap((r) => r.declarations)
+  expect(decls.find((d) => d.prop === 'borderLeftWidth')?.value).toBe(4)
+})
 ```
 
 - [ ] **Step 2: Run → FAIL** (current blockquote has no border).
@@ -481,6 +527,7 @@ git commit -m "chore: add changeset for list/quote/code polish"
 ## Self-Review (completed during planning)
 
 **1. Spec coverage** — every spec section maps to a task:
+
 - List converters (`toAlpha`/`toRoman`/`mapTypeAttr`/`orderedMarker`, roman→decimal fallback) → Task 0.
 - `annotateMarkers` start/type/value + ordered-style resolution (type wins) → Task 1.
 - blockquote left border → Task 2.

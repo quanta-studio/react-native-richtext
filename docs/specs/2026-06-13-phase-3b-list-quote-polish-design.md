@@ -18,12 +18,12 @@ mostly-additive items across core, css, and react-native:
 
 ## Decisions locked during brainstorming (do not re-litigate)
 
-| Question | Decision |
-| --- | --- |
-| List-counter scope | **Full common set + attributes**: `lower-/upper-alpha`, `lower-/upper-roman`, plus `<ol start>`, `<ol type>`, `<li value>`. |
-| Counter structure | **Approach A** — pure converter functions (`toAlpha`, `toRoman`, `mapTypeAttr`, `parseInt10`) + a readable counter loop in `annotateMarkers`. |
+| Question                 | Decision                                                                                                                                                                                         |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| List-counter scope       | **Full common set + attributes**: `lower-/upper-alpha`, `lower-/upper-roman`, plus `<ol start>`, `<ol type>`, `<li value>`.                                                                      |
+| Counter structure        | **Approach A** — pure converter functions (`toAlpha`, `toRoman`, `mapTypeAttr`, `parseInt10`) + a readable counter loop in `annotateMarkers`.                                                    |
 | `type` vs computed style | The `type` attribute **wins** over the computed `list-style-type` when present (a v1 pragmatism so `<ol type="a">` works for plain consumers, whose computed style is the UA default `decimal`). |
-| pre overflow | **Horizontal scroll** (preserve formatting), not wrap. |
+| pre overflow             | **Horizontal scroll** (preserve formatting), not wrap.                                                                                                                                           |
 
 ## 1. List counters — `packages/core/src/markers.ts`
 
@@ -44,12 +44,17 @@ New pure functions (no signature change to the exported `annotateMarkers` or the
 function orderedMarker(index: number, listStyleType: string): string {
   switch (listStyleType) {
     case 'lower-alpha':
-    case 'lower-latin': return `${toAlpha(index, false)}.`
+    case 'lower-latin':
+      return `${toAlpha(index, false)}.`
     case 'upper-alpha':
-    case 'upper-latin': return `${toAlpha(index, true)}.`
-    case 'lower-roman': return `${toRoman(index, false)}.`
-    case 'upper-roman': return `${toRoman(index, true)}.`
-    default: return `${index}.` // decimal + any unknown ordered style
+    case 'upper-latin':
+      return `${toAlpha(index, true)}.`
+    case 'lower-roman':
+      return `${toRoman(index, false)}.`
+    case 'upper-roman':
+      return `${toRoman(index, true)}.`
+    default:
+      return `${index}.` // decimal + any unknown ordered style
   }
 }
 // markerText(ordered, index, listStyleType): ordered -> orderedMarker; else BULLET[listStyleType] ?? '•'

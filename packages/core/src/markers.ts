@@ -34,7 +34,12 @@ export function annotateMarkers(nodes: BlockChild[]): BlockChild[] {
           const listStyleType = ordered
             ? (typeStyle ?? child.control.listStyleType ?? 'decimal')
             : (child.control.listStyleType ?? 'disc')
-          child.marker = { ordered, index, listStyleType, text: markerText(ordered, index, listStyleType) }
+          child.marker = {
+            ordered,
+            index,
+            listStyleType,
+            text: markerText(ordered, index, listStyleType),
+          }
           next = index + 1
         }
       }

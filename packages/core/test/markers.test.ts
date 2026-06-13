@@ -39,7 +39,9 @@ describe('annotateMarkers', () => {
   })
 
   it('renders lower-alpha markers from a CSS list-style-type', () => {
-    const items = lis(run('<ol style="list-style-type: lower-alpha"><li>a</li><li>b</li><li>c</li></ol>'))
+    const items = lis(
+      run('<ol style="list-style-type: lower-alpha"><li>a</li><li>b</li><li>c</li></ol>'),
+    )
     expect(items.map((li) => li.marker?.text)).toEqual(['a.', 'b.', 'c.'])
   })
 
