@@ -87,4 +87,17 @@ describe('buildTable', () => {
     const c = t.rows[0]!.items[0]!
     expect(c.type === 'table-cell' && JSON.stringify(c.children)).toContain('"type":"table"')
   })
+
+  it('collapses whitespace inside a cell', () => {
+    const t = firstTable('<table><tr><td>  a   b  </td></tr></table>')
+    const c = t.rows[0]!.items[0]!
+    const json = c.type === 'table-cell' ? JSON.stringify(c.children) : ''
+    expect(json).toContain('a b')
+    expect(json).not.toContain('a   b')
+  })
+
+  it('annotates list markers inside a cell', () => {
+    const t = firstTable('<table><tr><td><ul><li>x</li></ul></td></tr></table>')
+    expect(JSON.stringify(t)).toContain('•')
+  })
 })
