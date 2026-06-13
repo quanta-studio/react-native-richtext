@@ -1,0 +1,51 @@
+{
+  "name": "@yk-yong/rn-rich-text",
+  "version": "0.0.0",
+  "description": "Fabric-native HTML renderer for React Native: the <RichText> component.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc -p tsconfig.test.json",
+    "clean": "rimraf dist"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "react-native",
+    "html",
+    "rich-text",
+    "renderer",
+    "fabric"
+  ],
+  "dependencies": {
+    "@yk-yong/rn-rich-text-core": "workspace:*",
+    "@yk-yong/rn-rich-text-css": "workspace:*",
+    "@yk-yong/rn-rich-text-dom": "workspace:*"
+  },
+  "peerDependencies": { "react": ">=18.2.0", "react-native": ">=0.74.0" },
+  "devDependencies": {
+    "@types/node": "^25.9.2",
+    "@types/react": "^18.3.31",
+    "react": "18.3.1",
+    "react-native": "^0.86.0",
+    "react-test-renderer": "18.3.1"
+  }
+}
