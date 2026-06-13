@@ -66,10 +66,25 @@ export type RNStyleProp = keyof RNStyle
 
 /** CSS-computed props the renderer needs that are not RN style keys. */
 export interface ControlStyle {
-  display: 'block' | 'inline' | 'inline-block' | 'list-item' | 'none'
+  display:
+    | 'block'
+    | 'inline'
+    | 'inline-block'
+    | 'list-item'
+    | 'none'
+    | 'table'
+    | 'table-row'
+    | 'table-row-group'
+    | 'table-header-group'
+    | 'table-footer-group'
+    | 'table-cell'
+    | 'table-caption'
+    | 'table-column'
+    | 'table-column-group'
   whiteSpace: 'normal' | 'pre' | 'pre-wrap' | 'pre-line' | 'nowrap'
   listStyleType?: string
   listStylePosition?: 'inside' | 'outside'
+  borderCollapse?: 'collapse' | 'separate'
 }
 
 export type ControlProp = keyof ControlStyle
