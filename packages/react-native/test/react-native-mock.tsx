@@ -1,16 +1,14 @@
-import { createElement, type ReactNode } from 'react'
+import type { ComponentType, ReactNode } from 'react'
 import { vi } from 'vitest'
 
 type HostProps = Record<string, unknown> & { children?: ReactNode }
 
-const host =
-  (type: string) =>
-  ({ children, ...props }: HostProps) =>
-    createElement(type, props, children)
-
-export const View = host('View')
-export const Text = host('Text')
-export const Pressable = host('Pressable')
+// Use string-typed host components so react-test-renderer creates a single
+// host fiber per element (no composite wrapper). This makes findAllByType and
+// findAll-by-prop predicates each return exactly one node per rendered element.
+export const View = 'View' as unknown as ComponentType<HostProps>
+export const Text = 'Text' as unknown as ComponentType<HostProps>
+export const Pressable = 'Pressable' as unknown as ComponentType<HostProps>
 
 export const StyleSheet = {
   create: <T,>(styles: T): T => styles,
