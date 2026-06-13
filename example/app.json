@@ -1,0 +1,8 @@
+{
+  "expo": {
+    "name": "rn-rich-text-example",
+    "slug": "rn-rich-text-example",
+    "newArchEnabled": true,
+    "ios": { "supportsTablet": true }
+  }
+}

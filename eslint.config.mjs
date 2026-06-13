@@ -5,7 +5,14 @@ import globals from 'globals'
 
 export default tseslint.config(
   {
-    ignores: ['**/dist/**', '**/coverage/**', '**/node_modules/**', '.husky/**', 'pnpm-lock.yaml'],
+    ignores: [
+      '**/dist/**',
+      '**/coverage/**',
+      '**/node_modules/**',
+      '.husky/**',
+      'pnpm-lock.yaml',
+      'example/**',
+    ],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
