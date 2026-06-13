@@ -98,6 +98,34 @@ function clampSpan(value: string | undefined): number {
   return Number.isFinite(n) && n >= 1 ? n : 1
 }
 
+function parseColWidth(value: string | undefined): number | undefined {
+  if (value === undefined) return undefined
+  const t = value.trim()
+  if (t === '' || t.endsWith('%')) return undefined
+  const n = Number.parseInt(t, 10)
+  return Number.isFinite(n) && n > 0 ? n : undefined
+}
+
+function collectColWidths(el: Element): (number | undefined)[] | undefined {
+  const widths: (number | undefined)[] = []
+  const handleCol = (col: Element): void => {
+    const w = parseColWidth(col.attribs.width)
+    const span = clampSpan(col.attribs.span)
+    for (let i = 0; i < span; i++) widths.push(w)
+  }
+  for (const child of el.children as AnyNode[]) {
+    if (!isTag(child)) continue
+    if (child.name === 'colgroup') {
+      for (const c of child.children as AnyNode[]) {
+        if (isTag(c) && c.name === 'col') handleCol(c)
+      }
+    } else if (child.name === 'col') {
+      handleCol(child)
+    }
+  }
+  return widths.length > 0 ? widths : undefined
+}
+
 function buildCell(el: Element, key: string, styles: Styles): TableCellNode {
   const cs = styles.get(el)
   const style = cs?.style ?? EMPTY_STYLE
@@ -202,6 +230,7 @@ function buildTable(el: Element, key: string, styles: Styles): TableNode {
     attribs: el.attribs,
     caption,
     columnCount,
+    colWidths: collectColWidths(el),
     rows,
     key,
   }

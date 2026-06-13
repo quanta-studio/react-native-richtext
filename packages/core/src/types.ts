@@ -29,6 +29,7 @@ export interface TableNode {
   attribs: Record<string, string>
   caption?: BlockChild[]
   columnCount: number
+  colWidths?: (number | undefined)[]
   rows: TableRowNode[]
   key: string
 }
