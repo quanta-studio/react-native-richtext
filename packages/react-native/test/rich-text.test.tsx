@@ -42,4 +42,15 @@ describe('RichText', () => {
     const tree = create(<RichText source={{ html: '<p>x</p>' }} renderers={{ p: Custom }} />)
     expect(tree.root.findAll((n) => n.props.testID === 'custom').length).toBe(1)
   })
+
+  it('lets a custom renderer override a built-in default (a)', () => {
+    const CustomLink = () => <View testID="custom-link" />
+    const tree = create(
+      <RichText
+        source={{ html: '<p><a href="https://x.com">x</a></p>' }}
+        renderers={{ a: CustomLink }}
+      />,
+    )
+    expect(tree.root.findAll((n) => n.props.testID === 'custom-link').length).toBe(1)
+  })
 })
