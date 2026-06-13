@@ -4,7 +4,7 @@ Guidance for Claude Code working in this repository.
 
 ## Project Overview
 
-`react-native-richtext` (working name — repo/npm scope are placeholders, rename freely) is a modern,
+`react-native-richtext` (published as `@yk-yong/react-native-richtext`) is a modern,
 **Fabric-native HTML renderer for React Native**, built to grow into a full,
 community-maintained replacement for `react-native-render-html` (which is heavy, lightly
 maintained, and not New-Architecture-first).
@@ -15,9 +15,30 @@ the seed's parser/entity-decoder are superseded; its rendering _concepts_ carry 
 
 ## Status
 
-Design phase. The architecture + Phase 0 design is committed at
-`docs/specs/2026-06-09-architecture-and-phase-0-design.md` — **read it first**. No package code
-exists yet; **Phase 0** (monorepo scaffold + `@scope/dom`) is the next implementation step.
+**0.1.0 release-prep + dogfood** (branch `release-prep-and-dogfood`). Phases 0–3b are implemented:
+all four packages are built and tested (`packages/{dom,css,core,react-native}`, each at `0.1.0`),
+with an Expo example app in `example/`. Current work: cut the **0.1.0 release**
+(`docs/release-0.1.0-runbook.md`) and dogfood into the fonerewards app
+(`docs/dogfood-migration-plan.md`).
+
+Specs + plans live in `docs/specs/` and `docs/plans/` (one pair per phase, 0 → 3b); per-phase
+follow-ups in `docs/phase-*-followups.md`. Architecture spec:
+`docs/specs/2026-06-09-architecture-and-phase-0-design.md` — **read it first**.
+
+## Commands
+
+pnpm only (`preinstall` enforces it via `only-allow`). Node ≥ 20.18, pnpm 11.5.2.
+
+```bash
+pnpm install
+pnpm build          # tsup per-package, then tsc -b project refs
+pnpm test           # vitest run (all packages) · test:watch · test:coverage
+pnpm typecheck      # tsc per package
+pnpm lint           # eslint .   (lint:fix to autofix)
+pnpm format         # prettier --write .   (format:check to verify)
+pnpm changeset      # record a user-facing change
+pnpm release        # build + changeset publish (CI → GitHub Packages)
+```
 
 ## Key Decisions — do NOT re-litigate
 
@@ -52,13 +73,15 @@ _Rejected:_ no-DOM/regex (no selectors), WebView (defeats native perf).
 
 ## Packages (monorepo)
 
-Lower three are **React-free pure logic** (where the edge cases live → exhaustive unit tests):
+Lower three are **React-free pure logic** (where the edge cases live → exhaustive unit tests).
+Published under the `@yk-yong/` scope:
 
-- `@scope/dom` — htmlparser2 → DOM + traversal utils. No React/RN.
-- `@scope/css` — parse, selector match, specificity, cascade, inheritance, declaration→RN
-  mapping, UA stylesheet. Produces RN style objects; no React.
-- `@scope/core` — styled-render-tree builder (DOM + styles → render model). No React.
-- `@scope/react-native` — public package: `<RichText>`, renderer registry, props/hooks.
+- `@yk-yong/react-native-richtext-dom` — htmlparser2 → DOM + traversal utils. No React/RN.
+- `@yk-yong/react-native-richtext-css` — parse, selector match, specificity, cascade,
+  inheritance, declaration→RN mapping, UA stylesheet. Produces RN style objects; no React.
+- `@yk-yong/react-native-richtext-core` — styled-render-tree builder (DOM + styles → render
+  model). No React.
+- `@yk-yong/react-native-richtext` — public package: `<RichText>`, renderer registry, props/hooks.
 
 Public API target:
 
@@ -97,13 +120,14 @@ run in JS. Fabric only helps by widening which CSS props map faithfully to RN (`
 
 Each phase = its own spec → plan → implement cycle.
 
-- **Phase 0** — monorepo scaffold + `@scope/dom` (tested, React-free) + green CI. ← next
-- **Phase 1** — `@scope/css` engine (HTML+CSS → resolved RN styles per node).
-- **Phase 2** — `@scope/core` + `@scope/react-native` v1 render; dogfood by replacing the app
-  seed in `OutletAboutScreen` via local link; first published canary.
-- **Phase 3** — images (`img`), `hr`, `pre/code`, nested lists, `blockquote`.
-- **Phase 4** — tables.
-- **Phase 5+** — docs site, example app, advanced CSS, accessibility, 1.0 publish.
+- **Phase 0** ✅ — monorepo scaffold + `dom` (tested, React-free) + green CI.
+- **Phase 1** ✅ — `css` engine (HTML+CSS → resolved RN styles per node).
+- **Phase 2** ✅ — `core` + `react-native` v1 render; Expo `example/` app; dogfood by replacing
+  the app seed in `OutletAboutScreen` via local link.
+- **Phase 3** ✅ — split into **3a** (`img`) and **3b** (`hr`, `pre/code`, nested lists,
+  `blockquote`, polish).
+- **Phase 4** — tables. ← next
+- **Phase 5+** — docs site, advanced CSS, accessibility, 1.0 publish.
 
 **v1 (Phases 0–2) tag set:** inline `b strong i em u s span code br a`; block
 `p div h1–h6 ul ol li blockquote pre hr`. **Out of scope v1:** tables, images, forms, media,
@@ -120,8 +144,10 @@ react-native-web, pseudo-elements, animations, `@media`/`@supports`.
 - **Conventional Commits** + Changesets for versioning. MIT license.
 - Maintain a fixtures corpus of real-world HTML (CMS/Wikipedia-style) for integration tests.
 
-## Open questions (resolve in planning)
+## Resolved (were open questions)
 
-npm vs pnpm workspaces; build tool (tsup vs react-native-builder-bob); exact RN/React peer
-floors (New-Arch-stable line); final package scope/name; whether `img` lands in v1 (Phase 2) or
-Phase 3.
+- **Workspaces:** pnpm (`pnpm-workspace.yaml`, `only-allow pnpm`).
+- **Build tool:** tsup per package + `tsc -b` project references (not builder-bob).
+- **Peer floors:** Node ≥ 20.18; `react` ≥ 18.2.0, `react-native` ≥ 0.74.0 (New-Arch-stable line).
+- **Package scope:** `@yk-yong/react-native-richtext{,-dom,-css,-core}`.
+- **`img`:** shipped in its own **Phase 3a**, not v1.
