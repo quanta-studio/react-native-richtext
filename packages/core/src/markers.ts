@@ -1,4 +1,4 @@
-import type { BlockChild, BlockNode } from './types'
+import type { BlockChild } from './types'
 
 const BULLET: Record<string, string> = {
   disc: '•',
@@ -23,7 +23,12 @@ export function annotateMarkers(nodes: BlockChild[]): BlockChild[] {
         if (child.type === 'block' && child.tag === 'li') {
           index += 1
           const listStyleType = child.control.listStyleType ?? (ordered ? 'decimal' : 'disc')
-          child.marker = { ordered, index, listStyleType, text: markerText(ordered, index, listStyleType) }
+          child.marker = {
+            ordered,
+            index,
+            listStyleType,
+            text: markerText(ordered, index, listStyleType),
+          }
         }
       }
     }

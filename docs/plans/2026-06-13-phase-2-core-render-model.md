@@ -42,6 +42,7 @@ Typecheck the package: `pnpm --filter @yk-yong/rn-rich-text-core typecheck`
 ## Task 0: Scaffold `@yk-yong/rn-rich-text-core`
 
 **Files:**
+
 - Create: `packages/core/{package.json,tsconfig.json,tsconfig.test.json,tsup.config.ts,README.md,LICENSE,src/index.ts}`
 - Modify: root `tsconfig.json` (add reference), root `vitest.config.ts` (add css alias)
 
@@ -59,7 +60,11 @@ Typecheck the package: `pnpm --filter @yk-yong/rn-rich-text-core typecheck`
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "require": "./dist/index.cjs" }
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
   },
   "files": ["dist", "README.md", "LICENSE"],
   "scripts": { "build": "tsup", "typecheck": "tsc -p tsconfig.test.json", "clean": "rimraf dist" },
@@ -106,6 +111,7 @@ Typecheck the package: `pnpm --filter @yk-yong/rn-rich-text-core typecheck`
 - [ ] **Step 4: `packages/core/tsup.config.ts`** (identical to css's), `README.md`, copy `LICENSE`
 
 `packages/core/tsup.config.ts`:
+
 ```ts
 import { defineConfig } from 'tsup'
 
@@ -120,7 +126,9 @@ export default defineConfig({
   target: 'es2022',
 })
 ```
+
 `packages/core/README.md`:
+
 ```md
 # @yk-yong/rn-rich-text-core
 
@@ -130,6 +138,7 @@ collapse, entity decode, list markers). React-free pure logic.
 
 Not yet published — internal to the rn-rich-text monorepo.
 ```
+
 Copy license: `cp packages/dom/LICENSE packages/core/LICENSE`
 
 - [ ] **Step 5: root `tsconfig.json`** — add the core reference:
@@ -137,7 +146,11 @@ Copy license: `cp packages/dom/LICENSE packages/core/LICENSE`
 ```json
 {
   "files": [],
-  "references": [{ "path": "packages/dom" }, { "path": "packages/css" }, { "path": "packages/core" }]
+  "references": [
+    { "path": "packages/dom" },
+    { "path": "packages/css" },
+    { "path": "packages/core" }
+  ]
 }
 ```
 
@@ -248,7 +261,13 @@ describe('types', () => {
       key: '0',
     }
     const nodes: RenderNode[] = [block, container, inline, text, br]
-    expect(nodes.map((n) => n.type)).toEqual(['block', 'inline-container', 'inline', 'text', 'linebreak'])
+    expect(nodes.map((n) => n.type)).toEqual([
+      'block',
+      'inline-container',
+      'inline',
+      'text',
+      'linebreak',
+    ])
   })
 })
 ```
@@ -385,7 +404,14 @@ import type { ComputedStyle } from '@yk-yong/rn-rich-text-css'
 export type Display = ComputedStyle['control']['display']
 
 const NON_RENDERED = new Set<string>([
-  'head', 'style', 'script', 'title', 'meta', 'link', 'base', 'noscript',
+  'head',
+  'style',
+  'script',
+  'title',
+  'meta',
+  'link',
+  'base',
+  'noscript',
 ])
 
 export function isNonRendered(tag: string): boolean {
@@ -459,7 +485,11 @@ describe('splitDocument', () => {
   it('flushes inline runs around block children', () => {
     const tree = build('<div>before<p>mid</p>after</div>')
     const div = tree[0] as BlockNode
-    expect(div.children.map((c) => c.type)).toEqual(['inline-container', 'block', 'inline-container'])
+    expect(div.children.map((c) => c.type)).toEqual([
+      'inline-container',
+      'block',
+      'inline-container',
+    ])
     expect((div.children[1] as BlockNode).tag).toBe('p')
   })
 
@@ -925,7 +955,7 @@ export function processText(nodes: BlockChild[]): BlockChild[] {
   const result: BlockChild[] = []
   for (const node of nodes) {
     if (node.type === 'block') {
-      node.children = processText(node.children) as Array<typeof node.children[number]>
+      node.children = processText(node.children) as Array<(typeof node.children)[number]>
       result.push(node)
     } else {
       const processed = processContainer(node)
@@ -1026,7 +1056,12 @@ export function annotateMarkers(nodes: BlockChild[]): BlockChild[] {
         if (child.type === 'block' && child.tag === 'li') {
           index += 1
           const listStyleType = child.control.listStyleType ?? (ordered ? 'decimal' : 'disc')
-          child.marker = { ordered, index, listStyleType, text: markerText(ordered, index, listStyleType) }
+          child.marker = {
+            ordered,
+            index,
+            listStyleType,
+            text: markerText(ordered, index, listStyleType),
+          }
         }
       }
     }
@@ -1146,15 +1181,18 @@ git commit -m "feat(core): add buildRenderTree orchestrator and public API"
 ```html
 <article>
   <h1>Title</h1>
-  <p>Intro with <strong>bold</strong>, <em>italic</em>, and a
-     <a href="https://example.com">link</a>.</p>
+  <p>
+    Intro with <strong>bold</strong>, <em>italic</em>, and a <a href="https://example.com">link</a>.
+  </p>
   <ul>
     <li>first</li>
     <li>second</li>
   </ul>
   <blockquote>A &ldquo;quote&rdquo; with&nbsp;nbsp.</blockquote>
-  <pre>  preformatted
-  text</pre>
+  <pre>
+  preformatted
+  text</pre
+  >
 </article>
 ```
 
@@ -1169,9 +1207,15 @@ import { resolveStyles } from '@yk-yong/rn-rich-text-css'
 import { buildRenderTree } from '../src'
 import type { BlockNode, InlineContainerNode, InlineNode, TextNode } from '../src'
 
-const html = readFileSync(fileURLToPath(new URL('./fixtures/article.html', import.meta.url)), 'utf8')
+const html = readFileSync(
+  fileURLToPath(new URL('./fixtures/article.html', import.meta.url)),
+  'utf8',
+)
 
-const findBlock = (nodes: ReturnType<typeof buildRenderTree>, tag: string): BlockNode | undefined => {
+const findBlock = (
+  nodes: ReturnType<typeof buildRenderTree>,
+  tag: string,
+): BlockNode | undefined => {
   for (const n of nodes) {
     if (n.type === 'block') {
       if (n.tag === tag) return n
@@ -1211,7 +1255,7 @@ describe('integration: article.html', () => {
   it('blockquote decodes smart quotes and nbsp', () => {
     const bq = findBlock(tree, 'blockquote')!
     const ic = bq.children.find((c): c is InlineContainerNode => c.type === 'inline-container')!
-    const text = (ic.children.find((c): c is TextNode => c.type === 'text'))!.text
+    const text = ic.children.find((c): c is TextNode => c.type === 'text')!.text
     expect(text).toContain('“') // “
     expect(text).toContain(' ') // nbsp preserved
   })
@@ -1219,7 +1263,7 @@ describe('integration: article.html', () => {
   it('pre preserves its internal whitespace and newline', () => {
     const pre = findBlock(tree, 'pre')!
     const ic = pre.children.find((c): c is InlineContainerNode => c.type === 'inline-container')!
-    const text = (ic.children.find((c): c is TextNode => c.type === 'text'))!.text
+    const text = ic.children.find((c): c is TextNode => c.type === 'text')!.text
     expect(text).toContain('\n')
     expect(text).toContain('  ') // indentation preserved
   })
@@ -1272,8 +1316,9 @@ git commit -m "chore(core): add changeset for the Phase 2 render-model package"
 ## Self-Review (completed during planning)
 
 **1. Spec coverage** — every spec section maps to a task:
+
 - Package + deps + source-resolution wiring → Task 0 (incl. the css vitest alias + dom/css `paths`).
-- Node taxonomy (block/inline-container/inline/text/linebreak + ListMarker) → Task 1. *Refinement: element nodes carry `control`; `InlineContainerNode` carries `whiteSpace` — noted in the header and Task 1.*
+- Node taxonomy (block/inline-container/inline/text/linebreak + ListMarker) → Task 1. _Refinement: element nodes carry `control`; `InlineContainerNode` carries `whiteSpace` — noted in the header and Task 1._
 - Stage 1 prune & classify → Task 2 (predicates) + applied in Task 3.
 - Stage 2 split (inline-run grouping, br, href, root grouping, keys, block-in-inline flatten) → Task 3.
 - Stage 3 text: decode → Task 4; collapse (normal/pre/pre-line, nbsp, boundary, trim) → Task 5; tree-walk + drop-empties + inter-block-whitespace drop → Task 6.

@@ -41,6 +41,12 @@ describe('types', () => {
       key: '0',
     }
     const nodes: RenderNode[] = [block, container, inline, text, br]
-    expect(nodes.map((n) => n.type)).toEqual(['block', 'inline-container', 'inline', 'text', 'linebreak'])
+    expect(nodes.map((n) => n.type)).toEqual([
+      'block',
+      'inline-container',
+      'inline',
+      'text',
+      'linebreak',
+    ])
   })
 })

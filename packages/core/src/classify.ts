@@ -4,7 +4,14 @@ import type { ComputedStyle } from '@yk-yong/rn-rich-text-css'
 export type Display = ComputedStyle['control']['display']
 
 const NON_RENDERED = new Set<string>([
-  'head', 'style', 'script', 'title', 'meta', 'link', 'base', 'noscript',
+  'head',
+  'style',
+  'script',
+  'title',
+  'meta',
+  'link',
+  'base',
+  'noscript',
 ])
 
 export function isNonRendered(tag: string): boolean {

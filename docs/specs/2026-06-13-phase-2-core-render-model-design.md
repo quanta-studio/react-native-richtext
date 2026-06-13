@@ -27,12 +27,12 @@ DOM + Map<Element, ComputedStyle>  ─▶  buildRenderTree  ─▶  Array<BlockN
 
 ## Decisions locked during brainstorming (do not re-litigate)
 
-| Question | Decision |
-| --- | --- |
-| Phase 2 scope | **Decompose**: build `@scope/core` first (this spec), then `@scope/react-native` + example + dogfood. Design core's output contract with the RN renderer in mind. |
-| Render-model contract | **Renderer-agnostic styled tree**: nodes keep tag identity, computed `RNStyle`, a block/inline context, and needed attribs (`href`, list info). `@scope/react-native`'s registry maps each node → component. |
-| List markers | **Compute basic markers in core**: annotate each `li` with `{ordered, index, listStyleType, text}` (flat single-level counters). Deep-nesting restart/letters/roman → Phase 3. |
-| Transformation strategy | **Approach B — staged pipeline**: prune → split → text (decode + collapse) → markers. Each stage is pure and independently testable; collapse operates on already-grouped inline runs. |
+| Question                | Decision                                                                                                                                                                                                     |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Phase 2 scope           | **Decompose**: build `@scope/core` first (this spec), then `@scope/react-native` + example + dogfood. Design core's output contract with the RN renderer in mind.                                            |
+| Render-model contract   | **Renderer-agnostic styled tree**: nodes keep tag identity, computed `RNStyle`, a block/inline context, and needed attribs (`href`, list info). `@scope/react-native`'s registry maps each node → component. |
+| List markers            | **Compute basic markers in core**: annotate each `li` with `{ordered, index, listStyleType, text}` (flat single-level counters). Deep-nesting restart/letters/roman → Phase 3.                               |
+| Transformation strategy | **Approach B — staged pipeline**: prune → split → text (decode + collapse) → markers. Each stage is pure and independently testable; collapse operates on already-grouped inline runs.                       |
 
 ## Package
 
@@ -49,40 +49,50 @@ DOM + Map<Element, ComputedStyle>  ─▶  buildRenderTree  ─▶  Array<BlockN
 ```ts
 type RenderNode = BlockNode | InlineContainerNode | InlineNode | TextNode | LineBreakNode
 
-interface BlockNode {                 // display: block | list-item
+interface BlockNode {
+  // display: block | list-item
   type: 'block'
-  tag: string                         // p div h1–h6 ul ol li blockquote pre hr (+ unknown blocks)
+  tag: string // p div h1–h6 ul ol li blockquote pre hr (+ unknown blocks)
   style: RNStyle
   attribs: Record<string, string>
-  marker?: ListMarker                 // present on <li>
+  marker?: ListMarker // present on <li>
   children: Array<BlockNode | InlineContainerNode>
   key: string
 }
 
-interface InlineContainerNode {       // anonymous run-wrapper → renders to ONE <Text>
+interface InlineContainerNode {
+  // anonymous run-wrapper → renders to ONE <Text>
   type: 'inline-container'
-  style: RNStyle                      // the owning block's text style
+  style: RNStyle // the owning block's text style
   children: Array<InlineNode | TextNode | LineBreakNode>
   key: string
 }
 
-interface InlineNode {                // display: inline (+ inline-block, as a v1 simplification)
+interface InlineNode {
+  // display: inline (+ inline-block, as a v1 simplification)
   type: 'inline'
-  tag: string                         // b strong i em u s span code a (+ unknown inlines)
+  tag: string // b strong i em u s span code a (+ unknown inlines)
   style: RNStyle
-  attribs: Record<string, string>     // href on <a>
+  attribs: Record<string, string> // href on <a>
   children: Array<InlineNode | TextNode | LineBreakNode>
   key: string
 }
 
-interface TextNode { type: 'text'; text: string; key: string }   // entity-decoded + collapsed
-interface LineBreakNode { type: 'linebreak'; key: string }        // from <br>
+interface TextNode {
+  type: 'text'
+  text: string
+  key: string
+} // entity-decoded + collapsed
+interface LineBreakNode {
+  type: 'linebreak'
+  key: string
+} // from <br>
 
 interface ListMarker {
   ordered: boolean
-  index: number                       // 1-based within its direct list
+  index: number // 1-based within its direct list
   listStyleType: string
-  text: string                        // resolved marker, e.g. '•' or '1.'
+  text: string // resolved marker, e.g. '•' or '1.'
 }
 ```
 

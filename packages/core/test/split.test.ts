@@ -27,7 +27,11 @@ describe('splitDocument', () => {
   it('flushes inline runs around block children', () => {
     const tree = build('<div>before<p>mid</p>after</div>')
     const div = tree[0] as BlockNode
-    expect(div.children.map((c) => c.type)).toEqual(['inline-container', 'block', 'inline-container'])
+    expect(div.children.map((c) => c.type)).toEqual([
+      'inline-container',
+      'block',
+      'inline-container',
+    ])
     expect((div.children[1] as BlockNode).tag).toBe('p')
   })
 

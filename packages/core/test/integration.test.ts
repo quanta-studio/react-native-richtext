@@ -6,9 +6,15 @@ import { resolveStyles } from '@yk-yong/rn-rich-text-css'
 import { buildRenderTree } from '../src'
 import type { BlockNode, InlineContainerNode, InlineNode, TextNode } from '../src'
 
-const html = readFileSync(fileURLToPath(new URL('./fixtures/article.html', import.meta.url)), 'utf8')
+const html = readFileSync(
+  fileURLToPath(new URL('./fixtures/article.html', import.meta.url)),
+  'utf8',
+)
 
-const findBlock = (nodes: ReturnType<typeof buildRenderTree>, tag: string): BlockNode | undefined => {
+const findBlock = (
+  nodes: ReturnType<typeof buildRenderTree>,
+  tag: string,
+): BlockNode | undefined => {
   for (const n of nodes) {
     if (n.type === 'block') {
       if (n.tag === tag) return n
@@ -48,7 +54,7 @@ describe('integration: article.html', () => {
   it('blockquote decodes smart quotes and nbsp', () => {
     const bq = findBlock(tree, 'blockquote')!
     const ic = bq.children.find((c): c is InlineContainerNode => c.type === 'inline-container')!
-    const text = (ic.children.find((c): c is TextNode => c.type === 'text'))!.text
+    const text = ic.children.find((c): c is TextNode => c.type === 'text')!.text
     expect(text).toContain('“') // &ldquo; decoded to LEFT DOUBLE QUOTATION MARK (U+201C)
     expect(text).toContain(' ')
   })
@@ -56,7 +62,7 @@ describe('integration: article.html', () => {
   it('pre preserves its internal whitespace and newline', () => {
     const pre = findBlock(tree, 'pre')!
     const ic = pre.children.find((c): c is InlineContainerNode => c.type === 'inline-container')!
-    const text = (ic.children.find((c): c is TextNode => c.type === 'text'))!.text
+    const text = ic.children.find((c): c is TextNode => c.type === 'text')!.text
     expect(text).toContain('\n')
     expect(text).toContain('  ')
   })

@@ -74,7 +74,13 @@ function buildBlock(el: Element, key: string, styles: Styles): BlockNode {
   const cs = styles.get(el)
   const style = cs?.style ?? EMPTY_STYLE
   const control = cs?.control ?? DEFAULT_CONTROL
-  const children = buildBlockContext(el.children as AnyNode[], style, control.whiteSpace, key, styles)
+  const children = buildBlockContext(
+    el.children as AnyNode[],
+    style,
+    control.whiteSpace,
+    key,
+    styles,
+  )
   return { type: 'block', tag: el.name, style, control, attribs: el.attribs, children, key }
 }
 
