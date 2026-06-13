@@ -2,7 +2,6 @@ import { decodeText } from './decode'
 import { collapseLeaves } from './collapse'
 import type {
   BlockChild,
-  BlockNode,
   InlineChild,
   InlineContainerNode,
   LineBreakNode,
@@ -63,7 +62,7 @@ export function processText(nodes: BlockChild[]): BlockChild[] {
   const result: BlockChild[] = []
   for (const node of nodes) {
     if (node.type === 'block') {
-      node.children = processBlockChildren(node.children)
+      node.children = processText(node.children)
       result.push(node)
     } else {
       const processed = processContainer(node)
@@ -71,10 +70,4 @@ export function processText(nodes: BlockChild[]): BlockChild[] {
     }
   }
   return result
-}
-
-function processBlockChildren(
-  children: Array<BlockNode | InlineContainerNode>,
-): Array<BlockNode | InlineContainerNode> {
-  return processText(children) as Array<BlockNode | InlineContainerNode>
 }
