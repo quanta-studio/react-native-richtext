@@ -1,6 +1,6 @@
 {
   "name": "@yk-yong/react-native-richtext-core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Render-model builder for react-native-richtext: DOM + computed styles -> renderer-agnostic styled tree. React-free.",
   "license": "MIT",
   "type": "module",
