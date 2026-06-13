@@ -34,4 +34,10 @@ describe('buildUaRules', () => {
     const orders = rules.map((r) => r.order)
     expect(orders).toEqual([...orders].sort((a, b) => a - b))
   })
+
+  it('makes img display block', () => {
+    const img = rules.filter((r) => r.match.kind === 'selector' && r.match.selector === 'img')
+    const display = img.flatMap((r) => r.declarations).find((d) => d.prop === 'display')
+    expect(display?.value).toBe('block')
+  })
 })

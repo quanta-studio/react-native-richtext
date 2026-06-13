@@ -6,6 +6,7 @@
 export const UA_STYLESHEET = `
 p { display: block; margin: 1em 0 }
 div { display: block }
+img { display: block }
 article { display: block }
 section { display: block }
 aside { display: block }
