@@ -9,6 +9,7 @@ type HostProps = Record<string, unknown> & { children?: ReactNode }
 export const View = 'View' as unknown as ComponentType<HostProps>
 export const Text = 'Text' as unknown as ComponentType<HostProps>
 export const Pressable = 'Pressable' as unknown as ComponentType<HostProps>
+export const ScrollView = 'ScrollView' as unknown as ComponentType<HostProps>
 
 // Image is a function component (not a string host) so it can carry a static
 // getSize. It still renders a single host 'Image' element, which tests query.

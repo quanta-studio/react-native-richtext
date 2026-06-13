@@ -1,3 +1,4 @@
+import { mapTypeAttr, orderedMarker } from './list-style'
 import type { BlockChild } from './types'
 
 const BULLET: Record<string, string> = {
@@ -7,8 +8,14 @@ const BULLET: Record<string, string> = {
   none: '',
 }
 
+function parseInt10(value: string | undefined): number | undefined {
+  if (value === undefined) return undefined
+  const n = Number.parseInt(value, 10)
+  return Number.isFinite(n) ? n : undefined
+}
+
 function markerText(ordered: boolean, index: number, listStyleType: string): string {
-  if (ordered) return `${index}.` // decimal; lower-alpha/roman fall back to decimal in v1
+  if (ordered) return orderedMarker(index, listStyleType)
   return BULLET[listStyleType] ?? '•'
 }
 
@@ -18,17 +25,22 @@ export function annotateMarkers(nodes: BlockChild[]): BlockChild[] {
     if (node.type !== 'block') continue
     if (node.tag === 'ul' || node.tag === 'ol') {
       const ordered = node.tag === 'ol'
-      let index = 0
+      const typeStyle = ordered ? mapTypeAttr(node.attribs.type) : undefined
+      let next = ordered ? (parseInt10(node.attribs.start) ?? 1) : 1
       for (const child of node.children) {
         if (child.type === 'block' && child.tag === 'li') {
-          index += 1
-          const listStyleType = child.control.listStyleType ?? (ordered ? 'decimal' : 'disc')
+          const valueOverride = ordered ? parseInt10(child.attribs.value) : undefined
+          const index = valueOverride ?? next
+          const listStyleType = ordered
+            ? (typeStyle ?? child.control.listStyleType ?? 'decimal')
+            : (child.control.listStyleType ?? 'disc')
           child.marker = {
             ordered,
             index,
             listStyleType,
             text: markerText(ordered, index, listStyleType),
           }
+          next = index + 1
         }
       }
     }
