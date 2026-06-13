@@ -12,6 +12,11 @@ concurrency:
 jobs:
   release:
     runs-on: ubuntu-latest
+    # Git hooks are for local dev. Husky's commit-msg hook runs commitlint, which
+    # rejects the Changesets bot's "Version Packages" commit (not Conventional
+    # Commits) and fails the release. HUSKY=0 skips hook installation in CI.
+    env:
+      HUSKY: '0'
     permissions:
       contents: write
       pull-requests: write
