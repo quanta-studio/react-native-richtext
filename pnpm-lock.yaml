@@ -54,6 +54,22 @@ importers:
         specifier: ^4.1.8
         version: 4.1.8(@types/node@25.9.2)(@vitest/coverage-v8@4.1.8)(vite@8.0.16(@types/node@25.9.2)(esbuild@0.27.7)(jiti@2.6.1))
 
+  packages/core:
+    dependencies:
+      '@yk-yong/rn-rich-text-css':
+        specifier: workspace:*
+        version: link:../css
+      '@yk-yong/rn-rich-text-dom':
+        specifier: workspace:*
+        version: link:../dom
+      entities:
+        specifier: ^8.0.0
+        version: 8.0.0
+    devDependencies:
+      '@types/node':
+        specifier: ^25.9.2
+        version: 25.9.2
+
   packages/css:
     dependencies:
       '@yk-yong/rn-rich-text-dom':

@@ -8,6 +8,9 @@ export default defineConfig({
       '@yk-yong/rn-rich-text-dom': fileURLToPath(
         new URL('./packages/dom/src/index.ts', import.meta.url),
       ),
+      '@yk-yong/rn-rich-text-css': fileURLToPath(
+        new URL('./packages/css/src/index.ts', import.meta.url),
+      ),
     },
   },
   test: {
