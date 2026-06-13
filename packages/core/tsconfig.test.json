@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": false,
+    "noEmit": true,
+    "types": ["node"],
+    "paths": {
+      "@yk-yong/rn-rich-text-dom": ["../dom/src/index.ts"],
+      "@yk-yong/rn-rich-text-css": ["../css/src/index.ts"]
+    }
+  },
+  "include": ["src", "test"]
+}
