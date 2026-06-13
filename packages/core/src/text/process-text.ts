@@ -64,6 +64,14 @@ export function processText(nodes: BlockChild[]): BlockChild[] {
     if (node.type === 'block') {
       node.children = processText(node.children)
       result.push(node)
+    } else if (node.type === 'table') {
+      if (node.caption) node.caption = processText(node.caption)
+      for (const row of node.rows) {
+        for (const item of row.items) {
+          if (item.type === 'table-cell') item.children = processText(item.children)
+        }
+      }
+      result.push(node)
     } else {
       const processed = processContainer(node)
       if (processed) result.push(processed)
