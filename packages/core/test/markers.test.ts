@@ -37,4 +37,25 @@ describe('annotateMarkers', () => {
     expect(lis(tree, 0)[0]!.marker?.index).toBe(1)
     expect(lis(tree, 1)[0]!.marker?.index).toBe(1)
   })
+
+  it('renders lower-alpha markers from a CSS list-style-type', () => {
+    const items = lis(run('<ol style="list-style-type: lower-alpha"><li>a</li><li>b</li><li>c</li></ol>'))
+    expect(items.map((li) => li.marker?.text)).toEqual(['a.', 'b.', 'c.'])
+  })
+
+  it('honors the type attribute (lower-roman)', () => {
+    const items = lis(run('<ol type="i"><li>a</li><li>b</li></ol>'))
+    expect(items.map((li) => li.marker?.text)).toEqual(['i.', 'ii.'])
+  })
+
+  it('honors the start attribute', () => {
+    const items = lis(run('<ol start="3"><li>a</li><li>b</li></ol>'))
+    expect(items.map((li) => li.marker?.index)).toEqual([3, 4])
+    expect(items.map((li) => li.marker?.text)).toEqual(['3.', '4.'])
+  })
+
+  it('honors a li value attribute and continues from it', () => {
+    const items = lis(run('<ol><li>a</li><li value="9">b</li><li>c</li></ol>'))
+    expect(items.map((li) => li.marker?.index)).toEqual([1, 9, 10])
+  })
 })
