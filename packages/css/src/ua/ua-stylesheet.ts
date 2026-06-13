@@ -6,6 +6,15 @@
 export const UA_STYLESHEET = `
 p { display: block; margin: 1em 0 }
 div { display: block }
+article { display: block }
+section { display: block }
+aside { display: block }
+header { display: block }
+footer { display: block }
+main { display: block }
+nav { display: block }
+figure { display: block }
+figcaption { display: block }
 h1 { display: block; font-size: 2em; font-weight: bold; margin: 0.67em 0 }
 h2 { display: block; font-size: 1.5em; font-weight: bold; margin: 0.83em 0 }
 h3 { display: block; font-size: 1.17em; font-weight: bold; margin: 1em 0 }
