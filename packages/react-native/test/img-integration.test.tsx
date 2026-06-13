@@ -26,13 +26,17 @@ describe('integration: img', () => {
     act(() => {
       tree = create(
         <RichText
-          source={{ html: '<p>before <img src="https://x/b.png" width="10" height="10"> after</p>' }}
+          source={{
+            html: '<p>before <img src="https://x/b.png" width="10" height="10"> after</p>',
+          }}
         />,
       )
     })
     expect(tree.root.findAllByType(Image)).toHaveLength(1)
     // The img must NOT be a descendant of any Text (it broke out as a block).
-    const imgInsideText = tree.root.findAllByType(Text).some((t) => t.findAllByType(Image).length > 0)
+    const imgInsideText = tree.root
+      .findAllByType(Text)
+      .some((t) => t.findAllByType(Image).length > 0)
     expect(imgInsideText).toBe(false)
   })
 })

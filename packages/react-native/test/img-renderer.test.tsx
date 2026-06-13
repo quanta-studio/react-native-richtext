@@ -5,7 +5,10 @@ import { Img } from '../src/renderers/Img'
 import { defaultRenderers } from '../src/renderers/defaults'
 import type { BlockNode } from '@yk-yong/rn-rich-text-core'
 
-const imgNode = (attribs: Record<string, string>, style: Record<string, unknown> = {}): BlockNode => ({
+const imgNode = (
+  attribs: Record<string, string>,
+  style: Record<string, unknown> = {},
+): BlockNode => ({
   type: 'block',
   tag: 'img',
   style,

@@ -17,12 +17,12 @@ Phase 3 is "Images & list/quote polish", decomposed into two sub-projects:
 
 ## Decisions locked during brainstorming (do not re-litigate)
 
-| Question | Decision |
-| --- | --- |
-| Phase 3 sequencing | **`img` first**, then list/quote/code polish (3b). |
-| Image sizing | **Explicit dims + async intrinsic fallback.** Use `width`/`height` from the computed style or `attribs` when present; otherwise fetch the intrinsic size via `Image.getSize` and render at that, capped to the container width with aspect ratio preserved. The renderer is stateful. |
-| Image placement | **Block-level.** A UA rule sets `img { display: block }`, so each image becomes its own block (an `<Image>` in a block context), even one written mid-paragraph. Inline images are deferred. |
-| Sizing structure | **Approach A** — a pure `imageStyle` helper (the ratio/cap math, exhaustively tested) + a thin stateful `Img` component (the async glue). |
+| Question           | Decision                                                                                                                                                                                                                                                                              |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Phase 3 sequencing | **`img` first**, then list/quote/code polish (3b).                                                                                                                                                                                                                                    |
+| Image sizing       | **Explicit dims + async intrinsic fallback.** Use `width`/`height` from the computed style or `attribs` when present; otherwise fetch the intrinsic size via `Image.getSize` and render at that, capped to the container width with aspect ratio preserved. The renderer is stateful. |
+| Image placement    | **Block-level.** A UA rule sets `img { display: block }`, so each image becomes its own block (an `<Image>` in a block context), even one written mid-paragraph. Inline images are deferred.                                                                                          |
+| Sizing structure   | **Approach A** — a pure `imageStyle` helper (the ratio/cap math, exhaustively tested) + a thin stateful `Img` component (the async glue).                                                                                                                                             |
 
 ## Scope across packages
 
@@ -31,7 +31,9 @@ Phase 3 is "Images & list/quote polish", decomposed into two sub-projects:
 Add to the user-agent stylesheet (`packages/css/src/ua/ua-stylesheet.ts`):
 
 ```css
-img { display: block }
+img {
+  display: block;
+}
 ```
 
 That is the entire css change. `width`/`height`/`aspectRatio` are already whitelisted; `src`/`alt`/

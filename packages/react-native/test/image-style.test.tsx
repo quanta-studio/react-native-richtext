@@ -3,7 +3,9 @@ import { imageStyle } from '../src/renderers/image-style'
 
 describe('imageStyle', () => {
   it('uses explicit width and height when both present', () => {
-    expect(imageStyle({ explicitWidth: 100, explicitHeight: 50, viewStyle: { margin: 4 } })).toEqual({
+    expect(
+      imageStyle({ explicitWidth: 100, explicitHeight: 50, viewStyle: { margin: 4 } }),
+    ).toEqual({
       margin: 4,
       width: 100,
       height: 50,

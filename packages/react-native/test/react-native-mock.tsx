@@ -19,7 +19,9 @@ type GetSize = (
 ) => void
 
 const ImageComponent = (props: HostProps) => createElement('Image', props)
-const ImageWithStatics = ImageComponent as unknown as ComponentType<HostProps> & { getSize: GetSize }
+const ImageWithStatics = ImageComponent as unknown as ComponentType<HostProps> & {
+  getSize: GetSize
+}
 ImageWithStatics.getSize = vi.fn() as unknown as GetSize
 export const Image = ImageWithStatics
 
