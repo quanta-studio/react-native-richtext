@@ -10,8 +10,11 @@ import type {
   InlineNode,
   LineBreakNode,
   RNStyle,
+  TableCellNode,
+  TableNode,
   WhiteSpace,
 } from './types'
+import { normalizeGrid, type RawRow } from './table-grid'
 
 const EMPTY_STYLE: RNStyle = {}
 const DEFAULT_CONTROL: ControlStyle = { display: 'inline', whiteSpace: 'normal' }
@@ -60,7 +63,7 @@ function buildBlockContext(
     if (isNonRendered(node.name) || isHidden(node, styles)) return
     if (isBlockLevel(displayOf(node, styles))) {
       flush()
-      result.push(buildBlock(node, key, styles))
+      result.push(buildBlockLevel(node, key, styles))
     } else {
       if (run.length === 0) runKey = key
       run.push(buildInline(node, key, styles))
@@ -82,6 +85,126 @@ function buildBlock(el: Element, key: string, styles: Styles): BlockNode {
     styles,
   )
   return { type: 'block', tag: el.name, style, control, attribs: el.attribs, children, key }
+}
+
+function buildBlockLevel(el: Element, key: string, styles: Styles): BlockNode | TableNode {
+  if (displayOf(el, styles) === 'table') return buildTable(el, key, styles)
+  return buildBlock(el, key, styles)
+}
+
+function clampSpan(value: string | undefined): number {
+  if (value === undefined) return 1
+  const n = Number.parseInt(value, 10)
+  return Number.isFinite(n) && n >= 1 ? n : 1
+}
+
+function buildCell(el: Element, key: string, styles: Styles): TableCellNode {
+  const cs = styles.get(el)
+  const style = cs?.style ?? EMPTY_STYLE
+  const control = cs?.control ?? DEFAULT_CONTROL
+  const isHeader = el.name === 'th'
+  const children = buildBlockContext(
+    el.children as AnyNode[],
+    style,
+    control.whiteSpace,
+    key,
+    styles,
+  )
+  return {
+    type: 'table-cell',
+    tag: isHeader ? 'th' : 'td',
+    isHeader,
+    colSpan: clampSpan(el.attribs.colspan),
+    rowSpan: clampSpan(el.attribs.rowspan),
+    style,
+    control,
+    attribs: el.attribs,
+    children,
+    key,
+  }
+}
+
+function buildRow(tr: Element, key: string, styles: Styles, isHeader: boolean): RawRow {
+  const cs = styles.get(tr)
+  const cells: TableCellNode[] = []
+  ;(tr.children as AnyNode[]).forEach((child, i) => {
+    if (isTag(child) && (child.name === 'td' || child.name === 'th')) {
+      cells.push(buildCell(child, childKey(key, i), styles))
+    }
+  })
+  return { isHeader, style: cs?.style ?? EMPTY_STYLE, attribs: tr.attribs, cells, key }
+}
+
+function collectSectionRows(
+  section: Element,
+  key: string,
+  styles: Styles,
+  isHeader: boolean,
+  out: RawRow[],
+): void {
+  ;(section.children as AnyNode[]).forEach((child, i) => {
+    if (isTag(child) && child.name === 'tr') {
+      out.push(buildRow(child, childKey(key, i), styles, isHeader))
+    }
+  })
+}
+
+function buildTable(el: Element, key: string, styles: Styles): TableNode {
+  const cs = styles.get(el)
+  const style = cs?.style ?? EMPTY_STYLE
+  const control = cs?.control ?? DEFAULT_CONTROL
+
+  let caption: BlockChild[] | undefined
+  const headRows: RawRow[] = []
+  const bodyRows: RawRow[] = []
+  const footRows: RawRow[] = []
+
+  ;(el.children as AnyNode[]).forEach((child, i) => {
+    if (!isTag(child)) return
+    const childK = childKey(key, i)
+    switch (child.name) {
+      case 'caption': {
+        if (caption === undefined) {
+          const ccs = styles.get(child)
+          caption = buildBlockContext(
+            child.children as AnyNode[],
+            ccs?.style ?? EMPTY_STYLE,
+            ccs?.control.whiteSpace ?? 'normal',
+            childK,
+            styles,
+          )
+        }
+        return
+      }
+      case 'thead':
+        collectSectionRows(child, childK, styles, true, headRows)
+        return
+      case 'tbody':
+        collectSectionRows(child, childK, styles, false, bodyRows)
+        return
+      case 'tfoot':
+        collectSectionRows(child, childK, styles, false, footRows)
+        return
+      case 'tr':
+        bodyRows.push(buildRow(child, childK, styles, false))
+        return
+      default:
+        return // colgroup/col/unknown ignored in 4a
+    }
+  })
+
+  const { rows, columnCount } = normalizeGrid([...headRows, ...bodyRows, ...footRows])
+  return {
+    type: 'table',
+    tag: 'table',
+    style,
+    control,
+    attribs: el.attribs,
+    caption,
+    columnCount,
+    rows,
+    key,
+  }
 }
 
 function buildInline(el: Element, key: string, styles: Styles): InlineNode | LineBreakNode {

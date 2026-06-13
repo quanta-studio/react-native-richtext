@@ -3,6 +3,7 @@ import { useRichTextContext } from './context'
 import { Block } from './renderers/Block'
 import { InlineContainer } from './renderers/InlineContainer'
 import { Inline } from './renderers/Inline'
+import { Table } from './renderers/Table'
 import type { RenderNode } from '@yk-yong/react-native-richtext-core'
 
 export function NodeRenderer({ node }: { node: RenderNode }) {
@@ -41,7 +42,13 @@ export function NodeRenderer({ node }: { node: RenderNode }) {
         </Comp>
       )
     }
+    case 'table': {
+      const Comp = registry['table'] ?? Table
+      return <Comp node={node} />
+    }
     default:
+      // table-row / table-cell / table-filler are rendered internally by Table.tsx,
+      // never dispatched here directly.
       return null
   }
 }

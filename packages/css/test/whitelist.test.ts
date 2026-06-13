@@ -24,4 +24,8 @@ describe('classifyProp', () => {
     expect(classifyProp('position')).toBe('unsupported')
     expect(classifyProp('WebkitBoxShadow')).toBe('unsupported')
   })
+
+  it('classifies border-collapse as control', () => {
+    expect(classifyProp('borderCollapse')).toBe('control')
+  })
 })

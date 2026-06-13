@@ -12,4 +12,9 @@ export type {
   WhiteSpace,
   RNStyle,
   ControlStyle,
+  TableNode,
+  TableRowNode,
+  TableCellNode,
+  FillerSlot,
+  RowItem,
 } from './types'

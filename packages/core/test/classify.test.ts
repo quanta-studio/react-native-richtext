@@ -36,4 +36,8 @@ describe('classify', () => {
     const p = getElementsByTagName('p', doc)[0]!
     expect(isHidden(p, styles)).toBe(true)
   })
+
+  it('treats table as block-level', () => {
+    expect(isBlockLevel('table')).toBe(true)
+  })
 })

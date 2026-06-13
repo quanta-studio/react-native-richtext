@@ -69,6 +69,7 @@ const CONTROL_PROPS = new Set<string>([
   'listStyleType',
   'listStylePosition',
   'listStyle',
+  'borderCollapse',
 ])
 
 export type PropKind = 'style' | 'control' | 'unsupported'

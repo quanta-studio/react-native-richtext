@@ -27,7 +27,7 @@ export function isHidden(el: Element, styles: Map<Element, ComputedStyle>): bool
 }
 
 export function isBlockLevel(display: Display): boolean {
-  return display === 'block' || display === 'list-item'
+  return display === 'block' || display === 'list-item' || display === 'table'
 }
 
 export function isInlineLevel(display: Display): boolean {

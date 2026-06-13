@@ -28,6 +28,14 @@ ol { display: block; margin: 1em 0; padding-left: 40px; list-style-type: decimal
 li { display: list-item }
 pre { display: block; font-family: monospace; white-space: pre; margin: 1em 0 }
 hr { display: block; border-bottom-width: 1px; border-bottom-color: gray; margin: 0.5em 0 }
+table { display: table; border-collapse: collapse }
+thead { display: table-header-group }
+tbody { display: table-row-group }
+tfoot { display: table-footer-group }
+tr { display: table-row }
+td { display: table-cell; padding: 2px }
+th { display: table-cell; padding: 2px; font-weight: bold; text-align: center }
+caption { display: table-caption; text-align: center }
 b { font-weight: bold }
 strong { font-weight: bold }
 i { font-style: italic }

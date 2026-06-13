@@ -22,6 +22,7 @@ const CONTROL_PROPS = new Set<string>([
   'whiteSpace',
   'listStyleType',
   'listStylePosition',
+  'borderCollapse',
 ])
 const isControl = (p: TargetProp): p is ControlProp => CONTROL_PROPS.has(p)
 const isDeferred = (v: DeclValue): v is DeferredLength =>

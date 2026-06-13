@@ -47,6 +47,19 @@ describe('buildUaRules', () => {
     expect(decls.find((d) => d.prop === 'borderLeftWidth')?.value).toBe(4)
   })
 
+  it('makes table display table', () => {
+    const table = rules.filter((r) => r.match.kind === 'selector' && r.match.selector === 'table')
+    const display = table.flatMap((r) => r.declarations).find((d) => d.prop === 'display')
+    expect(display?.value).toBe('table')
+  })
+
+  it('makes th bold and centered', () => {
+    const th = rules.filter((r) => r.match.kind === 'selector' && r.match.selector === 'th')
+    const decls = th.flatMap((r) => r.declarations)
+    expect(decls.find((d) => d.prop === 'fontWeight')?.value).toBe('bold')
+    expect(decls.find((d) => d.prop === 'textAlign')?.value).toBe('center')
+  })
+
   it('decorates del/strike with line-through and ins with underline', () => {
     const decoration = (sel: string) =>
       rules

@@ -87,4 +87,13 @@ describe('mapDeclaration', () => {
       { property: 'width', value: '50vw', reason: 'unsupported-unit' },
     ])
   })
+
+  it('maps border-collapse to a control decl', () => {
+    const { decls } = mapDeclaration({
+      property: 'border-collapse',
+      value: 'collapse',
+      important: false,
+    })
+    expect(decls).toEqual([{ prop: 'borderCollapse', value: 'collapse', important: false }])
+  })
 })
