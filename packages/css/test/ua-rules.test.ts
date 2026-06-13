@@ -40,4 +40,10 @@ describe('buildUaRules', () => {
     const display = img.flatMap((r) => r.declarations).find((d) => d.prop === 'display')
     expect(display?.value).toBe('block')
   })
+
+  it('gives blockquote a left border', () => {
+    const bq = rules.filter((r) => r.match.kind === 'selector' && r.match.selector === 'blockquote')
+    const decls = bq.flatMap((r) => r.declarations)
+    expect(decls.find((d) => d.prop === 'borderLeftWidth')?.value).toBe(4)
+  })
 })

@@ -22,7 +22,7 @@ h3 { display: block; font-size: 1.17em; font-weight: bold; margin: 1em 0 }
 h4 { display: block; font-weight: bold; margin: 1.33em 0 }
 h5 { display: block; font-size: 0.83em; font-weight: bold; margin: 1.67em 0 }
 h6 { display: block; font-size: 0.67em; font-weight: bold; margin: 2.33em 0 }
-blockquote { display: block; margin: 1em 40px }
+blockquote { display: block; margin: 1em 0; border-left-width: 4px; border-left-color: #dddddd; padding-left: 16px }
 ul { display: block; margin: 1em 0; padding-left: 40px; list-style-type: disc }
 ol { display: block; margin: 1em 0; padding-left: 40px; list-style-type: decimal }
 li { display: list-item }
