@@ -1,6 +1,6 @@
 {
   "name": "@yk-yong/rn-rich-text-core",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Render-model builder for rn-rich-text: DOM + computed styles -> renderer-agnostic styled tree. React-free.",
   "license": "MIT",
   "type": "module",

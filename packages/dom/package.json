@@ -1,6 +1,6 @@
 {
   "name": "@yk-yong/rn-rich-text-dom",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Forgiving HTML → DOM parsing, traversal, and node guards for rn-rich-text. React-free.",
   "license": "MIT",
   "type": "module",

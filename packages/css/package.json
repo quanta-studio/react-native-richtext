@@ -1,6 +1,6 @@
 {
   "name": "@yk-yong/rn-rich-text-css",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "CSS engine for rn-rich-text: cascade, specificity, inheritance, and declaration->RN style resolution. React-free.",
   "license": "MIT",
   "type": "module",
