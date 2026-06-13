@@ -58,8 +58,8 @@ describe('buildUaRules', () => {
     const decls = th.flatMap((r) => r.declarations)
     expect(decls.find((d) => d.prop === 'fontWeight')?.value).toBe('bold')
     expect(decls.find((d) => d.prop === 'textAlign')?.value).toBe('center')
-  });
-  
+  })
+
   it('decorates del/strike with line-through and ins with underline', () => {
     const decoration = (sel: string) =>
       rules
