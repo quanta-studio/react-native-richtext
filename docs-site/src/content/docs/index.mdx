@@ -1,0 +1,31 @@
+---
+title: react-native-richtext
+description: A modern, Fabric-native HTML renderer for React Native.
+---
+
+A modern, **Fabric-native HTML renderer for React Native** — a community-maintained,
+New-Architecture-first alternative to `react-native-render-html`.
+
+It parses real HTML + CSS and renders native `<Text>`/`<View>`/`<Image>` — no WebView, no
+`react-native-web`.
+
+```tsx
+import { RichText } from '@yk-yong/react-native-richtext'
+
+;<RichText
+  source={{ html: '<h1>Hello</h1><p>Rendered <strong>natively</strong>.</p>' }}
+  baseStyle={{ fontSize: 16, color: '#1a1a1a' }}
+  onLinkPress={(href) => console.log(href)}
+/>
+```
+
+## Highlights
+
+- **Full CSS engine** — inline styles, `tagStyles`/`classStyles`, `<style>` blocks, selectors,
+  specificity, cascade, inheritance.
+- **New Architecture only** — bare RN + Expo, Fabric/Yoga layout. No WebView, no web.
+- **Override any tag** via the `renderers` prop, and per-weight font files via `fonts`.
+- **Tables** with `colspan`/`rowspan` and content-measured column widths; **accessibility** roles
+  for links, headings, and images.
+
+See [Getting Started](/react-native-richtext/getting-started/) to install.

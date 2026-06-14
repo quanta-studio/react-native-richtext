@@ -12,6 +12,7 @@ export default tseslint.config(
       '.husky/**',
       'pnpm-lock.yaml',
       'example/**',
+      'docs-site/**',
     ],
   },
   js.configs.recommended,

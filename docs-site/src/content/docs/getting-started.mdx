@@ -1,0 +1,62 @@
+---
+title: Getting Started
+description: Install react-native-richtext and render your first HTML.
+---
+
+## Requirements
+
+- React Native **≥ 0.74** with the **New Architecture (Fabric)** enabled — bare RN or Expo.
+- React **≥ 18.2**.
+
+## Install
+
+The packages publish to **GitHub Packages** under the `@yk-yong` scope, so route that scope and
+authenticate (GitHub Packages requires a token even for reads). Add an `.npmrc` at your app root:
+
+```ini
+@yk-yong:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
+Set `GITHUB_TOKEN` to a GitHub PAT with the `read:packages` scope (env var or CI secret — don't
+commit it). Then install:
+
+```bash
+npm install @yk-yong/react-native-richtext
+# pulls @yk-yong/react-native-richtext-{dom,css,core} transitively
+```
+
+It's a normal dependency resolved from `node_modules` — **no Metro config change** needed.
+
+## First render
+
+```tsx
+import { SafeAreaView, ScrollView } from 'react-native'
+import { RichText } from '@yk-yong/react-native-richtext'
+
+const html = `
+  <h1>react-native-richtext</h1>
+  <p>A <strong>Fabric-native</strong> HTML renderer with <em>inline styles</em>,
+     <a href="https://example.com">links</a>, and lists:</p>
+  <ul><li>first item</li><li>second item</li></ul>
+  <blockquote>A short quote &mdash; rendered natively.</blockquote>
+`
+
+export default function Screen() {
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={{ padding: 16 }}>
+        <RichText
+          source={{ html }}
+          baseStyle={{ fontSize: 16, color: '#1a1a1a' }}
+          onLinkPress={(href) => console.log('link:', href)}
+        />
+      </ScrollView>
+    </SafeAreaView>
+  )
+}
+```
+
+Next: [Styling](/react-native-richtext/guides/styling/) ·
+[Custom renderers](/react-native-richtext/guides/custom-renderers/) ·
+[API reference](/react-native-richtext/reference/api/).

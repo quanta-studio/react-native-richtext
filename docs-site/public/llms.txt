@@ -1,0 +1,53 @@
+# react-native-richtext
+
+> Fabric-native HTML renderer for React Native — a New-Architecture-first alternative to
+> react-native-render-html. Parses HTML + CSS and renders native Text/View/Image (no WebView, no web).
+
+## Install
+Published to GitHub Packages under the @yk-yong scope. App .npmrc:
+  @yk-yong:registry=https://npm.pkg.github.com
+  //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}   # PAT with read:packages
+Then: npm install @yk-yong/react-native-richtext  (pulls -dom/-css/-core transitively)
+Peers: react >=18.2, react-native >=0.74 (New Architecture).
+
+## Usage
+import { RichText } from '@yk-yong/react-native-richtext'
+<RichText
+  source={{ html }}
+  baseStyle={{ fontSize: 16 }}
+  tagStyles={{ p: { marginBottom: 12 } }}
+  classStyles={{ note: { color: '#b00' } }}
+  renderers={{ img: MyImage }}
+  fonts={montserratFaces}
+  onLinkPress={(href) => {}}
+/>
+
+## Props
+- source: { html: string }  (required)
+- baseStyle?: RNStyle        root styles, inherited
+- tagStyles?: Record<tag, RNStyle>
+- classStyles?: Record<class, RNStyle>
+- renderers?: Record<tag, Renderer>   override any tag; Renderer = (props: { node, children }) => ReactNode
+- fonts?: FontMap            Record<family, Record<weight, { normal?: string; italic?: string }>>
+- onLinkPress?: (href: string) => void
+- style?: ViewStyle          outer container
+
+## Other exports
+defaultRenderers, splitStyle(style)->{text,view}, resolveFont(text,fonts),
+RichTextContext, useRichTextContext. Types: RichTextProps, Renderer, RendererProps, FontMap,
+FontFaces, RenderNode, RNStyle.
+
+## Supported tags
+Inline: b strong i em u s del strike ins span code br a
+Block: p div h1-h6 ul ol li blockquote pre hr
+Images: img (alt -> a11y label)
+Tables: table thead tbody tfoot tr td th caption (colspan/rowspan, measured column widths, h-scroll)
+Accessibility: a->link, h1-h6->header, img->image roles.
+
+## Not yet supported
+Forms, media (audio/video/iframe), @media/@supports, pseudo-elements, CSS animations,
+react-native-web. True vertical rowspan + border-collapse polish in progress.
+
+## Links
+Docs: https://yk-yong.github.io/react-native-richtext/
+Repo: https://github.com/yk-yong/react-native-richtext

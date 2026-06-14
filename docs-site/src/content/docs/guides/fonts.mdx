@@ -1,0 +1,25 @@
+---
+title: Fonts
+description: Per-weight and per-style font-file resolution.
+---
+
+Many custom fonts ship as separate files per weight/style (e.g. `Montserrat-Regular`,
+`Montserrat-Bold`, `Montserrat-Italic`). React Native often needs the **specific font file**, not
+just `fontWeight`/`fontStyle`. The `fonts` prop maps a family + weight to the actual font file name.
+
+```tsx
+import type { FontMap } from '@yk-yong/react-native-richtext'
+
+const fonts: FontMap = {
+  Montserrat: {
+    '400': { normal: 'Montserrat-Regular', italic: 'Montserrat-Italic' },
+    '700': { normal: 'Montserrat-Bold', italic: 'Montserrat-BoldItalic' },
+  },
+}
+
+;<RichText source={{ html }} baseStyle={{ fontFamily: 'Montserrat' }} fonts={fonts} />
+```
+
+When text resolves to a family/weight/style present in the map, the renderer swaps in the mapped
+font file. `FontMap` is `Record<family, Record<weight, { normal?: string; italic?: string }>>`.
+Families/weights not in the map fall back to RN's default `fontWeight`/`fontStyle` handling.

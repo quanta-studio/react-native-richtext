@@ -1,0 +1,24 @@
+---
+title: Custom renderers
+description: Override how any tag renders via the renderers prop.
+---
+
+Every tag renders through a registry. Override or add one by passing `renderers` — a map of tag name
+to a React component. Your renderer receives `RendererProps` (`{ node, children }`).
+
+```tsx
+import { RichText } from '@yk-yong/react-native-richtext'
+import type { RendererProps } from '@yk-yong/react-native-richtext'
+import { View } from 'react-native'
+
+function Callout({ children }: RendererProps) {
+  return <View style={{ padding: 12, backgroundColor: '#eef', borderRadius: 8 }}>{children}</View>
+}
+
+;<RichText source={{ html: '<aside>Heads up!</aside>' }} renderers={{ aside: Callout }} />
+```
+
+`children` is the already-rendered subtree. The `node` carries the tag, computed `style`, `attribs`,
+and (for blocks) child nodes. Helpers `splitStyle` (partition an RN style into text vs view props)
+and `resolveFont` are exported for building renderers that match the built-ins. The built-in map is
+exported as `defaultRenderers` if you want to wrap rather than replace a renderer.
