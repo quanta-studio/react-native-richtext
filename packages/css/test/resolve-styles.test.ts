@@ -46,4 +46,25 @@ describe('resolveStyles', () => {
     const span = getElementsByTagName('span', doc)[0]!
     expect(styles.get(span)!.style.color).toBe('#123456')
   })
+
+  it('accumulates text-decoration through nested elements (line-through + underline)', () => {
+    const doc = parse('<strike><u><i><b>x</b></i></u></strike>')
+    const { styles } = resolveStyles(doc)
+    const b = getElementsByTagName('b', doc)[0]!
+    expect(styles.get(b)!.style.textDecorationLine).toBe('underline line-through')
+  })
+
+  it('keeps a single text-decoration unchanged', () => {
+    const doc = parse('<u>x</u>')
+    const { styles } = resolveStyles(doc)
+    const u = getElementsByTagName('u', doc)[0]!
+    expect(styles.get(u)!.style.textDecorationLine).toBe('underline')
+  })
+
+  it('does not add a decoration where there is none', () => {
+    const doc = parse('<p><span>x</span></p>')
+    const { styles } = resolveStyles(doc)
+    const span = getElementsByTagName('span', doc)[0]!
+    expect(styles.get(span)!.style.textDecorationLine).toBeUndefined()
+  })
 })
