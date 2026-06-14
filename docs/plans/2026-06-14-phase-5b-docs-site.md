@@ -13,6 +13,7 @@
 **Branch:** `phase-5b-docs-site` (already created; the spec commit is its first commit).
 
 ## Conventions / facts (use verbatim — do not invent)
+
 - Package: `@yk-yong/react-native-richtext` (current 0.3.0; a11y 0.4.0 in flight). Sub-packages `-dom`/`-css`/`-core` are pulled transitively.
 - Install: GitHub Packages. Consumer `.npmrc`: `@yk-yong:registry=https://npm.pkg.github.com` + `//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}` (PAT with `read:packages`).
 - Peers: `react >=18.2.0`, `react-native >=0.74.0` (New Architecture).
@@ -20,6 +21,7 @@
 - GitHub Pages URL base: owner `yk-yong`, repo `react-native-richtext` → `site: https://yk-yong.github.io`, `base: /react-native-richtext`.
 
 ## How to run things
+
 - Docs build (from `docs-site/`): `pnpm install` then `pnpm build` and `pnpm check`. There are NO vitest tests for the site.
 - The library gates (`pnpm test`/`typecheck`/`lint`/`format:check`/`build` at repo root) must stay green and must NOT touch `docs-site/`.
 
@@ -28,6 +30,7 @@
 ## File Structure
 
 **Create (all under `docs-site/` unless noted):**
+
 - `package.json`, `astro.config.mjs`, `tsconfig.json`, `src/content.config.ts` — Starlight scaffold/config.
 - `src/content/docs/index.mdx` — Home.
 - `src/content/docs/getting-started.mdx`
@@ -37,6 +40,7 @@
 - `.github/workflows/docs.yml` (repo root) — Pages deploy.
 
 **Modify (repo root):**
+
 - `.prettierignore` — add `docs-site/`.
 - `eslint.config.*` (the eslint ignore list) — add `docs-site/`.
 
@@ -159,6 +163,7 @@ Append `docs-site/` to the root `.prettierignore` (create the line if the file e
 
 Run (from `docs-site/`): `pnpm install` then `pnpm build`.
 Expected: a successful Astro build producing `docs-site/dist/`.
+
 > If `astro build` fails due to a Starlight config-API change in the resolved version (e.g. `social` shape, or content-collection loader), consult Starlight's "manual setup" docs and adjust ONLY `astro.config.mjs` / `src/content.config.ts` to match the installed version. The MDX content, `llms.txt`, and workflow in later tasks are version-independent. Report the adjustment as a concern.
 
 - [ ] **Step 8: Verify library gates are unaffected**
@@ -181,7 +186,7 @@ git commit -m "docs(site): scaffold Astro Starlight docs-site, isolated from lib
 
 - [ ] **Step 1: Write the Home page** — overwrite `docs-site/src/content/docs/index.mdx`:
 
-```mdx
+````mdx
 ---
 title: react-native-richtext
 description: A modern, Fabric-native HTML renderer for React Native.
@@ -195,13 +200,13 @@ It parses real HTML + CSS and renders native `<Text>`/`<View>`/`<Image>` — no 
 
 ```tsx
 import { RichText } from '@yk-yong/react-native-richtext'
-
 ;<RichText
   source={{ html: '<h1>Hello</h1><p>Rendered <strong>natively</strong>.</p>' }}
   baseStyle={{ fontSize: 16, color: '#1a1a1a' }}
   onLinkPress={(href) => console.log(href)}
 />
 ```
+````
 
 ## Highlights
 
@@ -213,7 +218,8 @@ import { RichText } from '@yk-yong/react-native-richtext'
   for links, headings, and images.
 
 See [Getting Started](/react-native-richtext/getting-started/) to install.
-```
+
+````
 
 - [ ] **Step 2: Write Getting Started** — create `docs-site/src/content/docs/getting-started.mdx`:
 
@@ -236,7 +242,7 @@ authenticate (GitHub Packages requires a token even for reads). Add an `.npmrc` 
 ```ini
 @yk-yong:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
-```
+````
 
 Set `GITHUB_TOKEN` to a GitHub PAT with the `read:packages` scope (env var or CI secret — don't
 commit it). Then install:
@@ -280,7 +286,8 @@ export default function Screen() {
 Next: [Styling](/react-native-richtext/guides/styling/) ·
 [Custom renderers](/react-native-richtext/guides/custom-renderers/) ·
 [API reference](/react-native-richtext/reference/api/).
-```
+
+````
 
 - [ ] **Step 2 (verify): build**
 
@@ -291,7 +298,7 @@ Run (from `docs-site/`): `pnpm build` → success, no broken-link warnings for t
 ```bash
 git add docs-site/src/content/docs/index.mdx docs-site/src/content/docs/getting-started.mdx
 git commit -m "docs(site): home and getting-started pages"
-```
+````
 
 ---
 
@@ -301,7 +308,7 @@ git commit -m "docs(site): home and getting-started pages"
 
 - [ ] **Step 1: `guides/styling.mdx`**
 
-```mdx
+````mdx
 ---
 title: Styling
 description: baseStyle, tagStyles, classStyles, and the CSS engine.
@@ -323,12 +330,14 @@ Styles come from four sources, applied with normal CSS cascade/specificity (UA <
   classStyles={{ lead: { fontSize: 18, fontWeight: '600' } }}
 />
 ```
+````
 
 The CSS engine parses selectors, computes specificity, applies the cascade and inheritance, resolves
 units (`em`/`rem`/`%`/unitless line-height), and maps declarations to React Native style objects.
 Styles are RN style values, so use RN-supported properties (e.g. `marginBottom`, not `margin-bottom`
 shorthands that RN can't express are dropped with a diagnostic).
-```
+
+````
 
 - [ ] **Step 2: `guides/custom-renderers.mdx`**
 
@@ -351,13 +360,14 @@ function Callout({ children }: RendererProps) {
 }
 
 ;<RichText source={{ html: '<aside>Heads up!</aside>' }} renderers={{ aside: Callout }} />
-```
+````
 
 `children` is the already-rendered subtree. The `node` carries the tag, computed `style`, `attribs`,
 and (for blocks) child nodes. Helpers `splitStyle` (partition an RN style into text vs view props)
 and `resolveFont` are exported for building renderers that match the built-ins. The built-in map is
 exported as `defaultRenderers` if you want to wrap rather than replace a renderer.
-```
+
+````
 
 - [ ] **Step 3: `guides/fonts.mdx`**
 
@@ -382,12 +392,13 @@ const fonts: FontMap = {
 }
 
 ;<RichText source={{ html }} baseStyle={{ fontFamily: 'Montserrat' }} fonts={fonts} />
-```
+````
 
 When text resolves to a family/weight/style present in the map, the renderer swaps in the mapped
 font file. `FontMap` is `Record<family, Record<weight, { normal?: string; italic?: string }>>`.
 Families/weights not in the map fall back to RN's default `fontWeight`/`fontStyle` handling.
-```
+
+````
 
 - [ ] **Step 4: build + commit**
 
@@ -396,7 +407,7 @@ Run (from `docs-site/`): `pnpm build` → success. Then:
 ```bash
 git add docs-site/src/content/docs/guides
 git commit -m "docs(site): styling, custom-renderers, and fonts guides"
-```
+````
 
 ---
 
@@ -414,16 +425,16 @@ description: <RichText> props, exported helpers, and types.
 
 ## `<RichText>` props
 
-| Prop          | Type                                   | Description                                                       |
-| ------------- | -------------------------------------- | ---------------------------------------------------------------- |
-| `source`      | `{ html: string }`                     | The HTML to render. **Required.**                                |
-| `baseStyle`   | `RNStyle`                              | Root styles, inherited down (e.g. font size/color).              |
-| `tagStyles`   | `Record<string, RNStyle>`             | Per-tag styles, keyed by tag name.                               |
-| `classStyles` | `Record<string, RNStyle>`             | Per-`class` styles, keyed by class name.                         |
-| `renderers`   | `Record<string, Renderer>`            | Override/add a renderer for any tag.                             |
-| `fonts`       | `FontMap`                              | Per-family/weight/style font-file map.                           |
-| `onLinkPress` | `(href: string) => void`               | Called when an `<a>` is pressed.                                  |
-| `style`       | `StyleProp<ViewStyle>`                 | Style for the outer container `View`.                            |
+| Prop          | Type                       | Description                                         |
+| ------------- | -------------------------- | --------------------------------------------------- |
+| `source`      | `{ html: string }`         | The HTML to render. **Required.**                   |
+| `baseStyle`   | `RNStyle`                  | Root styles, inherited down (e.g. font size/color). |
+| `tagStyles`   | `Record<string, RNStyle>`  | Per-tag styles, keyed by tag name.                  |
+| `classStyles` | `Record<string, RNStyle>`  | Per-`class` styles, keyed by class name.            |
+| `renderers`   | `Record<string, Renderer>` | Override/add a renderer for any tag.                |
+| `fonts`       | `FontMap`                  | Per-family/weight/style font-file map.              |
+| `onLinkPress` | `(href: string) => void`   | Called when an `<a>` is pressed.                    |
+| `style`       | `StyleProp<ViewStyle>`     | Style for the outer container `View`.               |
 
 ## Exports
 
@@ -647,6 +658,7 @@ GitHub Pages must be enabled once: repo Settings → Pages → Source = "GitHub 
 ## Self-Review
 
 **Spec coverage:**
+
 - Standalone `docs-site/` Astro Starlight, not a workspace member, isolated from library gates → Task 1. ✅
 - Text + code snippets only (no screenshots) → Tasks 2–4 (all content is prose + code). ✅
 - MVP pages (Home, Getting Started, 3 guides, API + supported-tags) → Tasks 2–4. ✅

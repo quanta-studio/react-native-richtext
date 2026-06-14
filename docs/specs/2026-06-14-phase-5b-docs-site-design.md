@@ -18,15 +18,15 @@ affects the library's build, tests, or release.
 
 ## Decisions locked during brainstorming (do not re-litigate)
 
-| Question        | Decision                                                                                                                       |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| Approach        | Static docs site, **text + code snippets only** (no screenshots in 5b; no live/RNW rendering).                                |
-| Generator       | **Astro Starlight** (lean, MDX, built-in pagefind search, easy GitHub Pages deploy).                                          |
-| Location        | A **standalone `docs-site/` project** — its own `package.json`, **not** a pnpm workspace member, so its deps don't bloat the library install/CI. |
-| Isolation       | `docs-site/` is excluded from the library's lint/format/test/typecheck so library gates never trip on it.                     |
-| LLM docs        | Ship an **`llms.txt`** (llmstxt.org convention) served at the site root — a self-contained concise reference an LLM can use.  |
-| Deploy          | A dedicated **`.github/workflows/docs.yml`** builds + deploys to GitHub Pages on push to `main` touching `docs-site/**`.       |
-| Verification    | `astro build` (+ `astro check` for broken internal links). No vitest — docs are content/tooling.                              |
+| Question     | Decision                                                                                                                                         |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Approach     | Static docs site, **text + code snippets only** (no screenshots in 5b; no live/RNW rendering).                                                   |
+| Generator    | **Astro Starlight** (lean, MDX, built-in pagefind search, easy GitHub Pages deploy).                                                             |
+| Location     | A **standalone `docs-site/` project** — its own `package.json`, **not** a pnpm workspace member, so its deps don't bloat the library install/CI. |
+| Isolation    | `docs-site/` is excluded from the library's lint/format/test/typecheck so library gates never trip on it.                                        |
+| LLM docs     | Ship an **`llms.txt`** (llmstxt.org convention) served at the site root — a self-contained concise reference an LLM can use.                     |
+| Deploy       | A dedicated **`.github/workflows/docs.yml`** builds + deploys to GitHub Pages on push to `main` touching `docs-site/**`.                         |
+| Verification | `astro build` (+ `astro check` for broken internal links). No vitest — docs are content/tooling.                                                 |
 
 ## 1. Project layout — `docs-site/` (standalone)
 
@@ -65,20 +65,20 @@ Not added to `pnpm-workspace.yaml`. Root `.prettierignore` and the eslint ignore
   GitHub Packages, not npm), peer-dependency floors (`react` ≥ 18.2, `react-native` ≥ 0.74,
   New-Arch), a first working render, and the "link locally during dev" note.
 - **Guides**
-  - *Styling* — `baseStyle` / `tagStyles` / `classStyles`, `<style>` blocks, and the CSS-engine
+  - _Styling_ — `baseStyle` / `tagStyles` / `classStyles`, `<style>` blocks, and the CSS-engine
     capabilities (selectors, specificity, cascade, inheritance, units) at a high level.
-  - *Custom renderers* — overriding any tag via the `renderers` prop (`RendererProps`, the registry,
+  - _Custom renderers_ — overriding any tag via the `renderers` prop (`RendererProps`, the registry,
     `splitStyle` helper); a worked `img`/`a` example.
-  - *Fonts* — the per-weight/style **font-file resolution** (`FontMap`/`FontFaces`, `resolveFont`),
-    why emphasis selects a font *file* (the Montserrat insight).
+  - _Fonts_ — the per-weight/style **font-file resolution** (`FontMap`/`FontFaces`, `resolveFont`),
+    why emphasis selects a font _file_ (the Montserrat insight).
 - **Reference**
-  - *API* — `<RichText>` props table (`source`, `baseStyle`, `tagStyles`, `classStyles`,
+  - _API_ — `<RichText>` props table (`source`, `baseStyle`, `tagStyles`, `classStyles`,
     `renderers`, `fonts`, `onLinkPress`, `style`) each with type + a short example; exported helpers
     (`defaultRenderers`, `splitStyle`, `resolveFont`) and types (`RichTextProps`, `Renderer`,
     `RendererProps`, `FontMap`, `FontFaces`, `RenderNode`, `RNStyle`).
-  - *Supported tags* — a matrix: inline (`b strong i em u s del strike ins span code br a`), block
+  - _Supported tags_ — a matrix: inline (`b strong i em u s del strike ins span code br a`), block
     (`p div h1–h6 ul ol li blockquote pre hr`), `img`, tables (`table thead tbody tfoot tr td th
-    caption`, colspan/rowspan, measured widths), with a11y notes (link/header/image roles) and a
+caption`, colspan/rowspan, measured widths), with a11y notes (link/header/image roles) and a
     "not yet" column (forms, media, `@media`).
 
 Content is sourced from the real public API (`RichTextProps` + exported types), the UA stylesheet,
@@ -141,4 +141,4 @@ code snippets; no screenshots.
 - Astro/Starlight pinned versions (resolve to current stable at implementation; lockfile committed in
   `docs-site/`).
 - Whether `docs-site/` needs its own `.npmrc` (it consumes only public npm deps — Astro/Starlight —
-  so no GitHub Packages scope needed; the GH Packages `.npmrc` is only documented for *consumers*).
+  so no GitHub Packages scope needed; the GH Packages `.npmrc` is only documented for _consumers_).

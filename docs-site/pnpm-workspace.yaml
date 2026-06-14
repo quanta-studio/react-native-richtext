@@ -1,3 +1,6 @@
+# Standalone workspace root so `pnpm install` here does not climb to the library's
+# root workspace. docs-site is intentionally NOT a member of the library workspace.
+packages: []
 allowBuilds:
-  esbuild: set this to true or false
-  sharp: set this to true or false
+  esbuild: true
+  sharp: true
