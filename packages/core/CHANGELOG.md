@@ -1,5 +1,12 @@
 # @yk-yong/react-native-richtext-core
 
+## 0.3.1
+
+### Patch Changes
+
+- Updated dependencies [4167c49]
+  - @yk-yong/react-native-richtext-css@0.2.1
+
 ## 0.3.0
 
 ### Minor Changes
