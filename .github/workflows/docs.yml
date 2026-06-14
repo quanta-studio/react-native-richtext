@@ -41,6 +41,10 @@ jobs:
         working-directory: docs-site
 
       - uses: actions/configure-pages@v5
+        with:
+          # Enable Pages from the workflow so the deploy never depends on the one-time
+          # manual "Settings → Pages → GitHub Actions" toggle being set first.
+          enablement: true
 
       - uses: actions/upload-pages-artifact@v3
         with:
