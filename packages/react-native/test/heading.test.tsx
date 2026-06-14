@@ -6,9 +6,13 @@ import { defaultRenderers } from '../src/renderers/defaults'
 import type { BlockNode } from '@yk-yong/react-native-richtext-core'
 
 const headingNode = (tag: string, style: Record<string, unknown> = {}): BlockNode => ({
-  type: 'block', tag, style,
+  type: 'block',
+  tag,
+  style,
   control: { display: 'block', whiteSpace: 'normal' },
-  attribs: {}, children: [], key: '0',
+  attribs: {},
+  children: [],
+  key: '0',
 })
 
 describe('Heading', () => {
