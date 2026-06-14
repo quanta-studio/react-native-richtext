@@ -1,0 +1,34 @@
+---
+title: API
+description: <RichText> props, exported helpers, and types.
+---
+
+## `<RichText>` props
+
+| Prop          | Type                                   | Description                                                       |
+| ------------- | -------------------------------------- | ---------------------------------------------------------------- |
+| `source`      | `{ html: string }`                     | The HTML to render. **Required.**                                |
+| `baseStyle`   | `RNStyle`                              | Root styles, inherited down (e.g. font size/color).              |
+| `tagStyles`   | `Record<string, RNStyle>`             | Per-tag styles, keyed by tag name.                               |
+| `classStyles` | `Record<string, RNStyle>`             | Per-`class` styles, keyed by class name.                         |
+| `renderers`   | `Record<string, Renderer>`            | Override/add a renderer for any tag.                             |
+| `fonts`       | `FontMap`                              | Per-family/weight/style font-file map.                           |
+| `onLinkPress` | `(href: string) => void`               | Called when an `<a>` is pressed.                                  |
+| `style`       | `StyleProp<ViewStyle>`                 | Style for the outer container `View`.                            |
+
+## Exports
+
+- `RichText` — the component.
+- `defaultRenderers` — the built-in tag→renderer map.
+- `splitStyle(style)` — partition an `RNStyle` into `{ text, view }` props.
+- `resolveFont(textStyle, fonts)` — apply the `fonts` map to a resolved text style.
+- `RichTextContext`, `useRichTextContext` — the renderer context (registry, fonts, `onLinkPress`).
+
+## Types
+
+- `RichTextProps` — the props above.
+- `Renderer = ComponentType<RendererProps>`
+- `RendererProps = { node: RenderNode; children?: ReactNode }`
+- `FontMap = Record<string, Record<string, FontFaces>>`, `FontFaces = { normal?: string; italic?: string }`
+- `RenderNode` — a node in the styled render tree (block / inline / text / table / …).
+- `RNStyle` — a curated subset of RN `TextStyle` & `ViewStyle`.
