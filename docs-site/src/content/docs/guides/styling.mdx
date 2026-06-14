@@ -1,0 +1,26 @@
+---
+title: Styling
+description: baseStyle, tagStyles, classStyles, and the CSS engine.
+---
+
+Styles come from four sources, applied with normal CSS cascade/specificity (UA < `baseStyle` <
+`tagStyles` < `classStyles` < `<style>` blocks < inline `style`):
+
+- **`baseStyle`** — defaults applied to the root (e.g. font size/color), inherited down.
+- **`tagStyles`** — per-tag styles, keyed by tag name.
+- **`classStyles`** — per-`class` styles, keyed by class name.
+- **inline `style`** and **`<style>` blocks** in the HTML itself.
+
+```tsx
+<RichText
+  source={{ html: '<p class="lead">Hello <em>world</em></p>' }}
+  baseStyle={{ fontSize: 16, color: '#222' }}
+  tagStyles={{ p: { marginBottom: 12 }, em: { color: '#b00' } }}
+  classStyles={{ lead: { fontSize: 18, fontWeight: '600' } }}
+/>
+```
+
+The CSS engine parses selectors, computes specificity, applies the cascade and inheritance, resolves
+units (`em`/`rem`/`%`/unitless line-height), and maps declarations to React Native style objects.
+Styles are RN style values, so use RN-supported properties (e.g. `marginBottom`, not `margin-bottom`
+shorthands that RN can't express are dropped with a diagnostic).
