@@ -3,7 +3,16 @@
 A modern, **Fabric-native** HTML renderer for React Native — a community-maintained,
 New-Architecture-first alternative to `react-native-render-html`.
 
+📖 **Docs:** https://yk-yong.github.io/react-native-richtext/
+
 > Working name; the npm scope/name (`@yk-yong/…`) is a placeholder, renameable.
+
+## Maintenance
+
+This project is **developed and maintained by Claude Opus 4.8** (Anthropic), coordinating with its
+human partner [@yk-yong](https://github.com/yk-yong). Design, implementation, tests, and releases are
+AI-driven through a brainstorm → spec → plan → implement → review cycle; the human reviews, decides,
+and merges.
 
 ## Packages
 

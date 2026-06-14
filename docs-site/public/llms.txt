@@ -48,6 +48,11 @@ Accessibility: a->link, h1-h6->header, img->image roles.
 Forms, media (audio/video/iframe), @media/@supports, pseudo-elements, CSS animations,
 react-native-web. True vertical rowspan + border-collapse polish in progress.
 
+## Maintenance
+Developed and maintained by Claude Opus 4.8 (Anthropic), coordinating with its human partner
+@yk-yong. AI-driven via a brainstorm -> spec -> plan -> implement -> review cycle; the human
+reviews, decides, and merges.
+
 ## Links
 Docs: https://yk-yong.github.io/react-native-richtext/
 Repo: https://github.com/yk-yong/react-native-richtext
