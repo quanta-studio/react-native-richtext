@@ -1,5 +1,16 @@
 # @yk-yong/react-native-richtext
 
+## 0.3.0
+
+### Minor Changes
+
+- e460b67: Phase 4b: table columns are now content-proportional. A single onLayout measurement pass sizes each column to its max-content; the table expands to fill its container when it fits and scrolls horizontally when it doesn't. Explicit `<col width>` and cell `width` are honored (and skip measurement when every column is explicit). rowspan still renders flat; border-spacing/collapse polish remains deferred.
+
+### Patch Changes
+
+- Updated dependencies [e460b67]
+  - @yk-yong/react-native-richtext-core@0.3.0
+
 ## 0.2.0
 
 ### Minor Changes
