@@ -13,9 +13,11 @@
 **Branch:** `phase-5a-accessibility` (already created; the spec commit is its first commit).
 
 ## Resolved from the spec's open question
-RN 0.86 (the pinned line) has **no typed `aria-level`/`accessibilityLevel`** prop (the supported `aria-*` set excludes level). Under strict TS / no-`any`, headings therefore set the **`header` role only** — heading *level* is dropped (the spec documented this as the fallback; the role is the contract). `header`, `link`, and `image` are all confirmed valid `AccessibilityRole` values in RN 0.86.
+
+RN 0.86 (the pinned line) has **no typed `aria-level`/`accessibilityLevel`** prop (the supported `aria-*` set excludes level). Under strict TS / no-`any`, headings therefore set the **`header` role only** — heading _level_ is dropped (the spec documented this as the fallback; the role is the contract). `header`, `link`, and `image` are all confirmed valid `AccessibilityRole` values in RN 0.86.
 
 ## How to run things (repo conventions)
+
 - Tests run from the ROOT (packages have NO `test` script): `pnpm exec vitest run packages/react-native` or a single file `pnpm exec vitest run packages/react-native/test/<file>`. Do NOT use `pnpm --filter <pkg> test` (no-op).
 - Typecheck: `pnpm --filter @yk-yong/react-native-richtext typecheck`. Whole-repo gates: `pnpm test`, `pnpm typecheck`, `pnpm lint`, `pnpm format:check`, `pnpm build`.
 
@@ -24,11 +26,13 @@ RN 0.86 (the pinned line) has **no typed `aria-level`/`accessibilityLevel`** pro
 ## File Structure
 
 **Create:**
+
 - `packages/react-native/src/renderers/Heading.tsx` — `<View>` with `accessibilityRole="header"` + `accessible`, for `h1`–`h6`.
 - `packages/react-native/test/heading.test.tsx` — Heading renderer + registration tests.
 - `packages/react-native/test/accessibility-integration.test.tsx` — `<RichText>` end-to-end role exposure.
 
 **Modify:**
+
 - `packages/react-native/src/renderers/Anchor.tsx` — add `accessibilityRole="link"` when `href` present.
 - `packages/react-native/src/renderers/Img.tsx` — add `accessibilityRole="image"`.
 - `packages/react-native/src/renderers/defaults.ts` — register `h1`–`h6` → `Heading`.
@@ -43,6 +47,7 @@ RN 0.86 (the pinned line) has **no typed `aria-level`/`accessibilityLevel`** pro
 ## Task 1: Anchor — `accessibilityRole="link"`
 
 **Files:**
+
 - Modify: `packages/react-native/src/renderers/Anchor.tsx`
 - Test: `packages/react-native/test/specializations.test.tsx`
 
@@ -51,33 +56,33 @@ RN 0.86 (the pinned line) has **no typed `aria-level`/`accessibilityLevel`** pro
 In `packages/react-native/test/specializations.test.tsx`, add inside `describe('specializations', ...)` (the file already imports `Anchor`, `Text`, `InlineNode`, and defines `wrap`/`makeCtx`):
 
 ```tsx
-  it('marks an anchor with href as a link for screen readers', () => {
-    const node: InlineNode = {
-      type: 'inline',
-      tag: 'a',
-      style: {},
-      control: { display: 'inline', whiteSpace: 'normal' },
-      attribs: { href: 'https://x.com' },
-      children: [],
-      key: '0',
-    }
-    const tree = wrap(<Anchor node={node}>link</Anchor>)
-    expect(tree.root.findByType(Text).props.accessibilityRole).toBe('link')
-  })
+it('marks an anchor with href as a link for screen readers', () => {
+  const node: InlineNode = {
+    type: 'inline',
+    tag: 'a',
+    style: {},
+    control: { display: 'inline', whiteSpace: 'normal' },
+    attribs: { href: 'https://x.com' },
+    children: [],
+    key: '0',
+  }
+  const tree = wrap(<Anchor node={node}>link</Anchor>)
+  expect(tree.root.findByType(Text).props.accessibilityRole).toBe('link')
+})
 
-  it('sets no link role on an anchor without href', () => {
-    const node: InlineNode = {
-      type: 'inline',
-      tag: 'a',
-      style: {},
-      control: { display: 'inline', whiteSpace: 'normal' },
-      attribs: {},
-      children: [],
-      key: '0',
-    }
-    const tree = wrap(<Anchor node={node}>x</Anchor>)
-    expect(tree.root.findByType(Text).props.accessibilityRole).toBeUndefined()
-  })
+it('sets no link role on an anchor without href', () => {
+  const node: InlineNode = {
+    type: 'inline',
+    tag: 'a',
+    style: {},
+    control: { display: 'inline', whiteSpace: 'normal' },
+    attribs: {},
+    children: [],
+    key: '0',
+  }
+  const tree = wrap(<Anchor node={node}>x</Anchor>)
+  expect(tree.root.findByType(Text).props.accessibilityRole).toBeUndefined()
+})
 ```
 
 - [ ] **Step 2: Run the tests to verify they fail**
@@ -130,6 +135,7 @@ git commit -m "feat(react-native): announce anchors as links for screen readers"
 ## Task 2: Heading renderer for `h1`–`h6`
 
 **Files:**
+
 - Create: `packages/react-native/src/renderers/Heading.tsx`
 - Modify: `packages/react-native/src/renderers/defaults.ts`
 - Test: `packages/react-native/test/heading.test.tsx`
@@ -256,6 +262,7 @@ git commit -m "feat(react-native): add Heading renderer with the header a11y rol
 ## Task 3: Img — `accessibilityRole="image"`
 
 **Files:**
+
 - Modify: `packages/react-native/src/renderers/Img.tsx`
 - Test: `packages/react-native/test/img-renderer.test.tsx`
 
@@ -264,26 +271,26 @@ git commit -m "feat(react-native): add Heading renderer with the header a11y rol
 In `packages/react-native/test/img-renderer.test.tsx`, add inside `describe('Img', ...)` (the file already imports `Image`, `act`, defines `imgNode` and `images`):
 
 ```tsx
-  it('exposes the image role with the alt label', () => {
-    let tree!: ReturnType<typeof create>
-    act(() => {
-      tree = create(
-        <Img node={imgNode({ src: 'https://x/e.png', width: '10', height: '10', alt: 'a dog' })} />,
-      )
-    })
-    const img = images(tree)[0]!
-    expect(img.props.accessibilityRole).toBe('image')
-    expect(img.props.accessibilityLabel).toBe('a dog')
-    expect(img.props.accessible).toBe(true)
+it('exposes the image role with the alt label', () => {
+  let tree!: ReturnType<typeof create>
+  act(() => {
+    tree = create(
+      <Img node={imgNode({ src: 'https://x/e.png', width: '10', height: '10', alt: 'a dog' })} />,
+    )
   })
+  const img = images(tree)[0]!
+  expect(img.props.accessibilityRole).toBe('image')
+  expect(img.props.accessibilityLabel).toBe('a dog')
+  expect(img.props.accessible).toBe(true)
+})
 
-  it('hides a decorative (no-alt) image from screen readers', () => {
-    let tree!: ReturnType<typeof create>
-    act(() => {
-      tree = create(<Img node={imgNode({ src: 'https://x/f.png', width: '10', height: '10' })} />)
-    })
-    expect(images(tree)[0]!.props.accessible).toBe(false)
+it('hides a decorative (no-alt) image from screen readers', () => {
+  let tree!: ReturnType<typeof create>
+  act(() => {
+    tree = create(<Img node={imgNode({ src: 'https://x/f.png', width: '10', height: '10' })} />)
   })
+  expect(images(tree)[0]!.props.accessible).toBe(false)
+})
 ```
 
 - [ ] **Step 2: Run the tests to verify they fail**
@@ -296,16 +303,16 @@ Expected: FAIL — `accessibilityRole` is `undefined` on the image.
 In `packages/react-native/src/renderers/Img.tsx`, update the returned `<Image>` to add `accessibilityRole="image"` (keep all other props exactly as they are):
 
 ```tsx
-  return (
-    <Image
-      source={{ uri: src }}
-      style={style}
-      resizeMode="cover"
-      accessibilityRole="image"
-      accessibilityLabel={alt}
-      accessible={alt !== undefined}
-    />
-  )
+return (
+  <Image
+    source={{ uri: src }}
+    style={style}
+    resizeMode="cover"
+    accessibilityRole="image"
+    accessibilityLabel={alt}
+    accessible={alt !== undefined}
+  />
+)
 ```
 
 - [ ] **Step 4: Run the tests to verify they pass**
@@ -324,6 +331,7 @@ git commit -m "feat(react-native): add image a11y role to Img"
 ## Task 4: Integration test + verify + changeset
 
 **Files:**
+
 - Create: `packages/react-native/test/accessibility-integration.test.tsx`
 - Create: `.changeset/phase-5a-accessibility.md`
 
@@ -396,6 +404,7 @@ Run: `pnpm test` → PASS across all packages. Branch `phase-5a-accessibility` i
 ## Self-Review
 
 **Spec coverage:**
+
 - Links → `accessibilityRole="link"` (Task 1). ✅
 - Headings → `header` role via dedicated `Heading` renderer for `h1`–`h6` (Task 2). Level dropped per the spec's documented fallback (untyped in RN 0.86). ✅
 - Images → `accessibilityRole="image"` + existing alt label; decorative no-alt stays hidden (Task 3). ✅

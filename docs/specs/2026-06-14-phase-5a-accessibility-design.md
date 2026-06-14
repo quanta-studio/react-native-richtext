@@ -17,14 +17,14 @@ Scope is deliberately narrow: the three roles below are reliable on both iOS (Vo
 
 ## Decisions locked during brainstorming (do not re-litigate)
 
-| Question         | Decision                                                                                                                                  |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| Coverage         | **Core roles only**: `a` → `link`, `h1`–`h6` → `header` (+ level), `img` → `image`. Lists/tables/structure deferred.                      |
-| Where it lives   | **Per-renderer** in the `react-native` package (each renderer owns its element's a11y). Not centralized; not in `core` (roles are RN-specific). |
-| Heading renderer | A **dedicated `Heading` renderer** registered for `h1`–`h6`. The generic `Block` stays generic.                                          |
-| Heading grouping | Heading View is **`accessible`** (announced as one unit with the header trait — required for heading navigation). Accepts that interactive content nested in a heading becomes non-focusable (rare). |
-| Configurability  | **On by default, no new prop.** Consumers customize by overriding `a`/`h1…h6`/`img` via the existing `renderers` prop.                    |
-| Decorative images | An `<img>` with no `alt` stays **hidden** from screen readers (current behavior preserved): `accessible`/role applied only when `alt` is present. |
+| Question          | Decision                                                                                                                                                                                             |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Coverage          | **Core roles only**: `a` → `link`, `h1`–`h6` → `header` (+ level), `img` → `image`. Lists/tables/structure deferred.                                                                                 |
+| Where it lives    | **Per-renderer** in the `react-native` package (each renderer owns its element's a11y). Not centralized; not in `core` (roles are RN-specific).                                                      |
+| Heading renderer  | A **dedicated `Heading` renderer** registered for `h1`–`h6`. The generic `Block` stays generic.                                                                                                      |
+| Heading grouping  | Heading View is **`accessible`** (announced as one unit with the header trait — required for heading navigation). Accepts that interactive content nested in a heading becomes non-focusable (rare). |
+| Configurability   | **On by default, no new prop.** Consumers customize by overriding `a`/`h1…h6`/`img` via the existing `renderers` prop.                                                                               |
+| Decorative images | An `<img>` with no `alt` stays **hidden** from screen readers (current behavior preserved): `accessible`/role applied only when `alt` is present.                                                    |
 
 ## 1. Links — `packages/react-native/src/renderers/Anchor.tsx`
 
