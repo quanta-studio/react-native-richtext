@@ -98,4 +98,28 @@ describe('buildTable', () => {
     const t = firstTable('<table><tr><td><ul><li>x</li></ul></td></tr></table>')
     expect(JSON.stringify(t)).toContain('•')
   })
+
+  it('parses <col width> into colWidths', () => {
+    const t = firstTable(
+      '<table><colgroup><col width="80"><col></colgroup><tr><td>a</td><td>b</td></tr></table>',
+    )
+    expect(t.colWidths).toEqual([80, undefined])
+  })
+
+  it('repeats a <col span> width across columns', () => {
+    const t = firstTable(
+      '<table><colgroup><col span="2" width="50"></colgroup><tr><td>a</td><td>b</td></tr></table>',
+    )
+    expect(t.colWidths).toEqual([50, 50])
+  })
+
+  it('ignores percentage col widths (deferred)', () => {
+    const t = firstTable('<table><colgroup><col width="50%"></colgroup><tr><td>a</td></tr></table>')
+    expect(t.colWidths).toEqual([undefined])
+  })
+
+  it('leaves colWidths undefined when there is no colgroup', () => {
+    const t = firstTable('<table><tr><td>a</td></tr></table>')
+    expect(t.colWidths).toBeUndefined()
+  })
 })
