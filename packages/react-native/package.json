@@ -1,6 +1,6 @@
 {
   "name": "@yk-yong/react-native-richtext",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Fabric-native HTML renderer for React Native: the <RichText> component.",
   "license": "MIT",
   "type": "module",
