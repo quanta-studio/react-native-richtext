@@ -11,7 +11,11 @@ export function Anchor({ node, children }: RendererProps) {
   const { text } = splitStyle(el.style)
   const href = el.attribs.href
   return (
-    <Text style={resolveFont(text, fonts)} onPress={href ? () => onLinkPress(href) : undefined}>
+    <Text
+      style={resolveFont(text, fonts)}
+      onPress={href ? () => onLinkPress(href) : undefined}
+      accessibilityRole={href ? 'link' : undefined}
+    >
       {children}
     </Text>
   )
