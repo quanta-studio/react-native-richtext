@@ -1,6 +1,6 @@
 {
   "name": "@yk-yong/react-native-richtext-css",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "CSS engine for react-native-richtext: cascade, specificity, inheritance, and declaration->RN style resolution. React-free.",
   "license": "MIT",
   "type": "module",
