@@ -57,6 +57,7 @@ export function Img({ node }: RendererProps) {
       source={{ uri: src }}
       style={style}
       resizeMode="cover"
+      accessibilityRole="image"
       accessibilityLabel={alt}
       accessible={alt !== undefined}
     />

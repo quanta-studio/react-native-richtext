@@ -71,4 +71,32 @@ describe('specializations', () => {
     expect(defaultRenderers.li).toBe(ListItem)
     expect(defaultRenderers.hr).toBe(Rule)
   })
+
+  it('marks an anchor with href as a link for screen readers', () => {
+    const node: InlineNode = {
+      type: 'inline',
+      tag: 'a',
+      style: {},
+      control: { display: 'inline', whiteSpace: 'normal' },
+      attribs: { href: 'https://x.com' },
+      children: [],
+      key: '0',
+    }
+    const tree = wrap(<Anchor node={node}>link</Anchor>)
+    expect(tree.root.findByType(Text).props.accessibilityRole).toBe('link')
+  })
+
+  it('sets no link role on an anchor without href', () => {
+    const node: InlineNode = {
+      type: 'inline',
+      tag: 'a',
+      style: {},
+      control: { display: 'inline', whiteSpace: 'normal' },
+      attribs: {},
+      children: [],
+      key: '0',
+    }
+    const tree = wrap(<Anchor node={node}>x</Anchor>)
+    expect(tree.root.findByType(Text).props.accessibilityRole).toBeUndefined()
+  })
 })

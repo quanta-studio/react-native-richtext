@@ -86,4 +86,25 @@ describe('Img', () => {
   it('is registered as the img default renderer', () => {
     expect(defaultRenderers.img).toBe(Img)
   })
+
+  it('exposes the image role with the alt label', () => {
+    let tree!: ReturnType<typeof create>
+    act(() => {
+      tree = create(
+        <Img node={imgNode({ src: 'https://x/e.png', width: '10', height: '10', alt: 'a dog' })} />,
+      )
+    })
+    const img = images(tree)[0]!
+    expect(img.props.accessibilityRole).toBe('image')
+    expect(img.props.accessibilityLabel).toBe('a dog')
+    expect(img.props.accessible).toBe(true)
+  })
+
+  it('hides a decorative (no-alt) image from screen readers', () => {
+    let tree!: ReturnType<typeof create>
+    act(() => {
+      tree = create(<Img node={imgNode({ src: 'https://x/f.png', width: '10', height: '10' })} />)
+    })
+    expect(images(tree)[0]!.props.accessible).toBe(false)
+  })
 })
