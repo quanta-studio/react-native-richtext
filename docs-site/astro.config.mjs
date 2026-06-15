@@ -33,6 +33,21 @@ export default defineConfig({
             { label: 'Supported tags', slug: 'reference/supported-tags' },
           ],
         },
+        {
+          label: 'Community',
+          items: [
+            {
+              label: 'Report a bug',
+              link: 'https://github.com/yk-yong/react-native-richtext/issues/new?template=bug_report.md',
+              attrs: { target: '_blank', rel: 'noopener noreferrer' },
+            },
+            {
+              label: 'Request a feature',
+              link: 'https://github.com/yk-yong/react-native-richtext/issues/new?template=feature_request.md',
+              attrs: { target: '_blank', rel: 'noopener noreferrer' },
+            },
+          ],
+        },
       ],
     }),
   ],
