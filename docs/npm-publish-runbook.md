@@ -3,16 +3,17 @@
 The project lives at **`github.com/quanta-studio/react-native-richtext`** and publishes the four
 packages to the **public npm registry** under the **`@quanta-studio`** scope:
 
-| Package                                     | Current version |
-| ------------------------------------------- | --------------- |
-| `@quanta-studio/react-native-richtext-dom`  | 0.1.0           |
-| `@quanta-studio/react-native-richtext-css`  | 0.2.1           |
-| `@quanta-studio/react-native-richtext-core` | 0.3.1           |
-| `@quanta-studio/react-native-richtext`      | 0.4.1           |
+| Package                                     | Published version |
+| ------------------------------------------- | ----------------- |
+| `@quanta-studio/react-native-richtext-dom`  | 0.1.0             |
+| `@quanta-studio/react-native-richtext-css`  | 0.2.1             |
+| `@quanta-studio/react-native-richtext-core` | 0.3.1             |
+| `@quanta-studio/react-native-richtext`      | 0.4.1             |
 
-These are **new package names** — nothing under `@quanta-studio` has been published yet. Versions
-carry over from the old `@yk-yong` GitHub Packages releases so the CHANGELOGs stay meaningful; npm
-has no history to conflict with.
+All four are **live on npm** as of 2026-07-28, published manually as the bootstrap release (see
+[Bootstrap](#bootstrap-the-first-publish-of-each-package-done)). Versions carried over from the old
+`@yk-yong` GitHub Packages releases so the CHANGELOGs stay meaningful; the new names had no npm
+history to conflict with.
 
 ## What is already wired in the repo
 
@@ -56,43 +57,70 @@ is not a TTY, which is always the case in CI.
 
 ## One-time setup
 
-1. **Create the npm org.** Log in at npmjs.com and create the **`quanta-studio`** organization
-   (free tier is fine for public packages). Without it, publishing a `@quanta-studio/*` package
-   fails with `E404 Scope not found`.
-2. **Push the repo to the new remote.** `origin` already points at
-   `git@github.com:quanta-studio/react-native-richtext.git`; the repo must exist under the org and
-   be **public** (provenance attestation requires a public repo).
-3. **Bootstrap publish — see below.** A trusted publisher is configured on a package's settings
-   page, so the package has to exist on npm first. The very first publish of each of the four
-   packages is therefore manual.
-4. **Configure the trusted publisher** on each of the four packages: npmjs.com → package →
-   Settings → **Trusted Publisher** → GitHub Actions, with
+1. ~~**Create the npm org** `quanta-studio`.~~ Done. Without it, publishing a `@quanta-studio/*`
+   package fails with `E404 Scope not found`.
+2. ~~**Repo public at `quanta-studio/react-native-richtext`.**~~ Done. Must stay public —
+   provenance attestation requires it.
+3. ~~**Bootstrap publish.**~~ Done, see below.
+4. **Configure the trusted publisher — one entry per package.** ← the remaining step.
+
+   npmjs.com → package → Settings → **Trusted Publisher** → GitHub Actions, with
    - Organization/repository: `quanta-studio/react-native-richtext`
    - Workflow filename: `release.yml`
    - Environment: leave empty (the job does not use a GitHub environment)
 
-   Repeat for `-dom`, `-css`, `-core`, and the umbrella package. Miss one and only that package
-   fails to publish, mid-release, leaving the set partially published.
+   **All four packages need their own entry** — `-dom`, `-css`, `-core`, and the umbrella. This is
+   not a per-repo or per-scope setting: the token exchange is
+   `POST /-/npm/v1/oidc/token/exchange/package/<escapedName>`, called once per package with a token
+   scoped to that name alone. Configure only the umbrella and a release that bumps `-css` fails on
+   `-css` after the others have already gone out — a partial release, announced only by a
+   `Skipped OIDC` line and a downstream `ENEEDAUTH`.
 
-## Bootstrap: the first publish of each package
+## Bootstrap: the first publish of each package (done)
 
-Publish once from your machine with an interactive OTP, in dependency order. Do them one at a time
-with a **fresh** OTP each — a single `-r` run reuses one code across four requests and will fail
-partway once it expires.
+Recorded because it is the procedure to repeat for any **new** package added to the workspace: a
+trusted publisher can only be configured on a package that already exists on npm, so every new
+package's first publish is manual.
+
+The account (`john-yk`) has `tfa.mode = auth-and-writes` with a **security key**, not TOTP. Two
+consequences that dictate the whole procedure:
+
+- **`--otp=<code>` is useless** — there is no code to type. npm authenticates a security key through
+  a browser WebAuthn flow, and it only offers that flow when **stdin is a TTY**. Run it
+  non-interactively and npm skips straight to `npm error code EOTP`, asking for a code that cannot
+  exist. So this must be run by a human in a real terminal; an agent or CI shell cannot do it.
+- **`pnpm publish` cannot do it at all.** pnpm drives `libnpmpublish` directly and never implements
+  npm's browser-based WebAuthn handshake, so it fails with `EOTP` regardless of TTY.
+
+The way through is to split the two jobs: let **pnpm** build the publishable manifest, and let the
+**npm CLI** do the authenticated upload.
 
 ```bash
-npm login                      # account must be a member of the quanta-studio org
-pnpm build
+# 1. From a clean, merged main — the published artifact should match a real commit.
+git checkout main && git pull --ff-only
+pnpm clean && pnpm install --frozen-lockfile && pnpm build
 
-cd packages/dom          && pnpm publish --no-git-checks --otp=<code> && cd -
-cd packages/css          && pnpm publish --no-git-checks --otp=<code> && cd -
-cd packages/core         && pnpm publish --no-git-checks --otp=<code> && cd -
-cd packages/react-native && pnpm publish --no-git-checks --otp=<code> && cd -
+# 2. pnpm pack rewrites `workspace:*` deps to exact versions. npm does NOT understand that
+#    protocol, so `npm publish` inside a package dir would ship unresolvable ranges.
+mkdir -p /tmp/packs
+for d in dom css core react-native; do (cd "packages/$d" && pnpm pack --pack-destination /tmp/packs); done
+
+# 3. Verify no `workspace:` survived into any tarball manifest before uploading.
+for f in /tmp/packs/*.tgz; do tar -xOf "$f" package/package.json | grep -q 'workspace:' && echo "LEAK: $f"; done
+
+# 4. Upload the tarballs with npm, in dependency order, from a real terminal.
+#    One security-key touch per package. `&&` stops at the first failure, so a problem
+#    leaves a clean prefix rather than a scattered partial release.
+cd /tmp/packs \
+  && npm publish quanta-studio-react-native-richtext-dom-0.1.0.tgz  --access public \
+  && npm publish quanta-studio-react-native-richtext-css-0.2.1.tgz  --access public \
+  && npm publish quanta-studio-react-native-richtext-core-0.3.1.tgz --access public \
+  && npm publish quanta-studio-react-native-richtext-0.4.1.tgz      --access public
 ```
 
-These four publishes are **not** provenance-attested — provenance requires the Actions OIDC token.
-Every release after this one goes through CI and is attested. Once all four exist on npm, do setup
-step 4, and never publish manually again.
+Bootstrap publishes are **not** provenance-attested — provenance requires the Actions OIDC token,
+which exists only in CI. Once the package exists, do setup step 4 for it and let CI publish from
+then on.
 
 ## Release flow (normal path)
 
@@ -117,26 +145,42 @@ npm view @quanta-studio/react-native-richtext version
 npm view @quanta-studio/react-native-richtext dist-tags
 ```
 
-Then verify a clean consumer install resolves all four packages:
+Then verify a clean-room consumer install really resolves the whole graph from the registry:
 
 ```bash
 cd "$(mktemp -d)" && npm init -y >/dev/null
 npm install @quanta-studio/react-native-richtext
 ls node_modules/@quanta-studio   # react-native-richtext{,-core,-css,-dom}
+
+# inter-package deps must be exact versions, never `workspace:*`
+node -e 'const fs=require("fs");for(const p of fs.readdirSync("node_modules/@quanta-studio")){const j=JSON.parse(fs.readFileSync(`node_modules/@quanta-studio/${p}/package.json`,"utf8"));console.log(j.name,j.version,JSON.stringify(j.dependencies||{}))}'
+
+# both module systems load the real entrypoints
+node -e 'console.log(Object.keys(require("@quanta-studio/react-native-richtext-dom")).length,"CJS exports")'
+node --input-type=module -e 'import * as m from "@quanta-studio/react-native-richtext-css"; console.log(Object.keys(m).length,"ESM exports")'
 ```
+
+Do **not** probe with `require.resolve("@quanta-studio/react-native-richtext/package.json")` — the
+`exports` map deliberately does not expose `./package.json`, so that throws
+`ERR_PACKAGE_PATH_NOT_EXPORTED` and looks like a broken package when nothing is wrong. Read the
+manifest from disk instead, as above.
 
 ## Manual publish (fallback, if CI is unavailable)
 
+`pnpm changeset publish` **will not work** from a developer machine here — it shells out to
+`pnpm publish`, which cannot perform the security-key WebAuthn handshake and dies with `EOTP`.
+
+Bump versions with changesets, then upload with npm using the pack-then-publish procedure above:
+
 ```bash
-npm login                       # account must be a member of the quanta-studio org
-pnpm build
 pnpm changeset version          # if versions are not already bumped
-pnpm changeset publish --otp=<code>
+pnpm build
+# then steps 2-4 of Bootstrap, with the version numbers in the filenames updated
 git push --follow-tags
 ```
 
-Manual publishes are **not** provenance-attested, and a single OTP across several packages may
-expire mid-run. Prefer the CI path.
+Manual publishes are **not** provenance-attested and must be run from a real terminal by someone
+holding the security key. Prefer the CI path.
 
 ## Constraint on the pnpm version
 
@@ -147,12 +191,15 @@ failure mode is a silent `Skipped OIDC` followed by an auth error, not a clear m
 
 ## Troubleshooting
 
-| Symptom                          | Cause / fix                                                                                                                              |
-| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `Skipped OIDC: …` in the job log | The real error, always check first. Missing `id-token: write`, no trusted publisher for that package, or a pnpm too old to support OIDC. |
-| `E404 Scope not found`           | The `quanta-studio` npm org does not exist yet — create it (setup step 1).                                                               |
-| `E402 Payment Required`          | Scoped package defaulted to private; `publishConfig.access: "public"` must be present.                                                   |
-| `E401` / `ENEEDAUTH` in CI       | OIDC did not engage — see the `Skipped OIDC` row. Also check nothing reintroduced a `registry-url` on `setup-node`.                      |
-| Only some packages published     | A trusted publisher is configured per package; the ones that failed are missing their entry. Add it and re-run the workflow.             |
-| Published but no provenance      | `NPM_CONFIG_PROVENANCE` got set, which suppresses pnpm's auto-determination; or the GitHub repo is private.                              |
-| Provenance URL mismatch          | `repository.url` in a package.json does not match the actual GitHub repo.                                                                |
+| Symptom                                       | Cause / fix                                                                                                                                                                                                            |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Skipped OIDC: …` in the job log              | The real error, always check first. Missing `id-token: write`, no trusted publisher for that package, or a pnpm too old to support OIDC.                                                                               |
+| `npm error code EOTP` on a manual publish     | Security key needs npm's browser WebAuthn flow, which npm only offers when stdin is a TTY. Run it yourself in a real terminal — not via an agent, script, or CI shell. `--otp=` cannot help; there is no code to type. |
+| `EOTP` from `pnpm publish` even in a terminal | pnpm never implements the WebAuthn handshake. Use `pnpm pack` + `npm publish <tarball>` instead.                                                                                                                       |
+| `EPUBLISHCONFLICT`                            | That exact version is already on npm. Published versions are immutable — bump and republish, never try to overwrite.                                                                                                   |
+| `E404 Scope not found`                        | The `quanta-studio` npm org does not exist yet — create it (setup step 1).                                                                                                                                             |
+| `E402 Payment Required`                       | Scoped package defaulted to private; `publishConfig.access: "public"` must be present.                                                                                                                                 |
+| `E401` / `ENEEDAUTH` in CI                    | OIDC did not engage — see the `Skipped OIDC` row. Also check nothing reintroduced a `registry-url` on `setup-node`.                                                                                                    |
+| Only some packages published                  | A trusted publisher is configured per package; the ones that failed are missing their entry. Add it and re-run the workflow.                                                                                           |
+| Published but no provenance                   | `NPM_CONFIG_PROVENANCE` got set, which suppresses pnpm's auto-determination; or the GitHub repo is private.                                                                                                            |
+| Provenance URL mismatch                       | `repository.url` in a package.json does not match the actual GitHub repo.                                                                                                                                              |
