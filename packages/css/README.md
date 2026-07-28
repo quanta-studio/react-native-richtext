@@ -1,4 +1,4 @@
-# @yk-yong/react-native-richtext-css
+# @quanta-studio/react-native-richtext-css
 
 CSS engine for react-native-richtext: parses stylesheets and inline styles, matches
 selectors, applies the cascade + inheritance, and resolves declarations into

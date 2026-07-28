@@ -1,4 +1,4 @@
-# @yk-yong/react-native-richtext-core
+# @quanta-studio/react-native-richtext-core
 
 Render-model builder for react-native-richtext: turns a parsed DOM + per-element computed
 styles into a renderer-agnostic styled tree (block/inline split, whitespace

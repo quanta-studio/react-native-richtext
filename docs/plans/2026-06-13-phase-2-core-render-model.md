@@ -2,11 +2,11 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build `@yk-yong/react-native-richtext-core` — a React-free package whose `buildRenderTree(document, styles)` turns a parsed DOM plus the css `Map<Element, ComputedStyle>` into a renderer-agnostic styled tree (block/inline split, whitespace-collapsed + entity-decoded text, basic list markers).
+**Goal:** Build `@quanta-studio/react-native-richtext-core` — a React-free package whose `buildRenderTree(document, styles)` turns a parsed DOM plus the css `Map<Element, ComputedStyle>` into a renderer-agnostic styled tree (block/inline split, whitespace-collapsed + entity-decoded text, basic list markers).
 
 **Architecture:** Approach B — a staged pipeline `split → processText → annotateMarkers`. `split` does the block/inline structural transform (the "no `<View>` inside `<Text>`" rule, driven by computed `display`), wrapping each maximal run of inline content in an anonymous `InlineContainerNode`. `processText` decodes entities then collapses whitespace per the container's `white-space`, dropping empties. `annotateMarkers` numbers `li`s. Each element node carries `style` + `control` (mirroring css's `ComputedStyle`); the model is mutated in place across stages.
 
-**Tech Stack:** TypeScript 6 (strict, `verbatimModuleSyntax`, `noUncheckedIndexedAccess`), Vitest 4, tsup, pnpm. New dep: `entities`. Workspace deps: `@yk-yong/react-native-richtext-dom`, `@yk-yong/react-native-richtext-css`.
+**Tech Stack:** TypeScript 6 (strict, `verbatimModuleSyntax`, `noUncheckedIndexedAccess`), Vitest 4, tsup, pnpm. New dep: `entities`. Workspace deps: `@quanta-studio/react-native-richtext-dom`, `@quanta-studio/react-native-richtext-css`.
 
 **Reference:** spec at `docs/specs/2026-06-13-phase-2-core-render-model-design.md`. Mirror `packages/css` for all config.
 
@@ -35,11 +35,11 @@ packages/core/
 ```
 
 Run one test file: `pnpm exec vitest run packages/core/test/<name>.test.ts`
-Typecheck the package: `pnpm --filter @yk-yong/react-native-richtext-core typecheck`
+Typecheck the package: `pnpm --filter @quanta-studio/react-native-richtext-core typecheck`
 
 ---
 
-## Task 0: Scaffold `@yk-yong/react-native-richtext-core`
+## Task 0: Scaffold `@quanta-studio/react-native-richtext-core`
 
 **Files:**
 
@@ -50,7 +50,7 @@ Typecheck the package: `pnpm --filter @yk-yong/react-native-richtext-core typech
 
 ```json
 {
-  "name": "@yk-yong/react-native-richtext-core",
+  "name": "@quanta-studio/react-native-richtext-core",
   "version": "0.0.0",
   "description": "Render-model builder for react-native-richtext: DOM + computed styles -> renderer-agnostic styled tree. React-free.",
   "license": "MIT",
@@ -100,8 +100,8 @@ Typecheck the package: `pnpm --filter @yk-yong/react-native-richtext-core typech
     "noEmit": true,
     "types": ["node"],
     "paths": {
-      "@yk-yong/react-native-richtext-dom": ["../dom/src/index.ts"],
-      "@yk-yong/react-native-richtext-css": ["../css/src/index.ts"]
+      "@quanta-studio/react-native-richtext-dom": ["../dom/src/index.ts"],
+      "@quanta-studio/react-native-richtext-css": ["../css/src/index.ts"]
     }
   },
   "include": ["src", "test"]
@@ -130,7 +130,7 @@ export default defineConfig({
 `packages/core/README.md`:
 
 ```md
-# @yk-yong/react-native-richtext-core
+# @quanta-studio/react-native-richtext-core
 
 Render-model builder for react-native-richtext: turns a parsed DOM + per-element computed
 styles into a renderer-agnostic styled tree (block/inline split, whitespace
@@ -164,10 +164,10 @@ export default defineConfig({
   // Resolve workspace packages to their source so tests run without a prior build.
   resolve: {
     alias: {
-      '@yk-yong/react-native-richtext-dom': fileURLToPath(
+      '@quanta-studio/react-native-richtext-dom': fileURLToPath(
         new URL('./packages/dom/src/index.ts', import.meta.url),
       ),
-      '@yk-yong/react-native-richtext-css': fileURLToPath(
+      '@quanta-studio/react-native-richtext-css': fileURLToPath(
         new URL('./packages/css/src/index.ts', import.meta.url),
       ),
     },
@@ -187,8 +187,8 @@ export default defineConfig({
 - [ ] **Step 7: Add dependencies via pnpm** (resolves valid versions, writes package.json + lockfile)
 
 ```bash
-pnpm --filter @yk-yong/react-native-richtext-core add @yk-yong/react-native-richtext-dom@workspace:* @yk-yong/react-native-richtext-css@workspace:* entities
-pnpm --filter @yk-yong/react-native-richtext-core add -D @types/node
+pnpm --filter @quanta-studio/react-native-richtext-core add @quanta-studio/react-native-richtext-dom@workspace:* @quanta-studio/react-native-richtext-css@workspace:* entities
+pnpm --filter @quanta-studio/react-native-richtext-core add -D @types/node
 ```
 
 - [ ] **Step 8: Placeholder `packages/core/src/index.ts`**
@@ -199,14 +199,14 @@ export {}
 
 - [ ] **Step 9: Verify install + build + typecheck**
 
-Run: `pnpm install && pnpm --filter @yk-yong/react-native-richtext-core typecheck && pnpm --filter @yk-yong/react-native-richtext-core build`
+Run: `pnpm install && pnpm --filter @quanta-studio/react-native-richtext-core typecheck && pnpm --filter @quanta-studio/react-native-richtext-core build`
 Expected: exit 0; `packages/core/dist/index.js` + `index.cjs` produced.
 
 - [ ] **Step 10: Commit**
 
 ```bash
 git add packages/core tsconfig.json vitest.config.ts package.json pnpm-lock.yaml
-git commit -m "chore(core): scaffold @yk-yong/react-native-richtext-core package"
+git commit -m "chore(core): scaffold @quanta-studio/react-native-richtext-core package"
 ```
 
 ---
@@ -277,7 +277,7 @@ describe('types', () => {
 - [ ] **Step 3: Implement `packages/core/src/types.ts`**
 
 ```ts
-import type { RNStyle, ControlStyle } from '@yk-yong/react-native-richtext-css'
+import type { RNStyle, ControlStyle } from '@quanta-studio/react-native-richtext-css'
 
 export type { RNStyle, ControlStyle }
 export type WhiteSpace = ControlStyle['whiteSpace']
@@ -334,7 +334,7 @@ export type BlockChild = BlockNode | InlineContainerNode
 export type RenderNode = BlockNode | InlineContainerNode | InlineNode | TextNode | LineBreakNode
 ```
 
-- [ ] **Step 4: Run → PASS**, then typecheck (`pnpm --filter @yk-yong/react-native-richtext-core typecheck`) → clean.
+- [ ] **Step 4: Run → PASS**, then typecheck (`pnpm --filter @quanta-studio/react-native-richtext-core typecheck`) → clean.
 
 - [ ] **Step 5: Commit**
 
@@ -353,8 +353,8 @@ git commit -m "feat(core): add render-model type definitions"
 
 ```ts
 import { describe, expect, it } from 'vitest'
-import { parse, getElementsByTagName } from '@yk-yong/react-native-richtext-dom'
-import { resolveStyles } from '@yk-yong/react-native-richtext-css'
+import { parse, getElementsByTagName } from '@quanta-studio/react-native-richtext-dom'
+import { resolveStyles } from '@quanta-studio/react-native-richtext-css'
 import { isBlockLevel, isInlineLevel, isHidden, isNonRendered, displayOf } from '../src/classify'
 
 describe('classify', () => {
@@ -398,8 +398,8 @@ describe('classify', () => {
 - [ ] **Step 3: Implement `packages/core/src/classify.ts`**
 
 ```ts
-import type { Element } from '@yk-yong/react-native-richtext-dom'
-import type { ComputedStyle } from '@yk-yong/react-native-richtext-css'
+import type { Element } from '@quanta-studio/react-native-richtext-dom'
+import type { ComputedStyle } from '@quanta-studio/react-native-richtext-css'
 
 export type Display = ComputedStyle['control']['display']
 
@@ -456,8 +456,8 @@ This builds the tree with RAW (undecoded, uncollapsed) text — Stage 3 cleans t
 
 ```ts
 import { describe, expect, it } from 'vitest'
-import { parse } from '@yk-yong/react-native-richtext-dom'
-import { resolveStyles } from '@yk-yong/react-native-richtext-css'
+import { parse } from '@quanta-studio/react-native-richtext-dom'
+import { resolveStyles } from '@quanta-studio/react-native-richtext-css'
 import { splitDocument } from '../src/split'
 import type { BlockNode, InlineContainerNode, InlineNode } from '../src/types'
 
@@ -534,9 +534,9 @@ describe('splitDocument', () => {
 - [ ] **Step 3: Implement `packages/core/src/split.ts`**
 
 ```ts
-import { isTag, isText } from '@yk-yong/react-native-richtext-dom'
-import type { AnyNode, Document, Element } from '@yk-yong/react-native-richtext-dom'
-import type { ComputedStyle } from '@yk-yong/react-native-richtext-css'
+import { isTag, isText } from '@quanta-studio/react-native-richtext-dom'
+import type { AnyNode, Document, Element } from '@quanta-studio/react-native-richtext-dom'
+import type { ComputedStyle } from '@quanta-studio/react-native-richtext-css'
 import { displayOf, isBlockLevel, isHidden, isNonRendered } from './classify'
 import type {
   BlockChild,
@@ -836,8 +836,8 @@ Walks the tree; for each inline-container: decode all text leaves, collapse them
 
 ```ts
 import { describe, expect, it } from 'vitest'
-import { parse } from '@yk-yong/react-native-richtext-dom'
-import { resolveStyles } from '@yk-yong/react-native-richtext-css'
+import { parse } from '@quanta-studio/react-native-richtext-dom'
+import { resolveStyles } from '@quanta-studio/react-native-richtext-css'
 import { splitDocument } from '../src/split'
 import { processText } from '../src/text/process-text'
 import type { BlockNode, InlineContainerNode, InlineNode, TextNode } from '../src/types'
@@ -985,8 +985,8 @@ git commit -m "feat(core): decode + collapse text across the tree"
 
 ```ts
 import { describe, expect, it } from 'vitest'
-import { parse } from '@yk-yong/react-native-richtext-dom'
-import { resolveStyles } from '@yk-yong/react-native-richtext-css'
+import { parse } from '@quanta-studio/react-native-richtext-dom'
+import { resolveStyles } from '@quanta-studio/react-native-richtext-css'
 import { splitDocument } from '../src/split'
 import { processText } from '../src/text/process-text'
 import { annotateMarkers } from '../src/markers'
@@ -1090,8 +1090,8 @@ git commit -m "feat(core): annotate list items with markers"
 
 ```ts
 import { describe, expect, it } from 'vitest'
-import { parse } from '@yk-yong/react-native-richtext-dom'
-import { resolveStyles } from '@yk-yong/react-native-richtext-css'
+import { parse } from '@quanta-studio/react-native-richtext-dom'
+import { resolveStyles } from '@quanta-studio/react-native-richtext-css'
 import { buildRenderTree } from '../src'
 import type { BlockNode, InlineContainerNode, TextNode } from '../src'
 
@@ -1125,8 +1125,8 @@ describe('buildRenderTree', () => {
 - [ ] **Step 3: Implement `packages/core/src/build.ts`**
 
 ```ts
-import type { Document, Element } from '@yk-yong/react-native-richtext-dom'
-import type { ComputedStyle } from '@yk-yong/react-native-richtext-css'
+import type { Document, Element } from '@quanta-studio/react-native-richtext-dom'
+import type { ComputedStyle } from '@quanta-studio/react-native-richtext-css'
 import { splitDocument } from './split'
 import { processText } from './text/process-text'
 import { annotateMarkers } from './markers'
@@ -1161,7 +1161,7 @@ export type {
 } from './types'
 ```
 
-- [ ] **Step 5: Run → PASS**; whole-package typecheck (`pnpm --filter @yk-yong/react-native-richtext-core typecheck`) → clean.
+- [ ] **Step 5: Run → PASS**; whole-package typecheck (`pnpm --filter @quanta-studio/react-native-richtext-core typecheck`) → clean.
 
 - [ ] **Step 6: Commit**
 
@@ -1202,8 +1202,8 @@ git commit -m "feat(core): add buildRenderTree orchestrator and public API"
 import { describe, expect, it } from 'vitest'
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { parse } from '@yk-yong/react-native-richtext-dom'
-import { resolveStyles } from '@yk-yong/react-native-richtext-css'
+import { parse } from '@quanta-studio/react-native-richtext-dom'
+import { resolveStyles } from '@quanta-studio/react-native-richtext-css'
 import { buildRenderTree } from '../src'
 import type { BlockNode, InlineContainerNode, InlineNode, TextNode } from '../src'
 
@@ -1289,7 +1289,7 @@ git commit -m "test(core): add end-to-end article fixture integration test"
 
 ```md
 ---
-'@yk-yong/react-native-richtext-core': minor
+'@quanta-studio/react-native-richtext-core': minor
 ---
 
 Add the render-model builder: `buildRenderTree(document, styles)` turns a parsed DOM plus

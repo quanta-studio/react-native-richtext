@@ -20,21 +20,23 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-      # Required to publish the packages to GitHub Packages with GITHUB_TOKEN.
-      packages: write
+      # Required for npm provenance: lets the job mint an OIDC token that npm
+      # verifies to attest the packages were built by this workflow.
+      id-token: write
     steps:
       - uses: actions/checkout@v6
         with:
           # Changesets needs full history to diff against the base branch.
           fetch-depth: 0
 
+      # No registry-url/scope on purpose. Those make setup-node write an ~/.npmrc
+      # containing `//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}`, and pnpm
+      # merges registry auth with `??=` — a present-but-empty _authToken would win
+      # over the token it mints via OIDC and break the publish. The registry is
+      # already pinned per package by `publishConfig.registry`.
       - uses: actions/setup-node@v6
         with:
           node-version: 22
-          # Writes a CI-only ~/.npmrc that routes the @yk-yong scope to GitHub Packages
-          # and wires NODE_AUTH_TOKEN for it (keeps auth out of the repo).
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@yk-yong'
 
       # standalone: true installs pnpm as a self-contained binary (bundled Node), so
       # pnpm 11.5.2 (whose npm manifest requires Node >=22.13) installs regardless of
@@ -51,7 +53,10 @@ jobs:
         with:
           publish: pnpm release
         env:
+          # Used by changesets/action to open the "Version Packages" PR / release.
+          # There is deliberately NO npm credential here: changesets shells out to
+          # `pnpm publish`, and pnpm 11.5.2 mints a short-lived registry token itself
+          # by exchanging the Actions OIDC id-token (npm trusted publishing), then
+          # derives provenance from it. Do not set NPM_CONFIG_PROVENANCE — pnpm only
+          # auto-determines provenance when the option is left unset.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # GitHub Packages authenticates with the workflow's built-in token —
-          # no separate NPM_TOKEN secret needed.
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

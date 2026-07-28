@@ -1,8 +1,8 @@
-# Phase 0 — Foundation + `@yk-yong/react-native-richtext-dom` Implementation Plan
+# Phase 0 — Foundation + `@quanta-studio/react-native-richtext-dom` Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Stand up the public pnpm monorepo (tooling, CI, governance) and ship a tested, React-free `@yk-yong/react-native-richtext-dom` package that parses HTML → a queryable DOM with traversal helpers and typed node guards.
+**Goal:** Stand up the public pnpm monorepo (tooling, CI, governance) and ship a tested, React-free `@quanta-studio/react-native-richtext-dom` package that parses HTML → a queryable DOM with traversal helpers and typed node guards.
 
 **Architecture:** A pnpm-workspaces monorepo with TypeScript project references. `tsc -b` owns type-checking and `.d.ts` emit; `tsup` (esbuild) owns ESM+CJS JS bundles. The only Phase 0 package, `packages/dom`, is a thin, well-tested wrapper that promotes the proven `htmlparser2`/`domhandler`/`domutils` substrate into a curated public API (`parse`, guards, query helpers, types). No React, no RN, no CSS.
 
@@ -12,15 +12,15 @@
 
 ## Decisions locked during planning
 
-| Question                      | Decision                                                                                                                                                                                                                                                       |
-| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Package manager / workspaces  | **pnpm workspaces**                                                                                                                                                                                                                                            |
-| Test runner (React-free pkgs) | **Vitest**                                                                                                                                                                                                                                                     |
-| Build tool                    | **tsup** for JS (ESM+CJS); `tsc -b` for `.d.ts` + project-reference type graph                                                                                                                                                                                 |
-| npm scope / naming            | Scope **`@yk-yong`**, packages prefixed **`react-native-richtext-`**. Phase 0 ships `@yk-yong/react-native-richtext-dom`. Future: `…-css`, `…-core`, and the umbrella RN package `@yk-yong/react-native-richtext`. Rename later with a repo-wide find/replace. |
-| `selectAll(sel)` in `dom`     | **Deferred to Phase 1 (`@scope/css`).** Selector matching needs `css-select`, which the spec assigns to the CSS engine. Phase 0 exposes `domutils` traversal only.                                                                                             |
-| RN/React peer floors          | **Not applicable to Phase 0** — no React/RN package yet. Resolve in Phase 2.                                                                                                                                                                                   |
-| `img` in v1 (Phase 2 vs 3)    | **Out of scope for Phase 0.** Resolve when Phase 2/3 specs are written.                                                                                                                                                                                        |
+| Question                      | Decision                                                                                                                                                                                                                                                                   |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Package manager / workspaces  | **pnpm workspaces**                                                                                                                                                                                                                                                        |
+| Test runner (React-free pkgs) | **Vitest**                                                                                                                                                                                                                                                                 |
+| Build tool                    | **tsup** for JS (ESM+CJS); `tsc -b` for `.d.ts` + project-reference type graph                                                                                                                                                                                             |
+| npm scope / naming            | Scope **`@yk-yong`**, packages prefixed **`react-native-richtext-`**. Phase 0 ships `@quanta-studio/react-native-richtext-dom`. Future: `…-css`, `…-core`, and the umbrella RN package `@quanta-studio/react-native-richtext`. Rename later with a repo-wide find/replace. |
+| `selectAll(sel)` in `dom`     | **Deferred to Phase 1 (`@scope/css`).** Selector matching needs `css-select`, which the spec assigns to the CSS engine. Phase 0 exposes `domutils` traversal only.                                                                                                         |
+| RN/React peer floors          | **Not applicable to Phase 0** — no React/RN package yet. Resolve in Phase 2.                                                                                                                                                                                               |
+| `img` in v1 (Phase 2 vs 3)    | **Out of scope for Phase 0.** Resolve when Phase 2/3 specs are written.                                                                                                                                                                                                    |
 
 ## File structure (created by this plan)
 
@@ -397,7 +397,7 @@ git commit -m "chore: add Vitest, tsup, and workspace build/test scripts"
 
 ---
 
-## Task 6: `@yk-yong/react-native-richtext-dom` package skeleton (types-only barrel)
+## Task 6: `@quanta-studio/react-native-richtext-dom` package skeleton (types-only barrel)
 
 **Files:**
 
@@ -408,7 +408,7 @@ git commit -m "chore: add Vitest, tsup, and workspace build/test scripts"
 
 ```json
 {
-  "name": "@yk-yong/react-native-richtext-dom",
+  "name": "@quanta-studio/react-native-richtext-dom",
   "version": "0.0.0",
   "description": "Forgiving HTML → DOM parsing, traversal, and node guards for react-native-richtext. React-free.",
   "license": "MIT",
@@ -488,13 +488,13 @@ export default defineConfig({
 - [ ] **Step 5: Create `packages/dom/README.md`**
 
 ```markdown
-# @yk-yong/react-native-richtext-dom
+# @quanta-studio/react-native-richtext-dom
 
 Forgiving HTML → DOM parsing and traversal for the `react-native-richtext` renderer.
 React-free; built on `htmlparser2` / `domhandler` / `domutils`.
 
 \`\`\`ts
-import { parse, getElementsByTagName, isTag } from '@yk-yong/react-native-richtext-dom'
+import { parse, getElementsByTagName, isTag } from '@quanta-studio/react-native-richtext-dom'
 
 const doc = parse('<p>Hello <b>world</b></p>')
 const paragraphs = getElementsByTagName('p', doc)
@@ -530,7 +530,7 @@ export * from './types'
 
 - [ ] **Step 8: Add runtime dependencies**
 
-Run: `pnpm add --filter @yk-yong/react-native-richtext-dom htmlparser2 domhandler domutils domelementtype`
+Run: `pnpm add --filter @quanta-studio/react-native-richtext-dom htmlparser2 domhandler domutils domelementtype`
 Expected: adds the four deps to `packages/dom/package.json` `dependencies` and updates the lockfile.
 
 - [ ] **Step 9: Wire the project reference into the root `tsconfig.json`**
@@ -553,7 +553,7 @@ Expected: install succeeds; `typecheck` (the package's `tsc -p tsconfig.test.jso
 
 ```bash
 git add -A
-git commit -m "feat(dom): scaffold @yk-yong/react-native-richtext-dom package"
+git commit -m "feat(dom): scaffold @quanta-studio/react-native-richtext-dom package"
 ```
 
 ---
@@ -978,7 +978,7 @@ Expected: `dist/` is removed then regenerated with the same three artifacts; no 
 ```
 MIT License
 
-Copyright (c) 2026 yk-yong
+Copyright (c) 2026 Quanta Studio
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -1011,12 +1011,12 @@ New-Architecture-first alternative to `react-native-render-html`.
 
 ## Packages
 
-| Package                               | Status     | Description                                                     |
-| ------------------------------------- | ---------- | --------------------------------------------------------------- |
-| `@yk-yong/react-native-richtext-dom`  | Phase 0 ✅ | Forgiving HTML → DOM, traversal, node guards. React-free.       |
-| `@yk-yong/react-native-richtext-css`  | Phase 1    | CSS engine: parse, selectors, specificity, cascade → RN styles. |
-| `@yk-yong/react-native-richtext-core` | Phase 2    | Styled render-tree builder.                                     |
-| `@yk-yong/react-native-richtext`      | Phase 2    | The public `<RichText>` component + renderer registry.          |
+| Package                                     | Status     | Description                                                     |
+| ------------------------------------------- | ---------- | --------------------------------------------------------------- |
+| `@quanta-studio/react-native-richtext-dom`  | Phase 0 ✅ | Forgiving HTML → DOM, traversal, node guards. React-free.       |
+| `@quanta-studio/react-native-richtext-css`  | Phase 1    | CSS engine: parse, selectors, specificity, cascade → RN styles. |
+| `@quanta-studio/react-native-richtext-core` | Phase 2    | Styled render-tree builder.                                     |
+| `@quanta-studio/react-native-richtext`      | Phase 2    | The public `<RichText>` component + renderer registry.          |
 
 ## Development
 
@@ -1138,7 +1138,7 @@ labels: enhancement
 # example
 
 Placeholder for the example app. An Expo (New Architecture) app that dogfoods
-`@yk-yong/react-native-richtext` is wired up in **Phase 2**. Intentionally not a workspace
+`@quanta-studio/react-native-richtext` is wired up in **Phase 2**. Intentionally not a workspace
 package yet.
 ```
 

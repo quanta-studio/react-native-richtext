@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native'
 import { splitStyle } from '../style/split-style'
 import type { RendererProps } from '../types'
-import type { BlockNode } from '@yk-yong/react-native-richtext-core'
+import type { BlockNode } from '@quanta-studio/react-native-richtext-core'
 
 export function ListItem({ node, children }: RendererProps) {
   const el = node as BlockNode

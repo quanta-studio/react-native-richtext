@@ -1,4 +1,4 @@
-# @yk-yong/react-native-richtext-css
+# @quanta-studio/react-native-richtext-css
 
 ## 0.2.1
 
@@ -38,4 +38,4 @@
   honor the `<ol start>`, `<ol type>`, and `<li value>` attributes; `blockquote` gets a left border; `pre`
   scrolls horizontally so long lines no longer wrap or clip.
 - Updated dependencies [fa86e21]
-  - @yk-yong/react-native-richtext-dom@0.1.0
+  - @quanta-studio/react-native-richtext-dom@0.1.0

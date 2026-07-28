@@ -19,7 +19,7 @@ RN 0.86 (the pinned line) has **no typed `aria-level`/`accessibilityLevel`** pro
 ## How to run things (repo conventions)
 
 - Tests run from the ROOT (packages have NO `test` script): `pnpm exec vitest run packages/react-native` or a single file `pnpm exec vitest run packages/react-native/test/<file>`. Do NOT use `pnpm --filter <pkg> test` (no-op).
-- Typecheck: `pnpm --filter @yk-yong/react-native-richtext typecheck`. Whole-repo gates: `pnpm test`, `pnpm typecheck`, `pnpm lint`, `pnpm format:check`, `pnpm build`.
+- Typecheck: `pnpm --filter @quanta-studio/react-native-richtext typecheck`. Whole-repo gates: `pnpm test`, `pnpm typecheck`, `pnpm lint`, `pnpm format:check`, `pnpm build`.
 
 ---
 
@@ -100,7 +100,7 @@ import { splitStyle } from '../style/split-style'
 import { resolveFont } from '../fonts/resolve-font'
 import { useRichTextContext } from '../context'
 import type { RendererProps } from '../types'
-import type { InlineNode } from '@yk-yong/react-native-richtext-core'
+import type { InlineNode } from '@quanta-studio/react-native-richtext-core'
 
 export function Anchor({ node, children }: RendererProps) {
   const { fonts, onLinkPress } = useRichTextContext()
@@ -150,7 +150,7 @@ import { create } from 'react-test-renderer'
 import { View } from 'react-native'
 import { Heading } from '../src/renderers/Heading'
 import { defaultRenderers } from '../src/renderers/defaults'
-import type { BlockNode } from '@yk-yong/react-native-richtext-core'
+import type { BlockNode } from '@quanta-studio/react-native-richtext-core'
 
 const headingNode = (tag: string, style: Record<string, unknown> = {}): BlockNode => ({
   type: 'block',
@@ -192,7 +192,7 @@ Create `packages/react-native/src/renderers/Heading.tsx`:
 import { View } from 'react-native'
 import { splitStyle } from '../style/split-style'
 import type { RendererProps } from '../types'
-import type { BlockNode } from '@yk-yong/react-native-richtext-core'
+import type { BlockNode } from '@quanta-studio/react-native-richtext-core'
 
 // h1–h6: a block View carrying the screen-reader "header" trait. `accessible` groups the
 // heading as one announced element (required for the trait to surface and for heading
@@ -248,7 +248,7 @@ export const defaultRenderers: Record<string, Renderer> = {
 
 Run: `pnpm exec vitest run packages/react-native/test/heading.test.tsx` → PASS (2 tests).
 Run: `pnpm exec vitest run packages/react-native` → full suite green.
-Run: `pnpm --filter @yk-yong/react-native-richtext typecheck` → PASS.
+Run: `pnpm --filter @quanta-studio/react-native-richtext typecheck` → PASS.
 
 - [ ] **Step 6: Commit**
 
@@ -382,7 +382,7 @@ Create `.changeset/phase-5a-accessibility.md`:
 
 ```md
 ---
-'@yk-yong/react-native-richtext': minor
+'@quanta-studio/react-native-richtext': minor
 ---
 
 Phase 5a accessibility: links now announce as links (`accessibilityRole="link"`), headings (`h1`–`h6`) render with the `header` role via a new `Heading` renderer, and images expose the `image` role alongside their alt label (decorative no-alt images stay hidden from screen readers). All on by default and customizable via the `renderers` prop.

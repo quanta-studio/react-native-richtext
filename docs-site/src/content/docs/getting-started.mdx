@@ -10,20 +10,12 @@ description: Install react-native-richtext and render your first HTML.
 
 ## Install
 
-The packages publish to **GitHub Packages** under the `@yk-yong` scope, so route that scope and
-authenticate (GitHub Packages requires a token even for reads). Add an `.npmrc` at your app root:
-
-```ini
-@yk-yong:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
-```
-
-Set `GITHUB_TOKEN` to a GitHub PAT with the `read:packages` scope (env var or CI secret — don't
-commit it). Then install:
+The packages publish to the **public npm registry** under the `@quanta-studio` scope — no `.npmrc`
+and no authentication needed:
 
 ```bash
-npm install @yk-yong/react-native-richtext
-# pulls @yk-yong/react-native-richtext-{dom,css,core} transitively
+npm install @quanta-studio/react-native-richtext
+# pulls @quanta-studio/react-native-richtext-{dom,css,core} transitively
 ```
 
 It's a normal dependency resolved from `node_modules` — **no Metro config change** needed.
@@ -32,7 +24,7 @@ It's a normal dependency resolved from `node_modules` — **no Metro config chan
 
 ```tsx
 import { SafeAreaView, ScrollView } from 'react-native'
-import { RichText } from '@yk-yong/react-native-richtext'
+import { RichText } from '@quanta-studio/react-native-richtext'
 
 const html = `
   <h1>react-native-richtext</h1>

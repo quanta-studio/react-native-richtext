@@ -4,8 +4,8 @@ import {
   getAttributeValue,
   findAll,
   isTag,
-} from '@yk-yong/react-native-richtext-dom'
-import type { Document, Element } from '@yk-yong/react-native-richtext-dom'
+} from '@quanta-studio/react-native-richtext-dom'
+import type { Document, Element } from '@quanta-studio/react-native-richtext-dom'
 import type { Rule } from '../types'
 
 function classTokens(el: Element): string[] {

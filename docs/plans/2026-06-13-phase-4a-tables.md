@@ -83,7 +83,7 @@ it('maps border-collapse to a control decl', () => {
 
 - [ ] **Step 2: Run tests to verify they fail**
 
-Run: `pnpm --filter @yk-yong/react-native-richtext-css test`
+Run: `pnpm --filter @quanta-studio/react-native-richtext-css test`
 Expected: FAIL — `classifyProp('borderCollapse')` returns `'unsupported'`; the map test returns `decls: []`.
 
 - [ ] **Step 3: Extend the `display` union and add `borderCollapse`**
@@ -144,7 +144,7 @@ const CONTROL_PROPS = new Set<string>([
 
 - [ ] **Step 5: Run tests to verify they pass**
 
-Run: `pnpm --filter @yk-yong/react-native-richtext-css test`
+Run: `pnpm --filter @quanta-studio/react-native-richtext-css test`
 Expected: PASS (all css tests green).
 
 - [ ] **Step 6: Commit**
@@ -184,7 +184,7 @@ it('makes th bold and centered', () => {
 
 - [ ] **Step 2: Run tests to verify they fail**
 
-Run: `pnpm --filter @yk-yong/react-native-richtext-css test ua-rules`
+Run: `pnpm --filter @quanta-studio/react-native-richtext-css test ua-rules`
 Expected: FAIL — no `table`/`th` selectors in the UA rules.
 
 - [ ] **Step 3: Add the table UA rules**
@@ -204,7 +204,7 @@ caption { display: table-caption; text-align: center }
 
 - [ ] **Step 4: Run tests to verify they pass**
 
-Run: `pnpm --filter @yk-yong/react-native-richtext-css test`
+Run: `pnpm --filter @quanta-studio/react-native-richtext-css test`
 Expected: PASS (all css tests green — confirms `border-collapse: collapse` in the UA sheet produces no diagnostic, since it now maps to a control decl).
 
 - [ ] **Step 5: Commit**
@@ -317,7 +317,7 @@ export type {
 
 - [ ] **Step 3: Verify it typechecks**
 
-Run: `pnpm --filter @yk-yong/react-native-richtext-core typecheck`
+Run: `pnpm --filter @quanta-studio/react-native-richtext-core typecheck`
 Expected: PASS (no type errors; `process-text.ts`/`markers.ts` still compile because their `BlockChild` loops keep their existing `else`/`continue` branches — the new `'table'` member is handled in Tasks 5–6, but the current code's branching does not break compilation since they switch on `node.type === 'block'` first).
 
 > Note: if typecheck flags `process-text.ts` because `processContainer(node)` now receives a `TableNode` in its `else` branch, proceed directly to Task 6's edit for that file before committing — but verify first; with the current `if (node.type === 'block') ... else ...` shape, `node` in the `else` is `InlineContainerNode | TableNode`, which **will** error. If so, apply Task 6 Step 3 (process-text) and Task 6 Step 4 (markers) now, then run typecheck again before committing this task.
@@ -426,7 +426,7 @@ describe('normalizeGrid', () => {
 
 - [ ] **Step 2: Run the test to verify it fails**
 
-Run: `pnpm --filter @yk-yong/react-native-richtext-core test table-grid`
+Run: `pnpm --filter @quanta-studio/react-native-richtext-core test table-grid`
 Expected: FAIL — `Failed to resolve import "../src/table-grid"` / `normalizeGrid is not a function`.
 
 - [ ] **Step 3: Implement `normalizeGrid`**
@@ -507,7 +507,7 @@ export function normalizeGrid(rawRows: RawRow[]): { rows: TableRowNode[]; column
 
 - [ ] **Step 4: Run the test to verify it passes**
 
-Run: `pnpm --filter @yk-yong/react-native-richtext-core test table-grid`
+Run: `pnpm --filter @quanta-studio/react-native-richtext-core test table-grid`
 Expected: PASS (6 tests).
 
 - [ ] **Step 5: Commit**
@@ -533,8 +533,8 @@ Create `packages/core/test/table.test.ts`:
 
 ```ts
 import { describe, expect, it } from 'vitest'
-import { parse } from '@yk-yong/react-native-richtext-dom'
-import { resolveStyles } from '@yk-yong/react-native-richtext-css'
+import { parse } from '@quanta-studio/react-native-richtext-dom'
+import { resolveStyles } from '@quanta-studio/react-native-richtext-css'
 import { splitDocument } from '../src/split'
 import { processText } from '../src/text/process-text'
 import { annotateMarkers } from '../src/markers'
@@ -632,7 +632,7 @@ it('treats table as block-level', () => {
 
 - [ ] **Step 2: Run the tests to verify they fail**
 
-Run: `pnpm --filter @yk-yong/react-native-richtext-core test table classify`
+Run: `pnpm --filter @quanta-studio/react-native-richtext-core test table classify`
 Expected: FAIL — `<table>` currently renders as inline (no `table` branch), so `find((n) => n.type === 'table')` returns undefined → "no table found"; `isBlockLevel('table')` is `false`.
 
 - [ ] **Step 3: Make `table` block-level**
@@ -802,7 +802,7 @@ function buildTable(el: Element, key: string, styles: Styles): TableNode {
 
 - [ ] **Step 5: Run the tests to verify they pass**
 
-Run: `pnpm --filter @yk-yong/react-native-richtext-core test table classify`
+Run: `pnpm --filter @quanta-studio/react-native-richtext-core test table classify`
 Expected: PASS for `classify` and all `buildTable` cases EXCEPT possibly the nested-table and caption assertions that depend on the text pass — those are covered by Task 6. The structural cases (`columnCount`, `colspan`, `rowspan`, `th`, ordering, whitespace-between-cells, nested `type:"table"` presence) pass now. The `caption` containing `Cap` passes too (caption text is built; the text pass only collapses/decodes it).
 
 > If the nested-table test fails because the inner table's cell text isn't processed, that's expected until Task 6 — re-run after Task 6. Do not block this commit on it; it asserts only `"type":"table"` presence, which holds now.
@@ -845,7 +845,7 @@ it('annotates list markers inside a cell', () => {
 
 - [ ] **Step 2: Run the tests to verify they fail**
 
-Run: `pnpm --filter @yk-yong/react-native-richtext-core test table`
+Run: `pnpm --filter @quanta-studio/react-native-richtext-core test table`
 Expected: FAIL — cell text is not collapsed (still `a   b`); the `<li>` inside a cell has no marker (no `•`).
 
 > If Task 3's typecheck note already forced these edits, this test may already pass — in that case confirm green and skip to Step 5 (commit any remaining test additions).
@@ -926,7 +926,7 @@ export function annotateMarkers(nodes: BlockChild[]): BlockChild[] {
 
 - [ ] **Step 5: Run the tests to verify they pass**
 
-Run: `pnpm --filter @yk-yong/react-native-richtext-core test`
+Run: `pnpm --filter @quanta-studio/react-native-richtext-core test`
 Expected: PASS (all core tests, including the full `table.test.ts` suite).
 
 - [ ] **Step 6: Commit**
@@ -956,7 +956,7 @@ import { create } from 'react-test-renderer'
 import { View } from 'react-native'
 import { TableCell } from '../src/renderers/TableCell'
 import { TableRow } from '../src/renderers/TableRow'
-import type { TableCellNode, TableRowNode } from '@yk-yong/react-native-richtext-core'
+import type { TableCellNode, TableRowNode } from '@quanta-studio/react-native-richtext-core'
 
 const cellNode = (colSpan = 1): TableCellNode => ({
   type: 'table-cell',
@@ -1003,7 +1003,7 @@ describe('TableRow', () => {
 
 - [ ] **Step 2: Run the test to verify it fails**
 
-Run: `pnpm --filter @yk-yong/react-native-richtext test table`
+Run: `pnpm --filter @quanta-studio/react-native-richtext test table`
 Expected: FAIL — cannot resolve `../src/renderers/TableCell` / `../src/renderers/TableRow`.
 
 - [ ] **Step 3: Implement the components**
@@ -1014,7 +1014,7 @@ Create `packages/react-native/src/renderers/TableCell.tsx`:
 import { View } from 'react-native'
 import { splitStyle } from '../style/split-style'
 import type { RendererProps } from '../types'
-import type { TableCellNode } from '@yk-yong/react-native-richtext-core'
+import type { TableCellNode } from '@quanta-studio/react-native-richtext-core'
 
 export function TableCell({ node, children }: RendererProps) {
   const cell = node as TableCellNode
@@ -1031,7 +1031,7 @@ Create `packages/react-native/src/renderers/TableRow.tsx`:
 import { View } from 'react-native'
 import { splitStyle } from '../style/split-style'
 import type { RendererProps } from '../types'
-import type { TableRowNode } from '@yk-yong/react-native-richtext-core'
+import type { TableRowNode } from '@quanta-studio/react-native-richtext-core'
 
 export function TableRow({ node, children }: RendererProps) {
   const row = node as TableRowNode
@@ -1042,7 +1042,7 @@ export function TableRow({ node, children }: RendererProps) {
 
 - [ ] **Step 4: Run the test to verify it passes**
 
-Run: `pnpm --filter @yk-yong/react-native-richtext test table`
+Run: `pnpm --filter @quanta-studio/react-native-richtext test table`
 Expected: PASS (2 tests).
 
 - [ ] **Step 5: Commit**
@@ -1072,7 +1072,7 @@ import { Table } from '../src/renderers/Table'
 import { defaultRenderers } from '../src/renderers/defaults'
 import { RichTextContext } from '../src/context'
 import type { Renderer } from '../src/types'
-import type { TableNode } from '@yk-yong/react-native-richtext-core'
+import type { TableNode } from '@quanta-studio/react-native-richtext-core'
 
 const ctxValue = (registry: Record<string, Renderer> = defaultRenderers) => ({
   registry,
@@ -1171,7 +1171,7 @@ describe('defaultRenderers (table)', () => {
 
 - [ ] **Step 2: Run the tests to verify they fail**
 
-Run: `pnpm --filter @yk-yong/react-native-richtext test table`
+Run: `pnpm --filter @quanta-studio/react-native-richtext test table`
 Expected: FAIL — cannot resolve `../src/renderers/Table`; `defaultRenderers.table` is undefined.
 
 - [ ] **Step 3: Implement the `Table` component**
@@ -1186,7 +1186,7 @@ import { splitStyle } from '../style/split-style'
 import { TableRow } from './TableRow'
 import { TableCell } from './TableCell'
 import type { RendererProps } from '../types'
-import type { TableCellNode, TableNode } from '@yk-yong/react-native-richtext-core'
+import type { TableCellNode, TableNode } from '@quanta-studio/react-native-richtext-core'
 
 const BORDER_COLOR = '#000000'
 
@@ -1298,7 +1298,7 @@ export const defaultRenderers: Record<string, Renderer> = {
 
 - [ ] **Step 6: Run the tests to verify they pass**
 
-Run: `pnpm --filter @yk-yong/react-native-richtext test table`
+Run: `pnpm --filter @quanta-studio/react-native-richtext test table`
 Expected: PASS (all `table.test.tsx` cases).
 
 - [ ] **Step 7: Commit**
@@ -1363,7 +1363,7 @@ describe('integration: tables', () => {
 
 - [ ] **Step 2: Run the test to verify it fails or passes**
 
-Run: `pnpm --filter @yk-yong/react-native-richtext test table-integration`
+Run: `pnpm --filter @quanta-studio/react-native-richtext test table-integration`
 Expected: PASS — by this point the full pipeline is wired, so this is a confirmation test. If any case fails, debug the specific stage (e.g. `textAlign` missing → check the `th` UA rule from Task 2 and that `buildCell` passes the cell's computed style as the inline-container owner style).
 
 - [ ] **Step 3: Commit**
@@ -1401,9 +1401,9 @@ Create `.changeset/phase-4a-tables.md`:
 
 ```md
 ---
-'@yk-yong/react-native-richtext': minor
-'@yk-yong/react-native-richtext-core': minor
-'@yk-yong/react-native-richtext-css': minor
+'@quanta-studio/react-native-richtext': minor
+'@quanta-studio/react-native-richtext-core': minor
+'@quanta-studio/react-native-richtext-css': minor
 ---
 
 Add Phase 4a table rendering: `<table>` (with `thead`/`tbody`/`tfoot`/`tr`/`td`/`th`/`caption`),

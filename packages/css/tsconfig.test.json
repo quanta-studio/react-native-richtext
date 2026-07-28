@@ -8,7 +8,7 @@
     // prior build of dom's dist/*.d.ts. The real build (tsc -b via tsconfig.json)
     // still resolves it through project references to dist.
     "paths": {
-      "@yk-yong/react-native-richtext-dom": ["../dom/src/index.ts"]
+      "@quanta-studio/react-native-richtext-dom": ["../dom/src/index.ts"]
     }
   },
   "include": ["src", "test"]

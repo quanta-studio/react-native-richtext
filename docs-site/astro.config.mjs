@@ -3,7 +3,7 @@ import { defineConfig } from 'astro/config'
 import starlight from '@astrojs/starlight'
 
 export default defineConfig({
-  site: 'https://yk-yong.github.io',
+  site: 'https://quanta-studio.github.io',
   base: '/react-native-richtext',
   integrations: [
     starlight({
@@ -13,7 +13,7 @@ export default defineConfig({
         {
           icon: 'github',
           label: 'GitHub',
-          href: 'https://github.com/yk-yong/react-native-richtext',
+          href: 'https://github.com/quanta-studio/react-native-richtext',
         },
       ],
       sidebar: [
@@ -38,12 +38,12 @@ export default defineConfig({
           items: [
             {
               label: 'Report a bug',
-              link: 'https://github.com/yk-yong/react-native-richtext/issues/new?template=bug_report.md',
+              link: 'https://github.com/quanta-studio/react-native-richtext/issues/new?template=bug_report.md',
               attrs: { target: '_blank', rel: 'noopener noreferrer' },
             },
             {
               label: 'Request a feature',
-              link: 'https://github.com/yk-yong/react-native-richtext/issues/new?template=feature_request.md',
+              link: 'https://github.com/quanta-studio/react-native-richtext/issues/new?template=feature_request.md',
               attrs: { target: '_blank', rel: 'noopener noreferrer' },
             },
           ],

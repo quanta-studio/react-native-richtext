@@ -4,6 +4,14 @@
   "private": true,
   "type": "module",
   "description": "Fabric-native HTML renderer for React Native (monorepo root).",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quanta-studio/react-native-richtext.git"
+  },
+  "homepage": "https://quanta-studio.github.io/react-native-richtext/",
+  "bugs": {
+    "url": "https://github.com/quanta-studio/react-native-richtext/issues"
+  },
   "license": "MIT",
   "packageManager": "pnpm@11.5.2",
   "engines": {

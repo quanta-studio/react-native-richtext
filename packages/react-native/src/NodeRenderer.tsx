@@ -4,7 +4,7 @@ import { Block } from './renderers/Block'
 import { InlineContainer } from './renderers/InlineContainer'
 import { Inline } from './renderers/Inline'
 import { Table } from './renderers/Table'
-import type { RenderNode } from '@yk-yong/react-native-richtext-core'
+import type { RenderNode } from '@quanta-studio/react-native-richtext-core'
 
 export function NodeRenderer({ node }: { node: RenderNode }) {
   const { registry } = useRichTextContext()

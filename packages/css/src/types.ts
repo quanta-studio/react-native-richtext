@@ -1,4 +1,4 @@
-import type { Element, Document } from '@yk-yong/react-native-richtext-dom'
+import type { Element, Document } from '@quanta-studio/react-native-richtext-dom'
 
 export type { Element, Document }
 

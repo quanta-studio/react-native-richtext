@@ -1,6 +1,6 @@
-import { isTag, isText } from '@yk-yong/react-native-richtext-dom'
-import type { AnyNode, Document, Element } from '@yk-yong/react-native-richtext-dom'
-import type { ComputedStyle } from '@yk-yong/react-native-richtext-css'
+import { isTag, isText } from '@quanta-studio/react-native-richtext-dom'
+import type { AnyNode, Document, Element } from '@quanta-studio/react-native-richtext-dom'
+import type { ComputedStyle } from '@quanta-studio/react-native-richtext-css'
 import { displayOf, isBlockLevel, isHidden, isNonRendered } from './classify'
 import type {
   BlockChild,

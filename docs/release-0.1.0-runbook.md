@@ -1,5 +1,9 @@
 # Release 0.1.0 runbook (first publish)
 
+> **Superseded — historical.** This describes the original `@yk-yong` → GitHub Packages release.
+> The project has since moved to the `quanta-studio` org and publishes to the **public npm
+> registry**; see [`docs/npm-publish-runbook.md`](./npm-publish-runbook.md).
+
 The first publish of the four packages at `0.1.0`, to **GitHub Packages**
 (`https://npm.pkg.github.com`, owner `yk-yong`). Versioning/build/pack are prepared in this repo;
 the **publish step needs a token** (there is no registry auth in the dev environment).
@@ -45,7 +49,7 @@ A `dom` changeset is already added (`.changeset/dom-initial-release.md`) so all 
 pnpm build                 # tsup (esm+cjs) + tsc -b (.d.ts) for all 4
 for p in dom css core react-native; do (cd packages/$p && npm pack --dry-run); done
 # confirm each tarball includes dist/ + README + LICENSE, and that the published deps
-# (@yk-yong/react-native-richtext-* in css/core/react-native) are real ^0.1.0 ranges, not workspace:*
+# (@quanta-studio/react-native-richtext-* in css/core/react-native) are real ^0.1.0 ranges, not workspace:*
 ```
 
 ### C. Publish to GitHub Packages
@@ -74,14 +78,14 @@ Pick one:
 git push --follow-tags        # changeset version created the git tags
 ```
 
-Verify on the repo's **Packages** page (github.com/yk-yong/react-native-richtext → Packages), or, with the
+Verify on the repo's **Packages** page (github.com/quanta-studio/react-native-richtext → Packages), or, with the
 `~/.npmrc` token set:
 
 ```bash
-npm view @yk-yong/react-native-richtext --registry=https://npm.pkg.github.com version   # 0.1.0
+npm view @quanta-studio/react-native-richtext --registry=https://npm.pkg.github.com version   # 0.1.0
 ```
 
-Then the dogfood (`docs/dogfood-migration-plan.md`) can install `@yk-yong/react-native-richtext@0.1.0` once
+Then the dogfood (`docs/dogfood-migration-plan.md`) can install `@quanta-studio/react-native-richtext@0.1.0` once
 its app `.npmrc` routes the `@yk-yong` scope to GitHub Packages (see that doc's Step 1).
 
 ## What I've prepared in this branch

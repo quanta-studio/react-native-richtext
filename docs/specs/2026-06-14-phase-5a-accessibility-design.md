@@ -55,7 +55,7 @@ Add a `Heading` renderer:
 import { View } from 'react-native'
 import { splitStyle } from '../style/split-style'
 import type { RendererProps } from '../types'
-import type { BlockNode } from '@yk-yong/react-native-richtext-core'
+import type { BlockNode } from '@quanta-studio/react-native-richtext-core'
 
 function levelOf(tag: string): number {
   const n = Number.parseInt(tag.slice(1), 10) // 'h2' -> 2

@@ -4,14 +4,12 @@
 > react-native-render-html. Parses HTML + CSS and renders native Text/View/Image (no WebView, no web).
 
 ## Install
-Published to GitHub Packages under the @yk-yong scope. App .npmrc:
-  @yk-yong:registry=https://npm.pkg.github.com
-  //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}   # PAT with read:packages
-Then: npm install @yk-yong/react-native-richtext  (pulls -dom/-css/-core transitively)
+Published to the public npm registry under the @quanta-studio scope (no auth, no .npmrc).
+  npm install @quanta-studio/react-native-richtext  (pulls -dom/-css/-core transitively)
 Peers: react >=18.2, react-native >=0.74 (New Architecture).
 
 ## Usage
-import { RichText } from '@yk-yong/react-native-richtext'
+import { RichText } from '@quanta-studio/react-native-richtext'
 <RichText
   source={{ html }}
   baseStyle={{ fontSize: 16 }}
@@ -54,5 +52,5 @@ Developed and maintained by Claude Opus 4.8 (Anthropic), coordinating with its h
 reviews, decides, and merges.
 
 ## Links
-Docs: https://yk-yong.github.io/react-native-richtext/
-Repo: https://github.com/yk-yong/react-native-richtext
+Docs: https://quanta-studio.github.io/react-native-richtext/
+Repo: https://github.com/quanta-studio/react-native-richtext

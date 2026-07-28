@@ -1,5 +1,10 @@
-import { getElementsByTagName, getText, isTag, findAll } from '@yk-yong/react-native-richtext-dom'
-import type { Document, Element } from '@yk-yong/react-native-richtext-dom'
+import {
+  getElementsByTagName,
+  getText,
+  isTag,
+  findAll,
+} from '@quanta-studio/react-native-richtext-dom'
+import type { Document, Element } from '@quanta-studio/react-native-richtext-dom'
 import { parseStylesheet } from '../parse/parse-stylesheet'
 import { parseInline } from '../parse/parse-inline'
 import { mapDeclaration } from '../mapping/map-declaration'

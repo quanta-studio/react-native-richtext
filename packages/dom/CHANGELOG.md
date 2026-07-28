@@ -1,4 +1,4 @@
-# @yk-yong/react-native-richtext-dom
+# @quanta-studio/react-native-richtext-dom
 
 ## 0.1.0
 

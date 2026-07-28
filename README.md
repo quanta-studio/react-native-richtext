@@ -3,9 +3,16 @@
 A modern, **Fabric-native** HTML renderer for React Native — a community-maintained,
 New-Architecture-first alternative to `react-native-render-html`.
 
-📖 **Docs:** https://yk-yong.github.io/react-native-richtext/
+📖 **Docs:** https://quanta-studio.github.io/react-native-richtext/
 
-> Working name; the npm scope/name (`@yk-yong/…`) is a placeholder, renameable.
+## Install
+
+```bash
+npm install @quanta-studio/react-native-richtext
+# pulls @quanta-studio/react-native-richtext-{dom,css,core} transitively
+```
+
+Peers: `react` ≥ 18.2, `react-native` ≥ 0.74 with the New Architecture (Fabric) enabled.
 
 ## Maintenance
 
@@ -16,12 +23,12 @@ and merges.
 
 ## Packages
 
-| Package                               | Status     | Description                                                     |
-| ------------------------------------- | ---------- | --------------------------------------------------------------- |
-| `@yk-yong/react-native-richtext-dom`  | Phase 0 ✅ | Forgiving HTML → DOM, traversal, node guards. React-free.       |
-| `@yk-yong/react-native-richtext-css`  | Phase 1    | CSS engine: parse, selectors, specificity, cascade → RN styles. |
-| `@yk-yong/react-native-richtext-core` | Phase 2    | Styled render-tree builder.                                     |
-| `@yk-yong/react-native-richtext`      | Phase 2    | The public `<RichText>` component + renderer registry.          |
+| Package                                     | Status     | Description                                                     |
+| ------------------------------------------- | ---------- | --------------------------------------------------------------- |
+| `@quanta-studio/react-native-richtext-dom`  | Phase 0 ✅ | Forgiving HTML → DOM, traversal, node guards. React-free.       |
+| `@quanta-studio/react-native-richtext-css`  | Phase 1    | CSS engine: parse, selectors, specificity, cascade → RN styles. |
+| `@quanta-studio/react-native-richtext-core` | Phase 2    | Styled render-tree builder.                                     |
+| `@quanta-studio/react-native-richtext`      | Phase 2    | The public `<RichText>` component + renderer registry.          |
 
 ## Development
 
