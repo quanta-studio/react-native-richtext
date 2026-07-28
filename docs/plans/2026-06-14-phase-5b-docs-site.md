@@ -14,11 +14,11 @@
 
 ## Conventions / facts (use verbatim — do not invent)
 
-- Package: `@yk-yong/react-native-richtext` (current 0.3.0; a11y 0.4.0 in flight). Sub-packages `-dom`/`-css`/`-core` are pulled transitively.
+- Package: `@quanta-studio/react-native-richtext` (current 0.3.0; a11y 0.4.0 in flight). Sub-packages `-dom`/`-css`/`-core` are pulled transitively.
 - Install: GitHub Packages. Consumer `.npmrc`: `@yk-yong:registry=https://npm.pkg.github.com` + `//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}` (PAT with `read:packages`).
 - Peers: `react >=18.2.0`, `react-native >=0.74.0` (New Architecture).
 - Public API: `RichText`; props `source`, `baseStyle`, `tagStyles`, `classStyles`, `renderers`, `fonts`, `onLinkPress`, `style`. Exports: `RichTextContext`, `useRichTextContext`, `defaultRenderers`, `splitStyle`, `resolveFont`; types `RichTextProps`, `Renderer`, `RendererProps`, `FontMap`, `FontFaces`, `RenderNode`, `RNStyle`. `FontMap = Record<string, Record<string, FontFaces>>`, `FontFaces = { normal?: string; italic?: string }`, `Renderer = ComponentType<RendererProps>`, `RendererProps = { node: RenderNode; children?: ReactNode }`.
-- GitHub Pages URL base: owner `yk-yong`, repo `react-native-richtext` → `site: https://yk-yong.github.io`, `base: /react-native-richtext`.
+- GitHub Pages URL base: owner `yk-yong`, repo `react-native-richtext` → `site: https://quanta-studio.github.io`, `base: /react-native-richtext`.
 
 ## How to run things
 
@@ -96,7 +96,7 @@ import { defineConfig } from 'astro/config'
 import starlight from '@astrojs/starlight'
 
 export default defineConfig({
-  site: 'https://yk-yong.github.io',
+  site: 'https://quanta-studio.github.io',
   base: '/react-native-richtext',
   integrations: [
     starlight({
@@ -106,7 +106,7 @@ export default defineConfig({
         {
           icon: 'github',
           label: 'GitHub',
-          href: 'https://github.com/yk-yong/react-native-richtext',
+          href: 'https://github.com/quanta-studio/react-native-richtext',
         },
       ],
       sidebar: [
@@ -199,7 +199,7 @@ It parses real HTML + CSS and renders native `<Text>`/`<View>`/`<Image>` — no 
 `react-native-web`.
 
 ```tsx
-import { RichText } from '@yk-yong/react-native-richtext'
+import { RichText } from '@quanta-studio/react-native-richtext'
 ;<RichText
   source={{ html: '<h1>Hello</h1><p>Rendered <strong>natively</strong>.</p>' }}
   baseStyle={{ fontSize: 16, color: '#1a1a1a' }}
@@ -248,8 +248,8 @@ Set `GITHUB_TOKEN` to a GitHub PAT with the `read:packages` scope (env var or CI
 commit it). Then install:
 
 ```bash
-npm install @yk-yong/react-native-richtext
-# pulls @yk-yong/react-native-richtext-{dom,css,core} transitively
+npm install @quanta-studio/react-native-richtext
+# pulls @quanta-studio/react-native-richtext-{dom,css,core} transitively
 ```
 
 It's a normal dependency resolved from `node_modules` — **no Metro config change** needed.
@@ -258,7 +258,7 @@ It's a normal dependency resolved from `node_modules` — **no Metro config chan
 
 ```tsx
 import { SafeAreaView, ScrollView } from 'react-native'
-import { RichText } from '@yk-yong/react-native-richtext'
+import { RichText } from '@quanta-studio/react-native-richtext'
 
 const html = `
   <h1>react-native-richtext</h1>
@@ -351,8 +351,8 @@ Every tag renders through a registry. Override or add one by passing `renderers`
 to a React component. Your renderer receives `RendererProps` (`{ node, children }`).
 
 ```tsx
-import { RichText } from '@yk-yong/react-native-richtext'
-import type { RendererProps } from '@yk-yong/react-native-richtext'
+import { RichText } from '@quanta-studio/react-native-richtext'
+import type { RendererProps } from '@quanta-studio/react-native-richtext'
 import { View } from 'react-native'
 
 function Callout({ children }: RendererProps) {
@@ -382,7 +382,7 @@ Many custom fonts ship as separate files per weight/style (e.g. `Montserrat-Regu
 just `fontWeight`/`fontStyle`. The `fonts` prop maps a family + weight to the actual font file name.
 
 ```tsx
-import type { FontMap } from '@yk-yong/react-native-richtext'
+import type { FontMap } from '@quanta-studio/react-native-richtext'
 
 const fonts: FontMap = {
   Montserrat: {
@@ -520,11 +520,11 @@ git commit -m "docs(site): API and supported-tags reference"
 Published to GitHub Packages under the @yk-yong scope. App .npmrc:
   @yk-yong:registry=https://npm.pkg.github.com
   //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}   # PAT with read:packages
-Then: npm install @yk-yong/react-native-richtext  (pulls -dom/-css/-core transitively)
+Then: npm install @quanta-studio/react-native-richtext  (pulls -dom/-css/-core transitively)
 Peers: react >=18.2, react-native >=0.74 (New Architecture).
 
 ## Usage
-import { RichText } from '@yk-yong/react-native-richtext'
+import { RichText } from '@quanta-studio/react-native-richtext'
 <RichText
   source={{ html }}
   baseStyle={{ fontSize: 16 }}
@@ -562,8 +562,8 @@ Forms, media (audio/video/iframe), @media/@supports, pseudo-elements, CSS animat
 react-native-web. True vertical rowspan + border-collapse polish in progress.
 
 ## Links
-Docs: https://yk-yong.github.io/react-native-richtext/
-Repo: https://github.com/yk-yong/react-native-richtext
+Docs: https://quanta-studio.github.io/react-native-richtext/
+Repo: https://github.com/quanta-studio/react-native-richtext
 ```
 
 - [ ] **Step 2: Verify it's served**
@@ -651,7 +651,7 @@ git commit -m "ci: build and deploy docs site to GitHub Pages"
 
 - [ ] **Step 4: Note for the repo owner**
 
-GitHub Pages must be enabled once: repo Settings → Pages → Source = "GitHub Actions". After merge to `main`, the `Docs` workflow publishes to `https://yk-yong.github.io/react-native-richtext/`. (No changeset — `docs-site/` is not a published package.)
+GitHub Pages must be enabled once: repo Settings → Pages → Source = "GitHub Actions". After merge to `main`, the `Docs` workflow publishes to `https://quanta-studio.github.io/react-native-richtext/`. (No changeset — `docs-site/` is not a published package.)
 
 ---
 
@@ -668,6 +668,6 @@ GitHub Pages must be enabled once: repo Settings → Pages → Source = "GitHub 
 
 **Placeholder scan:** none — every file's full content is provided. (The Task 1 Step 5 `index.mdx` is an explicit, labeled placeholder that Task 2 overwrites — intentional, not a gap.)
 
-**Type/fact consistency:** props, exports, types, install snippet, peer floors, and the Pages URL (`yk-yong.github.io/react-native-richtext`) match the spec and the real API. Sidebar `slug`s match the created file paths.
+**Type/fact consistency:** props, exports, types, install snippet, peer floors, and the Pages URL (`quanta-studio.github.io/react-native-richtext`) match the spec and the real API. Sidebar `slug`s match the created file paths.
 
 **Known fragility (flagged in Task 1 Step 7):** Astro/Starlight config API can shift between versions; only `astro.config.mjs`/`content.config.ts` are version-sensitive — the implementer adjusts them to the resolved version if `astro build` complains. All content/workflow files are version-independent.

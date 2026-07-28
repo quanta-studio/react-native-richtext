@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { parse, getElementsByTagName, findOne, isTag } from '@yk-yong/react-native-richtext-dom'
+import {
+  parse,
+  getElementsByTagName,
+  findOne,
+  isTag,
+} from '@quanta-studio/react-native-richtext-dom'
 import { resolveStyles } from '../src'
 
 const html = readFileSync(

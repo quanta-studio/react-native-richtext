@@ -7,7 +7,7 @@ import { TableRow } from './TableRow'
 import { TableCell } from './TableCell'
 import { computeColumnWidths, type CellMeasure } from './column-widths'
 import type { RendererProps } from '../types'
-import type { TableCellNode, TableNode } from '@yk-yong/react-native-richtext-core'
+import type { TableCellNode, TableNode } from '@quanta-studio/react-native-richtext-core'
 
 const BORDER_COLOR = '#000000'
 

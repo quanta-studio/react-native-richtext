@@ -7,15 +7,15 @@ export default defineConfig({
   resolve: {
     alias: [
       {
-        find: '@yk-yong/react-native-richtext-dom',
+        find: '@quanta-studio/react-native-richtext-dom',
         replacement: src('./packages/dom/src/index.ts'),
       },
       {
-        find: '@yk-yong/react-native-richtext-css',
+        find: '@quanta-studio/react-native-richtext-css',
         replacement: src('./packages/css/src/index.ts'),
       },
       {
-        find: '@yk-yong/react-native-richtext-core',
+        find: '@quanta-studio/react-native-richtext-core',
         replacement: src('./packages/core/src/index.ts'),
       },
       {

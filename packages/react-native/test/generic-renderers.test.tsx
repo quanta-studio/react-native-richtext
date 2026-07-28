@@ -9,7 +9,7 @@ import type {
   BlockNode,
   InlineContainerNode,
   InlineNode,
-} from '@yk-yong/react-native-richtext-core'
+} from '@quanta-studio/react-native-richtext-core'
 
 const ctx = {
   registry: {},

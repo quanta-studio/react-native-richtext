@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { parse } from '@yk-yong/react-native-richtext-dom'
-import { resolveStyles } from '@yk-yong/react-native-richtext-css'
+import { parse } from '@quanta-studio/react-native-richtext-dom'
+import { resolveStyles } from '@quanta-studio/react-native-richtext-css'
 import { buildRenderTree } from '../src'
 import type { BlockNode, InlineContainerNode, TextNode } from '../src'
 

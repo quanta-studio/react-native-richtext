@@ -1,4 +1,4 @@
-# Dogfood: migrating the fonerewards seed → `@yk-yong/react-native-richtext`
+# Dogfood: migrating the fonerewards seed → `@quanta-studio/react-native-richtext`
 
 Instructions to replace the in-app `@packages/rich-text` seed in
 `fonerewards-user-app/mobile-app` with the published library. **Plan only — apply in the app repo.**
@@ -27,23 +27,13 @@ migrate screens to the native API and delete the seed.
 
 ### Step 1 — install the library
 
-The packages publish to **GitHub Packages** (`@yk-yong` scope → `https://npm.pkg.github.com`), so the
-app must route that scope to GitHub Packages and authenticate (GitHub Packages requires a token even
-for reads). Add an `.npmrc` at the app root:
-
-```ini
-# fonerewards-user-app/mobile-app/.npmrc
-@yk-yong:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
-```
-
-Set `GITHUB_TOKEN` in the environment to a GitHub PAT with the `read:packages` scope (use an env var
-or CI secret — don't commit the token). Then, after 0.1.0 is published:
+The packages publish to the **public npm registry** under the `@quanta-studio` scope, so the app
+needs no `.npmrc` and no registry auth:
 
 ```bash
 cd fonerewards-user-app/mobile-app
-npm install @yk-yong/react-native-richtext
-# pulls @yk-yong/react-native-richtext-{dom,css,core} transitively
+npm install @quanta-studio/react-native-richtext
+# pulls @quanta-studio/react-native-richtext-{dom,css,core} transitively
 ```
 
 It is a normal npm dependency (not a workspace), so Metro resolves it from `node_modules` with **no
@@ -57,7 +47,7 @@ Map the seed props to the library's `<RichText>`. The seed's `emphasisStyles` be
 
 ```tsx
 import { StyleSheet } from 'react-native'
-import { RichText as LibRichText } from '@yk-yong/react-native-richtext'
+import { RichText as LibRichText } from '@quanta-studio/react-native-richtext'
 import type { RichTextProps } from './RichText.types'
 
 const flat = (s: unknown): Record<string, unknown> | undefined =>

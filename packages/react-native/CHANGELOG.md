@@ -1,4 +1,4 @@
-# @yk-yong/react-native-richtext
+# @quanta-studio/react-native-richtext
 
 ## 0.4.1
 
@@ -6,8 +6,8 @@
 
 - 4167c49: Fix nested text decorations being lost. When elements with different `text-decoration-line` values nest (e.g. `<u>` inside `<strike>`), the inner text now correctly shows **both** lines (`underline line-through`) instead of only the innermost. `text-decoration-line` is now accumulated (unioned) down the element tree, matching browser behavior — React Native honors only one decoration per `<Text>`, so the combined value is computed during the cascade.
 - Updated dependencies [4167c49]
-  - @yk-yong/react-native-richtext-css@0.2.1
-  - @yk-yong/react-native-richtext-core@0.3.1
+  - @quanta-studio/react-native-richtext-css@0.2.1
+  - @quanta-studio/react-native-richtext-core@0.3.1
 
 ## 0.4.0
 
@@ -24,7 +24,7 @@
 ### Patch Changes
 
 - Updated dependencies [e460b67]
-  - @yk-yong/react-native-richtext-core@0.3.0
+  - @quanta-studio/react-native-richtext-core@0.3.0
 
 ## 0.2.0
 
@@ -37,8 +37,8 @@
 - c8e6732: Fix `<del>`, `<strike>`, and `<ins>` rendering without their text-decoration. The UA stylesheet covered only `<s>`/`<u>`; add the missing aliases so `<del>`/`<strike>` render with `line-through` and `<ins>` with `underline`, matching browser defaults.
 - Updated dependencies [c8e6732]
 - Updated dependencies [f7558b5]
-  - @yk-yong/react-native-richtext-css@0.2.0
-  - @yk-yong/react-native-richtext-core@0.2.0
+  - @quanta-studio/react-native-richtext-css@0.2.0
+  - @quanta-studio/react-native-richtext-core@0.2.0
 
 ## 0.1.0
 
@@ -64,6 +64,6 @@
 - Updated dependencies [721df22]
 - Updated dependencies [64c5d21]
 - Updated dependencies [e01df31]
-  - @yk-yong/react-native-richtext-css@0.1.0
-  - @yk-yong/react-native-richtext-dom@0.1.0
-  - @yk-yong/react-native-richtext-core@0.1.0
+  - @quanta-studio/react-native-richtext-css@0.1.0
+  - @quanta-studio/react-native-richtext-dom@0.1.0
+  - @quanta-studio/react-native-richtext-core@0.1.0

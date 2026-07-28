@@ -1,6 +1,6 @@
 # Phase 1 (`@scope/css`) — deferred follow-ups
 
-Phase 1's deliverable — a tested, React-free `@yk-yong/react-native-richtext-css` package whose
+Phase 1's deliverable — a tested, React-free `@quanta-studio/react-native-richtext-css` package whose
 `resolveStyles(document, options)` returns a fully-computed `Map<Element, ComputedStyle>` plus
 optional diagnostics — is complete and green (lint + typecheck + tests + build). The items below
 were surfaced by the final whole-implementation review. **None are blockers**; the engine is

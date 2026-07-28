@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { parse, getElementsByTagName } from '@yk-yong/react-native-richtext-dom'
+import { parse, getElementsByTagName } from '@quanta-studio/react-native-richtext-dom'
 import { resolveStyles } from '../src/resolve/resolve-styles'
 
 describe('resolveStyles', () => {

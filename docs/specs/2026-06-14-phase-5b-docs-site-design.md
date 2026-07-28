@@ -105,7 +105,7 @@ A standalone workflow: `on: push: branches: [main]` with `paths: ['docs-site/**'
 `workflow_dispatch`). Steps: checkout → setup-node 22 + pnpm (standalone, matching the other
 workflows) → `cd docs-site && pnpm install` → `pnpm build` → upload + deploy via
 `actions/deploy-pages`. Permissions `pages: write` + `id-token: write`; `concurrency` group so
-deploys don't overlap. `astro.config.mjs` sets `site: 'https://yk-yong.github.io'` and
+deploys don't overlap. `astro.config.mjs` sets `site: 'https://quanta-studio.github.io'` and
 `base: '/react-native-richtext'` for project-Pages URLs. (Repo owner enables Pages → "GitHub
 Actions" source once.)
 

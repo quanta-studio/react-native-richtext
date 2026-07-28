@@ -1,5 +1,5 @@
 {
-  "name": "@yk-yong/react-native-richtext-css",
+  "name": "@quanta-studio/react-native-richtext-css",
   "version": "0.2.1",
   "description": "CSS engine for react-native-richtext: cascade, specificity, inheritance, and declaration->RN style resolution. React-free.",
   "license": "MIT",
@@ -27,12 +27,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yk-yong/react-native-richtext.git",
+    "url": "git+https://github.com/quanta-studio/react-native-richtext.git",
     "directory": "packages/css"
+  },
+  "homepage": "https://quanta-studio.github.io/react-native-richtext/",
+  "bugs": {
+    "url": "https://github.com/quanta-studio/react-native-richtext/issues"
   },
   "publishConfig": {
     "access": "public",
-    "registry": "https://npm.pkg.github.com"
+    "registry": "https://registry.npmjs.org"
   },
   "keywords": [
     "css",
@@ -42,7 +46,7 @@
     "stylesheet"
   ],
   "dependencies": {
-    "@yk-yong/react-native-richtext-dom": "workspace:*",
+    "@quanta-studio/react-native-richtext-dom": "workspace:*",
     "css-select": "^7.0.0",
     "css-to-react-native": "^3.2.0",
     "css-tree": "^3.2.1"

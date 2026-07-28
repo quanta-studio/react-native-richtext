@@ -1,6 +1,6 @@
 import { SafeAreaView, ScrollView } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
-import { RichText } from '@yk-yong/react-native-richtext'
+import { RichText } from '@quanta-studio/react-native-richtext'
 
 const html = `
   <h1>react-native-richtext</h1>

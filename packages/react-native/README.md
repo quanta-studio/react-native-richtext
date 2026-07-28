@@ -1,4 +1,4 @@
-# @yk-yong/react-native-richtext
+# @quanta-studio/react-native-richtext
 
 Fabric-native HTML renderer for React Native. Renders an HTML string to native
 `<View>`/`<Text>` via `<RichText source={{ html }} />`, with a renderer registry,

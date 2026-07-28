@@ -3,7 +3,7 @@ import { create } from 'react-test-renderer'
 import { View } from 'react-native'
 import { Heading } from '../src/renderers/Heading'
 import { defaultRenderers } from '../src/renderers/defaults'
-import type { BlockNode } from '@yk-yong/react-native-richtext-core'
+import type { BlockNode } from '@quanta-studio/react-native-richtext-core'
 
 const headingNode = (tag: string, style: Record<string, unknown> = {}): BlockNode => ({
   type: 'block',

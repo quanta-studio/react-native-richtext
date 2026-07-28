@@ -1,7 +1,7 @@
 import { View } from 'react-native'
 import { splitStyle } from '../style/split-style'
 import type { RendererProps } from '../types'
-import type { TableRowNode } from '@yk-yong/react-native-richtext-core'
+import type { TableRowNode } from '@quanta-studio/react-native-richtext-core'
 
 export function TableRow({ node, children }: RendererProps) {
   const row = node as TableRowNode

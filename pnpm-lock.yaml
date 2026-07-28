@@ -56,10 +56,10 @@ importers:
 
   packages/core:
     dependencies:
-      '@yk-yong/react-native-richtext-css':
+      '@quanta-studio/react-native-richtext-css':
         specifier: workspace:*
         version: link:../css
-      '@yk-yong/react-native-richtext-dom':
+      '@quanta-studio/react-native-richtext-dom':
         specifier: workspace:*
         version: link:../dom
       entities:
@@ -72,7 +72,7 @@ importers:
 
   packages/css:
     dependencies:
-      '@yk-yong/react-native-richtext-dom':
+      '@quanta-studio/react-native-richtext-dom':
         specifier: workspace:*
         version: link:../dom
       css-select:
@@ -109,13 +109,13 @@ importers:
 
   packages/react-native:
     dependencies:
-      '@yk-yong/react-native-richtext-core':
+      '@quanta-studio/react-native-richtext-core':
         specifier: workspace:*
         version: link:../core
-      '@yk-yong/react-native-richtext-css':
+      '@quanta-studio/react-native-richtext-css':
         specifier: workspace:*
         version: link:../css
-      '@yk-yong/react-native-richtext-dom':
+      '@quanta-studio/react-native-richtext-dom':
         specifier: workspace:*
         version: link:../dom
     devDependencies:
@@ -1667,6 +1667,7 @@ packages:
   git-raw-commits@5.0.1:
     resolution: {integrity: sha512-Y+csSm2GD/PCSh6Isd/WiMjNAydu0VBiG9J7EdQsNA5P9uXvLayqjmTsNlK5Gs9IhblFZqOU0yid5Il5JPoLiQ==}
     engines: {node: '>=18'}
+    deprecated: Deprecated and no longer maintained. Use @conventional-changelog/git-client instead.
     hasBin: true
 
   glob-parent@5.1.2:

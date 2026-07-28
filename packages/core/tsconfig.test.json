@@ -5,8 +5,8 @@
     "noEmit": true,
     "types": ["node"],
     "paths": {
-      "@yk-yong/react-native-richtext-dom": ["../dom/src/index.ts"],
-      "@yk-yong/react-native-richtext-css": ["../css/src/index.ts"]
+      "@quanta-studio/react-native-richtext-dom": ["../dom/src/index.ts"],
+      "@quanta-studio/react-native-richtext-css": ["../css/src/index.ts"]
     }
   },
   "include": ["src", "test"]

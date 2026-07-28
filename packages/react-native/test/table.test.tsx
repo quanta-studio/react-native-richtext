@@ -3,12 +3,12 @@ import { create, act } from 'react-test-renderer'
 import { View, ScrollView } from 'react-native'
 import { TableCell } from '../src/renderers/TableCell'
 import { TableRow } from '../src/renderers/TableRow'
-import type { TableCellNode, TableRowNode } from '@yk-yong/react-native-richtext-core'
+import type { TableCellNode, TableRowNode } from '@quanta-studio/react-native-richtext-core'
 import { Table } from '../src/renderers/Table'
 import { defaultRenderers } from '../src/renderers/defaults'
 import { RichTextContext } from '../src/context'
 import type { Renderer } from '../src/types'
-import type { TableNode } from '@yk-yong/react-native-richtext-core'
+import type { TableNode } from '@quanta-studio/react-native-richtext-core'
 
 const cellNode = (colSpan = 1): TableCellNode => ({
   type: 'table-cell',

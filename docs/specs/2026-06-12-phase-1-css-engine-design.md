@@ -2,12 +2,12 @@
 
 Date: 2026-06-12
 Status: Draft for review
-Depends on: Phase 0 (`@yk-yong/react-native-richtext-dom`, merged) and
+Depends on: Phase 0 (`@quanta-studio/react-native-richtext-dom`, merged) and
 `docs/specs/2026-06-09-architecture-and-phase-0-design.md` (read that first).
 
 ## What this is
 
-Phase 1 builds **`@scope/css`** (`@yk-yong/react-native-richtext-css`): the CSS engine that turns a
+Phase 1 builds **`@scope/css`** (`@quanta-studio/react-native-richtext-css`): the CSS engine that turns a
 parsed DOM plus consumer-supplied styles into a **fully-resolved RN style per element node**.
 It is React-free pure logic — the package where the edge cases live, so it gets exhaustive unit
 tests (per the project conventions). No rendering happens here; that is Phase 2 (`@scope/core` +
@@ -35,7 +35,7 @@ DOM ─▶ [2] Collect CSS  parse <style> blocks + inline style attrs; merge wit
 
 ## Package
 
-- Name: `@yk-yong/react-native-richtext-css`. React-free. Depends on the `@yk-yong/react-native-richtext-dom`
+- Name: `@quanta-studio/react-native-richtext-css`. React-free. Depends on the `@quanta-studio/react-native-richtext-dom`
   workspace package.
 - Build/test/tsconfig mirror `packages/dom` exactly: tsup build, Vitest tests, TS project
   references, same `moduleResolution: Bundler` baseline (the Phase 0 publish follow-ups in
@@ -177,7 +177,7 @@ tokens**; `units/` finalizes them in the compute pass. This split is exactly why
 ## Public API
 
 ```ts
-import type { Document, Element } from '@yk-yong/react-native-richtext-dom'
+import type { Document, Element } from '@quanta-studio/react-native-richtext-dom'
 
 function resolveStyles(
   document: Document,
@@ -225,7 +225,7 @@ insight) stays in `@scope/react-native` (Phase 2) — Phase 1 only computes
 
 ## Deliverable
 
-A tested, React-free `@yk-yong/react-native-richtext-css` package exposing `resolveStyles(document, options)`
+A tested, React-free `@quanta-studio/react-native-richtext-css` package exposing `resolveStyles(document, options)`
 that returns a fully-computed `Map<Element, ComputedStyle>` (cascade + inheritance applied, relative
 units resolved) plus optional diagnostics — with green CI (lint + typecheck + tests). No rendering.
 

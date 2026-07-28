@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { parse } from '@yk-yong/react-native-richtext-dom'
-import { resolveStyles } from '@yk-yong/react-native-richtext-css'
+import { parse } from '@quanta-studio/react-native-richtext-dom'
+import { resolveStyles } from '@quanta-studio/react-native-richtext-css'
 import { splitDocument } from '../src/split'
 import type { BlockNode, InlineContainerNode, InlineNode } from '../src/types'
 

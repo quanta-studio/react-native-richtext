@@ -1,7 +1,7 @@
 import { View } from 'react-native'
 import { splitStyle } from '../style/split-style'
 import type { RendererProps } from '../types'
-import type { BlockNode } from '@yk-yong/react-native-richtext-core'
+import type { BlockNode } from '@quanta-studio/react-native-richtext-core'
 
 // h1–h6: a block View carrying the screen-reader "header" trait. `accessible` groups the
 // heading as one announced element (required for the trait to surface and for heading

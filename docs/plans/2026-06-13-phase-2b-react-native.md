@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build `@yk-yong/react-native-richtext` (the flagship public package) — the `<RichText>` component that orchestrates `parse → resolveStyles → buildRenderTree` and walks the `RenderNode` tree to React Native elements via a renderer registry, with per-weight/style font resolution and `onLinkPress` — plus a minimal Expo example screen.
+**Goal:** Build `@quanta-studio/react-native-richtext` (the flagship public package) — the `<RichText>` component that orchestrates `parse → resolveStyles → buildRenderTree` and walks the `RenderNode` tree to React Native elements via a renderer registry, with per-weight/style font resolution and `onLinkPress` — plus a minimal Expo example screen.
 
 **Architecture:** Approach A — a recursive `NodeRenderer` dispatches by node type and looks up `registry[node.tag]` (consumer override merged over built-in defaults), falling back to generic `Block`/`Inline`. Shared concerns (`registry`, `fonts`, `onLinkPress`) live in `RichTextContext`. Block→`<View>` (box style), inline-container/inline→`<Text>` (text style, font-resolved). The "no View inside Text" invariant is already guaranteed by core's tree.
 
@@ -13,7 +13,7 @@
 **New infra this plan introduces (call-outs):**
 
 - First TSX package → `jsx: react-jsx` in tsconfigs; tests are `.test.tsx`.
-- The root `vitest.config.ts` must (a) add a `@yk-yong/react-native-richtext-core` source alias, (b) add an **exact** `react-native` → mock alias, and (c) widen the `include` glob to `*.test.{ts,tsx}`. The alias block is converted to the **array form** so `react-native` can use a `/^react-native$/` regex (exact match, no prefix bleed).
+- The root `vitest.config.ts` must (a) add a `@quanta-studio/react-native-richtext-core` source alias, (b) add an **exact** `react-native` → mock alias, and (c) widen the `include` glob to `*.test.{ts,tsx}`. The alias block is converted to the **array form** so `react-native` can use a `/^react-native$/` regex (exact match, no prefix bleed).
 - `react`/`react-native` are **peer** deps; dev-installed for typecheck + tests. `react`/`react-test-renderer` are pinned to the same 18.x line for stable react-test-renderer.
 
 ---
@@ -41,11 +41,11 @@ example/                     # minimal Expo screen (manual; not in CI)
 ```
 
 Run one test: `pnpm exec vitest run packages/react-native/test/<name>.test.tsx`
-Typecheck: `pnpm --filter @yk-yong/react-native-richtext typecheck`
+Typecheck: `pnpm --filter @quanta-studio/react-native-richtext typecheck`
 
 ---
 
-## Task 0: Scaffold `@yk-yong/react-native-richtext`
+## Task 0: Scaffold `@quanta-studio/react-native-richtext`
 
 **Files:** Create `packages/react-native/{package.json,tsconfig.json,tsconfig.test.json,tsup.config.ts,README.md,LICENSE,src/index.ts}`; Modify root `tsconfig.json` + root `vitest.config.ts`.
 
@@ -53,7 +53,7 @@ Typecheck: `pnpm --filter @yk-yong/react-native-richtext typecheck`
 
 ```json
 {
-  "name": "@yk-yong/react-native-richtext",
+  "name": "@quanta-studio/react-native-richtext",
   "version": "0.0.0",
   "description": "Fabric-native HTML renderer for React Native: the <RichText> component.",
   "license": "MIT",
@@ -104,9 +104,9 @@ Typecheck: `pnpm --filter @yk-yong/react-native-richtext typecheck`
     "noEmit": true,
     "jsx": "react-jsx",
     "paths": {
-      "@yk-yong/react-native-richtext-dom": ["../dom/src/index.ts"],
-      "@yk-yong/react-native-richtext-css": ["../css/src/index.ts"],
-      "@yk-yong/react-native-richtext-core": ["../core/src/index.ts"]
+      "@quanta-studio/react-native-richtext-dom": ["../dom/src/index.ts"],
+      "@quanta-studio/react-native-richtext-css": ["../css/src/index.ts"],
+      "@quanta-studio/react-native-richtext-core": ["../core/src/index.ts"]
     }
   },
   "include": ["src", "test"]
@@ -135,7 +135,7 @@ export default defineConfig({
 `README.md`:
 
 ```md
-# @yk-yong/react-native-richtext
+# @quanta-studio/react-native-richtext
 
 Fabric-native HTML renderer for React Native. Renders an HTML string to native
 `<View>`/`<Text>` via `<RichText source={{ html }} />`, with a renderer registry,
@@ -174,15 +174,15 @@ export default defineConfig({
   resolve: {
     alias: [
       {
-        find: '@yk-yong/react-native-richtext-dom',
+        find: '@quanta-studio/react-native-richtext-dom',
         replacement: src('./packages/dom/src/index.ts'),
       },
       {
-        find: '@yk-yong/react-native-richtext-css',
+        find: '@quanta-studio/react-native-richtext-css',
         replacement: src('./packages/css/src/index.ts'),
       },
       {
-        find: '@yk-yong/react-native-richtext-core',
+        find: '@quanta-studio/react-native-richtext-core',
         replacement: src('./packages/core/src/index.ts'),
       },
       {
@@ -206,9 +206,9 @@ export default defineConfig({
 - [ ] **Step 7: Add deps via pnpm** (peers + dev; pinned react line for stable react-test-renderer)
 
 ```bash
-pnpm --filter @yk-yong/react-native-richtext add @yk-yong/react-native-richtext-dom@workspace:* @yk-yong/react-native-richtext-css@workspace:* @yk-yong/react-native-richtext-core@workspace:*
-pnpm --filter @yk-yong/react-native-richtext add -P --save-peer react@">=18.2.0" react-native@">=0.74.0"
-pnpm --filter @yk-yong/react-native-richtext add -D react@18.3.1 react-test-renderer@18.3.1 react-native @types/react@18 @types/node
+pnpm --filter @quanta-studio/react-native-richtext add @quanta-studio/react-native-richtext-dom@workspace:* @quanta-studio/react-native-richtext-css@workspace:* @quanta-studio/react-native-richtext-core@workspace:*
+pnpm --filter @quanta-studio/react-native-richtext add -P --save-peer react@">=18.2.0" react-native@">=0.74.0"
+pnpm --filter @quanta-studio/react-native-richtext add -D react@18.3.1 react-test-renderer@18.3.1 react-native @types/react@18 @types/node
 ```
 
 (If pnpm balks at the peer-range syntax, set `peerDependencies` directly in package.json to `{"react": ">=18.2.0", "react-native": ">=0.74.0"}` and dev-install `react@18.3.1 react-test-renderer@18.3.1 react-native @types/react@18 @types/node`. Report the resolved versions.)
@@ -219,13 +219,13 @@ pnpm --filter @yk-yong/react-native-richtext add -D react@18.3.1 react-test-rend
 export {}
 ```
 
-- [ ] **Step 9: Verify** — `pnpm install && pnpm --filter @yk-yong/react-native-richtext typecheck && pnpm --filter @yk-yong/react-native-richtext build` → exit 0; `dist/index.js` + `index.cjs` produced. Also confirm the other packages still typecheck: `pnpm typecheck`.
+- [ ] **Step 9: Verify** — `pnpm install && pnpm --filter @quanta-studio/react-native-richtext typecheck && pnpm --filter @quanta-studio/react-native-richtext build` → exit 0; `dist/index.js` + `index.cjs` produced. Also confirm the other packages still typecheck: `pnpm typecheck`.
 
 - [ ] **Step 10: Commit**
 
 ```bash
 git add packages/react-native tsconfig.json vitest.config.ts package.json pnpm-lock.yaml
-git commit -m "chore(rn): scaffold @yk-yong/react-native-richtext package"
+git commit -m "chore(rn): scaffold @quanta-studio/react-native-richtext package"
 ```
 
 ---
@@ -354,7 +354,7 @@ describe('types', () => {
 ```ts
 import type { ReactNode, ComponentType } from 'react'
 import type { StyleProp, ViewStyle } from 'react-native'
-import type { RenderNode, RNStyle } from '@yk-yong/react-native-richtext-core'
+import type { RenderNode, RNStyle } from '@quanta-studio/react-native-richtext-core'
 
 export type { RenderNode, RNStyle }
 
@@ -426,7 +426,7 @@ describe('splitStyle', () => {
 - [ ] **Step 3: Implement `packages/react-native/src/style/split-style.ts`**
 
 ```ts
-import type { RNStyle } from '@yk-yong/react-native-richtext-core'
+import type { RNStyle } from '@quanta-studio/react-native-richtext-core'
 
 const TEXT_PROPS = new Set<string>([
   'color',
@@ -670,7 +670,7 @@ import type {
   BlockNode,
   InlineContainerNode,
   InlineNode,
-} from '@yk-yong/react-native-richtext-core'
+} from '@quanta-studio/react-native-richtext-core'
 
 const ctx = {
   registry: {},
@@ -739,7 +739,7 @@ describe('generic renderers', () => {
 import { View } from 'react-native'
 import { splitStyle } from '../style/split-style'
 import type { RendererProps } from '../types'
-import type { BlockNode } from '@yk-yong/react-native-richtext-core'
+import type { BlockNode } from '@quanta-studio/react-native-richtext-core'
 
 export function Block({ node, children }: RendererProps) {
   const { view } = splitStyle((node as BlockNode).style)
@@ -755,7 +755,7 @@ import { splitStyle } from '../style/split-style'
 import { resolveFont } from '../fonts/resolve-font'
 import { useRichTextContext } from '../context'
 import type { RendererProps } from '../types'
-import type { InlineContainerNode } from '@yk-yong/react-native-richtext-core'
+import type { InlineContainerNode } from '@quanta-studio/react-native-richtext-core'
 
 export function InlineContainer({ node, children }: RendererProps) {
   const { fonts } = useRichTextContext()
@@ -772,7 +772,7 @@ import { splitStyle } from '../style/split-style'
 import { resolveFont } from '../fonts/resolve-font'
 import { useRichTextContext } from '../context'
 import type { RendererProps } from '../types'
-import type { InlineNode } from '@yk-yong/react-native-richtext-core'
+import type { InlineNode } from '@quanta-studio/react-native-richtext-core'
 
 export function Inline({ node, children }: RendererProps) {
   const { fonts } = useRichTextContext()
@@ -804,7 +804,7 @@ import { create } from 'react-test-renderer'
 import { View, Text } from 'react-native'
 import { NodeRenderer } from '../src/NodeRenderer'
 import { RichTextContext } from '../src/context'
-import type { BlockNode } from '@yk-yong/react-native-richtext-core'
+import type { BlockNode } from '@quanta-studio/react-native-richtext-core'
 
 const ctx = { registry: {}, fonts: undefined, onLinkPress: () => {} }
 const wrap = (ui: React.ReactNode) =>
@@ -885,7 +885,7 @@ import { useRichTextContext } from './context'
 import { Block } from './renderers/Block'
 import { InlineContainer } from './renderers/InlineContainer'
 import { Inline } from './renderers/Inline'
-import type { RenderNode } from '@yk-yong/react-native-richtext-core'
+import type { RenderNode } from '@quanta-studio/react-native-richtext-core'
 
 export function NodeRenderer({ node }: { node: RenderNode }) {
   const { registry } = useRichTextContext()
@@ -953,7 +953,7 @@ import { ListItem } from '../src/renderers/ListItem'
 import { Rule } from '../src/renderers/Rule'
 import { defaultRenderers } from '../src/renderers/defaults'
 import { RichTextContext } from '../src/context'
-import type { BlockNode, InlineNode } from '@yk-yong/react-native-richtext-core'
+import type { BlockNode, InlineNode } from '@quanta-studio/react-native-richtext-core'
 
 const makeCtx = (onLinkPress = () => {}) => ({ registry: {}, fonts: undefined, onLinkPress })
 const wrap = (ui: React.ReactNode, ctx = makeCtx()) =>
@@ -1033,7 +1033,7 @@ import { splitStyle } from '../style/split-style'
 import { resolveFont } from '../fonts/resolve-font'
 import { useRichTextContext } from '../context'
 import type { RendererProps } from '../types'
-import type { InlineNode } from '@yk-yong/react-native-richtext-core'
+import type { InlineNode } from '@quanta-studio/react-native-richtext-core'
 
 export function Anchor({ node, children }: RendererProps) {
   const { fonts, onLinkPress } = useRichTextContext()
@@ -1054,7 +1054,7 @@ export function Anchor({ node, children }: RendererProps) {
 import { View, Text } from 'react-native'
 import { splitStyle } from '../style/split-style'
 import type { RendererProps } from '../types'
-import type { BlockNode } from '@yk-yong/react-native-richtext-core'
+import type { BlockNode } from '@quanta-studio/react-native-richtext-core'
 
 export function ListItem({ node, children }: RendererProps) {
   const el = node as BlockNode
@@ -1075,7 +1075,7 @@ export function ListItem({ node, children }: RendererProps) {
 import { View } from 'react-native'
 import { splitStyle } from '../style/split-style'
 import type { RendererProps } from '../types'
-import type { BlockNode } from '@yk-yong/react-native-richtext-core'
+import type { BlockNode } from '@quanta-studio/react-native-richtext-core'
 
 export function Rule({ node }: RendererProps) {
   const { view } = splitStyle((node as BlockNode).style)
@@ -1172,9 +1172,9 @@ describe('RichText', () => {
 ```tsx
 import { useMemo } from 'react'
 import { View, Linking } from 'react-native'
-import { parse } from '@yk-yong/react-native-richtext-dom'
-import { resolveStyles } from '@yk-yong/react-native-richtext-css'
-import { buildRenderTree } from '@yk-yong/react-native-richtext-core'
+import { parse } from '@quanta-studio/react-native-richtext-dom'
+import { resolveStyles } from '@quanta-studio/react-native-richtext-css'
+import { buildRenderTree } from '@quanta-studio/react-native-richtext-core'
 import { RichTextContext } from './context'
 import { NodeRenderer } from './NodeRenderer'
 import { defaultRenderers } from './renderers/defaults'
@@ -1231,7 +1231,7 @@ export type {
 } from './types'
 ```
 
-- [ ] **Step 5: Run → PASS** (4 tests); whole-package typecheck (`pnpm --filter @yk-yong/react-native-richtext typecheck`) → clean.
+- [ ] **Step 5: Run → PASS** (4 tests); whole-package typecheck (`pnpm --filter @quanta-studio/react-native-richtext typecheck`) → clean.
 
 - [ ] **Step 6: Commit**
 
@@ -1328,7 +1328,7 @@ This is hand-authored (no `expo init`); it is **run manually** by the maintainer
     "android": "expo start --android"
   },
   "dependencies": {
-    "@yk-yong/react-native-richtext": "workspace:*",
+    "@quanta-studio/react-native-richtext": "workspace:*",
     "expo": "~52.0.0",
     "expo-status-bar": "~2.0.0",
     "react": "18.3.1",
@@ -1383,7 +1383,7 @@ module.exports = config
 ```tsx
 import { SafeAreaView, ScrollView } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
-import { RichText } from '@yk-yong/react-native-richtext'
+import { RichText } from '@quanta-studio/react-native-richtext'
 
 const html = `
   <h1>react-native-richtext</h1>
@@ -1416,7 +1416,7 @@ export default function App() {
 ````md
 # Example app
 
-Minimal Expo (New Architecture) screen dogfooding `@yk-yong/react-native-richtext`.
+Minimal Expo (New Architecture) screen dogfooding `@quanta-studio/react-native-richtext`.
 
 ```bash
 pnpm install            # from the repo root
@@ -1449,7 +1449,7 @@ git commit -m "docs(example): add minimal Expo screen dogfooding RichText"
 
 ```md
 ---
-'@yk-yong/react-native-richtext': minor
+'@quanta-studio/react-native-richtext': minor
 ---
 
 Add the flagship `<RichText>` component: renders an HTML string to native React Native

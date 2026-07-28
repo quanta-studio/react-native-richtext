@@ -1,11 +1,11 @@
-# @yk-yong/react-native-richtext-core
+# @quanta-studio/react-native-richtext-core
 
 ## 0.3.1
 
 ### Patch Changes
 
 - Updated dependencies [4167c49]
-  - @yk-yong/react-native-richtext-css@0.2.1
+  - @quanta-studio/react-native-richtext-css@0.2.1
 
 ## 0.3.0
 
@@ -23,7 +23,7 @@
 
 - Updated dependencies [c8e6732]
 - Updated dependencies [f7558b5]
-  - @yk-yong/react-native-richtext-css@0.2.0
+  - @quanta-studio/react-native-richtext-css@0.2.0
 
 ## 0.1.0
 
@@ -44,5 +44,5 @@
 - Updated dependencies [cf86763]
 - Updated dependencies [64c5d21]
 - Updated dependencies [e01df31]
-  - @yk-yong/react-native-richtext-css@0.1.0
-  - @yk-yong/react-native-richtext-dom@0.1.0
+  - @quanta-studio/react-native-richtext-css@0.1.0
+  - @quanta-studio/react-native-richtext-dom@0.1.0

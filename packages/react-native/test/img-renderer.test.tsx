@@ -3,7 +3,7 @@ import { create, act } from 'react-test-renderer'
 import { Image } from 'react-native'
 import { Img } from '../src/renderers/Img'
 import { defaultRenderers } from '../src/renderers/defaults'
-import type { BlockNode } from '@yk-yong/react-native-richtext-core'
+import type { BlockNode } from '@quanta-studio/react-native-richtext-core'
 
 const imgNode = (
   attribs: Record<string, string>,

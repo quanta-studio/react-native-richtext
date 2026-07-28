@@ -3,7 +3,7 @@ import { create } from 'react-test-renderer'
 import { View, Text } from 'react-native'
 import { NodeRenderer } from '../src/NodeRenderer'
 import { RichTextContext } from '../src/context'
-import type { BlockNode } from '@yk-yong/react-native-richtext-core'
+import type { BlockNode } from '@quanta-studio/react-native-richtext-core'
 
 const ctx = { registry: {}, fonts: undefined, onLinkPress: () => {} }
 const wrap = (ui: React.ReactNode) =>

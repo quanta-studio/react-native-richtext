@@ -15,7 +15,7 @@
 ## How to run things (repo conventions)
 
 - Tests run from the ROOT (packages have NO `test` script): `pnpm exec vitest run packages/<pkg>` or a single file `pnpm exec vitest run packages/<pkg>/test/<file>`. Do NOT use `pnpm --filter <pkg> test` (no-op).
-- Per-package typecheck: `pnpm --filter @yk-yong/react-native-richtext-core typecheck` / `pnpm --filter @yk-yong/react-native-richtext typecheck`.
+- Per-package typecheck: `pnpm --filter @quanta-studio/react-native-richtext-core typecheck` / `pnpm --filter @quanta-studio/react-native-richtext typecheck`.
 - Whole-repo gates: `pnpm test`, `pnpm typecheck`, `pnpm lint`, `pnpm format:check`, `pnpm build`.
 
 ---
@@ -162,7 +162,7 @@ return {
 - [ ] **Step 5: Run the tests to verify they pass**
 
 Run: `pnpm exec vitest run packages/core` → all green.
-Run: `pnpm --filter @yk-yong/react-native-richtext-core typecheck` → PASS.
+Run: `pnpm --filter @quanta-studio/react-native-richtext-core typecheck` → PASS.
 
 - [ ] **Step 6: Commit**
 
@@ -361,7 +361,7 @@ Replace `packages/react-native/src/renderers/TableCell.tsx` with:
 import { View } from 'react-native'
 import { splitStyle } from '../style/split-style'
 import type { RendererProps } from '../types'
-import type { TableCellNode } from '@yk-yong/react-native-richtext-core'
+import type { TableCellNode } from '@quanta-studio/react-native-richtext-core'
 
 // 4b: the Table owns column width (set on the node's style); the cell just renders its box.
 export function TableCell({ node, children }: RendererProps) {
@@ -385,7 +385,7 @@ import { TableRow } from './TableRow'
 import { TableCell } from './TableCell'
 import { computeColumnWidths, type CellMeasure } from './column-widths'
 import type { RendererProps } from '../types'
-import type { TableCellNode, TableNode } from '@yk-yong/react-native-richtext-core'
+import type { TableCellNode, TableNode } from '@quanta-studio/react-native-richtext-core'
 
 const BORDER_COLOR = '#000000'
 
@@ -702,7 +702,7 @@ Leave the other two integration tests (header/body text; centered `th`) unchange
 - [ ] **Step 5: Run the tests to verify they pass**
 
 Run: `pnpm exec vitest run packages/react-native` → all green.
-Run: `pnpm --filter @yk-yong/react-native-richtext typecheck` → PASS.
+Run: `pnpm --filter @quanta-studio/react-native-richtext typecheck` → PASS.
 
 - [ ] **Step 6: Commit**
 
@@ -829,8 +829,8 @@ Create `.changeset/phase-4b-tables-measurement.md`:
 
 ```md
 ---
-'@yk-yong/react-native-richtext': minor
-'@yk-yong/react-native-richtext-core': minor
+'@quanta-studio/react-native-richtext': minor
+'@quanta-studio/react-native-richtext-core': minor
 ---
 
 Phase 4b: table columns are now content-proportional. A single onLayout measurement pass sizes each column to its max-content; the table expands to fill its container when it fits and scrolls horizontally when it doesn't. Explicit `<col width>` and cell `width` are honored (and skip measurement when every column is explicit). rowspan still renders flat; border-spacing/collapse polish remains deferred.
